@@ -1,0 +1,24 @@
+{
+  "name": "Mario_MakerJS",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve ./public",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AGirlNamedCaro/Mario_MakerJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AGirlNamedCaro/Mario_MakerJS/issues"
+  },
+  "homepage": "https://github.com/AGirlNamedCaro/Mario_MakerJS#readme",
+  "description": "",
+  "dependencies": {
+    "serve": "^11.3.0"
+  }
+}
