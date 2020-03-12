@@ -1,0 +1,15 @@
+#top-bar {
+  display: grid;
+  grid-template-columns: 5% auto 5%;
+  grid-template-rows: 15% auto 15%;
+  grid-template-areas: 
+  ". . ."
+  ". content ."
+  ". . .";
+  background-color: steelblue;
+}
+
+#top-bar h1 {
+  grid-area: content;
+  margin: 0em;
+}

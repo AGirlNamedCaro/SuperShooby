@@ -1,7 +1,10 @@
-var config = {
-  type: Phaser.AUTO,
+const canvasEl = document.getElementById("game-phaser");
+
+const config = {
+  type: Phaser.CANVAS,
   width: 800,
   height: 600,
+  canvas: canvasEl,
   physics: {
       default: 'arcade',
       arcade: {
@@ -44,4 +47,8 @@ function create ()
   logo.setCollideWorldBounds(true);
 
   emitter.startFollow(logo);
+}
+
+window.onload = function() {
+  console.log(canvasEl);
 }
