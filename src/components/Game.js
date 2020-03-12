@@ -1,6 +1,6 @@
 import React from "react";
 import Phaser from "phaser";
-import {preload, create} from './helpers';
+import TitleScene from './TitleScene'
 
 export const config = {
   type: Phaser.CANVAS,
@@ -13,12 +13,20 @@ export const config = {
           gravity: { y: 200 }
       }
   },
-  scene: {
-      preload: preload,
-      create: create
-  }
+  scene: [TitleScene]
+      
+  
 };
 const game = new Phaser.Game(config);
+
+
+
+
+
+
+
+
+
 
 
 export default function Game() {
