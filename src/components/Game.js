@@ -1,5 +1,7 @@
 import React from "react";
 import Phaser from "phaser";
+import Preload from "./game_scenes/Preload";
+import Main from "./game_scenes/Main";
 
 const config = {
   type: Phaser.CANVAS,
@@ -12,21 +14,15 @@ const config = {
           gravity: { y: 200 }
       }
   },
-  scene: {
-      preload: preload,
-      create: create
-  }
+  scene: [Preload, Main]
 };
 
 const game = new Phaser.Game(config);
 
 function preload ()
 {
-  this.load.setBaseURL('https://labs.phaser.io');
 
-  this.load.image('sky', 'assets/skies/space3.png');
-  this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-  this.load.image('red', 'assets/particles/red.png');
+
 }
 
 function create ()
