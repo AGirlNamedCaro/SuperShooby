@@ -1,30 +1,14 @@
 import Phaser from "phaser";
 
 
-export default class TitleScene extends  Phaser.Scene{
+class TitleScene extends  Phaser.Scene{
   
   constructor() {
-    super({key: 'TitleScene'})
-  }
-
-
-  preload() {
-    this.load.image('sky', 'images/bg/fairy-background-craft-pixel.png');
-    this.load.image('ground', 'images/bg/platform.png');
-    this.load.spritesheet('dude', 
-    'images/dude.png',
-    { frameWidth: 32, frameHeight: 48 }
-    );
-    this.load.image('star', 'images/star.png')
-    
-    
-    
+    super('TitleScene')
   }
   
-  
- 
-
   create() {
+    this.scene.launch("mainMenu");
     this.bg = this.add.tileSprite(400,300,800,600,'sky')
     this.ground = this.add.tileSprite(0,0,'ground')
 
@@ -58,16 +42,22 @@ star.children.iterate(function (child) {
   
 });
 
-this.player.setVelocityY(-330);
 this.physics.add.collider(star, platforms);
+
 this.physics.add.overlap(this.player,star, this.collectStars, null, true)
+
+setTimeout(() => {
+  this.player.setVelocityY(-230);
+  this.player.setVelocityX(20);
+}, 2000)
+
 
 }
 
 
-
 collectStars(player,star) {
   star.disableBody(true, true);
+  return true
 }
 
 
@@ -85,6 +75,7 @@ this.bg.tilePositionX += 5;
 }
 
 
+export default TitleScene;
 
 
 
