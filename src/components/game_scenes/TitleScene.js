@@ -9,6 +9,7 @@ export default class TitleScene extends  Phaser.Scene{
 
 
   preload() {
+    
     this.load.image('sky', 'images/bg/fairy-background-craft-pixel.png');
     this.load.image('ground', 'images/bg/platform.png');
     this.load.spritesheet('dude', 
@@ -17,15 +18,13 @@ export default class TitleScene extends  Phaser.Scene{
     );
     this.load.image('star', 'images/star.png')
     
-    
-    
   }
   
   
  
 
   create() {
-    this.bg = this.add.tileSprite(400,300,800,480,'sky')
+    this.bg = this.add.tileSprite(400,300,800,600,'sky')
     this.ground = this.add.tileSprite(0,0,'ground')
 
 
@@ -67,8 +66,9 @@ setTimeout(() => {
   this.player.setVelocityX(20);
 }, 2000)
 
-}
+this.scene.launch("mainMenu");
 
+}
 
 
 collectStars(player,star) {
