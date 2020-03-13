@@ -4,6 +4,7 @@ import Preload from "./game_scenes/Preload";
 import Main from "./game_scenes/Main";
 import MainMenu from "./game_scenes/MainMenu";
 import PlayMenu from "./game_scenes/PlayMenu";
+import MultiplayerMenu from "./game_scenes/MultiplayerMenu";
 
 const config = {
   type: Phaser.CANVAS,
@@ -16,7 +17,7 @@ const config = {
           gravity: { y: 200 }
       }
   },
-  scene: [Preload, Main, MainMenu, PlayMenu]
+  scene: [Preload, Main, MainMenu, PlayMenu, MultiplayerMenu]
 };
 
 const game = new Phaser.Game(config);

@@ -24,10 +24,22 @@ export default class PlayMenu extends Phaser.Scene{
     smallPlayButton.flipX = true;
     smallPlayButton.scale = 0.09;
 
+    singlePlayer.setInteractive();
+    multiplayer.setInteractive();
     smallPlayButton.setInteractive();
+
+    singlePlayer.on("pointerdown", () => {
+      console.log("Single Player");
+      // this.scene.start("play")
+    });
+
+    multiplayer.on("pointerdown", () => {
+      console.log("Multiplayer");
+      this.scene.start("multiplayerMenu", { menuBg: this.menuBg, smPlBtn: smallPlayButton})
+    });
 
     smallPlayButton.on("pointerdown", () => {
       this.scene.start("mainMenu")
-    })
+    });
   }
 }
