@@ -23,6 +23,8 @@ class Main extends Phaser.Scene {
     logo.setCollideWorldBounds(true);
 
     emitter.startFollow(logo);
+
+    this.scene.launch("mainMenu");
   }
 }
 
