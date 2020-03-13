@@ -6,10 +6,7 @@ export default class Preload extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
-    // this.load.image('logo', 'https://labs.phaser.io/assets/sprites/phaser3-logo.png');
-    // this.load.image('red', 'https://labs.phaser.io/assets/particles/red.png');
-    
+   
     this.load.image('playButton', "/assets/playButton.png");
     this.load.image('smallPlayButton', "/assets/smallPlayButton.png");
     this.load.image('singlePlayer', "/assets/singlePlayerButton.png");

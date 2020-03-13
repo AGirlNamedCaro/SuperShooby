@@ -1,7 +1,7 @@
 import React from "react";
 import Phaser from "phaser";
-import TitleScene from './game_scenes/TitleScene'
 import Preload from "./game_scenes/Preload";
+import TitleScene from './game_scenes/TitleScene';
 // import Main from "./game_scenes/Main";
 import MainMenu from "./game_scenes/MainMenu";
 import PlayMenu from "./game_scenes/PlayMenu";

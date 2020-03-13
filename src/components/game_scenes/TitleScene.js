@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 
 
-export default class TitleScene extends  Phaser.Scene{
+class TitleScene extends  Phaser.Scene{
   
   constructor() {
-    super({key: 'TitleScene'})
+    super('TitleScene')
   }
 
 
@@ -21,9 +21,8 @@ export default class TitleScene extends  Phaser.Scene{
   }
   
   
- 
-
   create() {
+    this.scene.launch("mainMenu");
     this.bg = this.add.tileSprite(400,300,800,600,'sky')
     this.ground = this.add.tileSprite(0,0,'ground')
 
@@ -66,7 +65,6 @@ setTimeout(() => {
   this.player.setVelocityX(20);
 }, 2000)
 
-this.scene.launch("mainMenu");
 
 }
 
@@ -91,6 +89,7 @@ this.bg.tilePositionX += 5;
 }
 
 
+export default TitleScene;
 
 
 
