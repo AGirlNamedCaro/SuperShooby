@@ -58,9 +58,14 @@ star.children.iterate(function (child) {
   
 });
 
-this.player.setVelocityY(-330);
 this.physics.add.collider(star, platforms);
+
 this.physics.add.overlap(this.player,star, this.collectStars, null, true)
+
+setTimeout(() => {
+  this.player.setVelocityY(-230);
+  this.player.setVelocityX(20);
+}, 2000)
 
 }
 
@@ -68,6 +73,7 @@ this.physics.add.overlap(this.player,star, this.collectStars, null, true)
 
 collectStars(player,star) {
   star.disableBody(true, true);
+  return true
 }
 
 
