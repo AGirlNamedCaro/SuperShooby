@@ -27,7 +27,6 @@ export const config = {
 
 function resize() {
   let canvas = document.querySelector("canvas");
-  console.log(canvas)
   let windowWidth = window.innerWidth;
   let windowHeight = window.innerHeight;
   let windowRatio = windowWidth / windowHeight;
