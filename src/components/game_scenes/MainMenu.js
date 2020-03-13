@@ -14,7 +14,6 @@ export default class MainMenu extends Phaser.Scene{
     playButton.setInteractive();
 
     playButton.on("pointerdown", () => {
-      console.log(menuBg, "old")
       this.scene.start("playMenu", { menuBg: menuBg})
     })
   }
