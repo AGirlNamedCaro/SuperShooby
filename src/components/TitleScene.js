@@ -25,7 +25,7 @@ export default class TitleScene extends  Phaser.Scene{
  
 
   create() {
-    this.bg = this.add.tileSprite(400,300,800,480,'sky')
+    this.bg = this.add.tileSprite(400,300,800,600,'sky')
     this.ground = this.add.tileSprite(0,0,'ground')
 
 
