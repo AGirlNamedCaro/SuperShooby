@@ -31,20 +31,20 @@ this.anims.create({
 this.player.anims.play('right', true);
 this.physics.add.collider(this.player, platforms);
 
-let star = this.physics.add.group({
+this.star = this.physics.add.group({
   key: 'star',
   repeat: 2,
   setXY: { x: 450, y: 0, stepX: 70 }
 });
 
-star.children.iterate(function (child) {
+this.star.children.iterate(function (child) {
   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   
 });
 
-this.physics.add.collider(star, platforms);
+this.physics.add.collider(this.star, platforms);
 
-this.physics.add.overlap(this.player,star, this.collectStars, null, true)
+this.physics.add.overlap(this.player,this.star, this.collectStars, null, true)
 
 setTimeout(() => {
   this.player.setVelocityY(-230);
@@ -57,16 +57,20 @@ setTimeout(() => {
 
 collectStars(player,star) {
   star.disableBody(true, true);
-  return true
+
 }
 
 
 
 
 update() {
-this.bg.tilePositionX += 5;
-
+  this.bg.tilePositionX += 5;
   
+  if(this.star.countActive(true) === 0) {
+    this.player.setVelocityX(0);    
+  
+  }
+
 
 }
 
