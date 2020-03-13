@@ -14,6 +14,8 @@ export default class Preload extends Phaser.Scene {
     this.load.image("menuBg", "/assets/menu-bg.png");
     this.load.image("cancelButton", "/assets/cancelButton.png");
     this.load.image("headButton", "/assets/headButton.png");
+    this.load.image("customizeButton", "/assets/customizeButton.png");
+
 
     this.load.on("progress", () => {
       this.add.text(20, 20, "Loading game...")
