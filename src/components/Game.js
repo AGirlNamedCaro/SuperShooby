@@ -2,10 +2,10 @@ import React from "react";
 import Phaser from "phaser";
 import Preload from "./game_scenes/Preload";
 import Main from "./game_scenes/Main";
-import MainMenu from "./game_scenes/MainMenu";
-import PlayMenu from "./game_scenes/PlayMenu";
-import MultiplayerMenu from "./game_scenes/MultiplayerMenu";
-import CustomizeMenu from "./game_scenes/CustomizeMenu";
+import MainMenu from "./game_scenes/menu_scenes/MainMenu";
+import PlayMenu from "./game_scenes/menu_scenes/PlayMenu";
+import MultiplayerMenu from "./game_scenes/menu_scenes/MultiplayerMenu";
+import CustomizeMenu from "./game_scenes/menu_scenes/CustomizeMenu";
 
 const config = {
   type: Phaser.CANVAS,
