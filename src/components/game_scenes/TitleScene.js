@@ -6,20 +6,6 @@ class TitleScene extends  Phaser.Scene{
   constructor() {
     super('TitleScene')
   }
-
-
-  preload() {
-    
-    this.load.image('sky', 'images/bg/fairy-background-craft-pixel.png');
-    this.load.image('ground', 'images/bg/platform.png');
-    this.load.spritesheet('dude', 
-    'images/dude.png',
-    { frameWidth: 32, frameHeight: 48 }
-    );
-    this.load.image('star', 'images/star.png')
-    
-  }
-  
   
   create() {
     this.scene.launch("mainMenu");
