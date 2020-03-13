@@ -2,23 +2,34 @@
   display: grid;
   margin: 0em;
   grid-template-columns: 1fr auto 1fr;
-  grid-template-rows: 2.5em auto 10em;
+  grid-template-rows: auto auto 12em;
   grid-template-areas:
   "topBar topBar topBar"
   ". game ."
   ". game-desc .";
+  background-image: url("/Screen Shot 2020-03-12 at 4.png");
+  background-attachment: fixed;
+  
 }
 
 #top-bar {
   grid-area: topBar;
+  
 }
 
 #game-container {
   grid-area: game;
   display: flex;
   justify-content: center;
+ 
 }
-
+#game-container canvas {
+  border: 8px solid;
+  border-color: rgba(59, 48, 15, 0.322) rgba(219, 183, 85, 0.342) rgba(245, 212, 120, 0.329) rgba(87, 69, 19, 0.342) 
+  /* box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color]; */
+  
+}
 #game-desc {
   grid-area: game-desc;
+  
 }
