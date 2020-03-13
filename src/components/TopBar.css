@@ -1,15 +1,16 @@
 #top-bar {
   display: grid;
   grid-template-columns: 5% auto 5%;
-  grid-template-rows: 15% auto 15%;
+  grid-template-rows: auto auto 15%;
   grid-template-areas: 
   ". . ."
   ". content ."
   ". . .";
-  background-color: steelblue;
+  
+  justify-content: center;
 }
 
-#top-bar h1 {
+#top-bar img {
   grid-area: content;
   margin: 0em;
 }

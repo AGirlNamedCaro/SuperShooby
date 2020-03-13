@@ -3,8 +3,8 @@ import "./TopBar.css"
 
 export default function TopBar() {
   return (
-    <article id="top-bar">
-    <h1>LOGO HERE</h1>
+    <article id="top-bar" >
+    <img src="/logo192.png" alt=""/>
   </article>
   );
 }
