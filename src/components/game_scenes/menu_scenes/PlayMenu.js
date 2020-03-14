@@ -30,7 +30,12 @@ export default class PlayMenu extends Phaser.Scene{
 
     singlePlayer.on("pointerdown", () => {
       console.log("Single Player");
-      // this.scene.start("play")
+      this.scene.stop("playMenu");
+      const titleScene = this.scene.get("titleScene");
+      titleScene.scene.transition({
+        target: "gameScene",
+        duration: 1000,
+      })
     });
 
     multiplayer.on("pointerdown", () => {
