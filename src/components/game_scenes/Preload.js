@@ -20,6 +20,14 @@ export default class Preload extends Phaser.Scene {
     this.load.image("createCharButton", "/assets/images/buttons/createCharButton.png");
     this.load.image('ground', '/assets/images/prefabs/platform.png');
     this.load.image('star', '/assets/images/prefabs/star.png')
+
+
+
+    this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
+    this.load.image('slider', '/assets/images/buttons/slider.png')
+
+
+
     
     
     this.load.spritesheet('dude',
