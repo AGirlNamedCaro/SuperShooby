@@ -8,6 +8,7 @@ export default class Preload extends Phaser.Scene {
   preload() {
     this.load.image('sky', '/assets/images/backgrounds/fairy-background-craft-pixel.png');
     this.load.image('playButton', "/assets/images/buttons/playButton.png");
+    this.load.image('settingsButton', "/assets/images/buttons/settings.png");
     this.load.image('smallPlayButton', "/assets/images/buttons/smallPlayButton.png");
     this.load.image('singlePlayer', "/assets/images/buttons/singlePlayerButton.png");
     this.load.image('multiplayer', "/assets/images/buttons/multiplayerButton.png");
