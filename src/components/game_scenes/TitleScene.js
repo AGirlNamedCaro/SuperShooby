@@ -10,11 +10,12 @@ class TitleScene extends  Phaser.Scene{
   create() {
     this.scene.launch("mainMenu");
     this.bg = this.add.tileSprite(400,300,800,600,'sky')
+    this.bg.scaleY = 1.15;
     this.ground = this.add.tileSprite(0,0,'ground')
 
 
     let platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    platforms.create(400, 610, 'ground').setScale(2).refreshBody();
 
 this.player =  this.physics.add.sprite(450, 450, 'dude')
 // player.body.velocity.set(100);

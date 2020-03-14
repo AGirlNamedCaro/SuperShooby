@@ -32,6 +32,12 @@
          "id":3,
          "name":"ground",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"collides",
+                 "type":"bool",
+                 "value":true
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":50,
