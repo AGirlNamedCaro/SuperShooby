@@ -14,7 +14,7 @@ export default class Customize extends Phaser.Scene {
 
     create() {
         this.add.existing(this.menuBg);
-        this.menuBg.scaleY = 0.45;
+        this.menuBg.scaleY = 0.3;
         const setMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.32, "setMapButton");
         setMapButton.scale = 0.15;
         const createMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.40, "createMapButton");
