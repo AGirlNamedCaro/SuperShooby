@@ -31,10 +31,38 @@ export default class GameScene extends Phaser.Scene {
     ground.setCollisionByExclusion(-1, true);
 
     const self = this;
+    this.otherPlayers = this.physics.add.group();
     this.socket.on("currentPlayers", players => {
-      Object.keys(players).forEach(id => {
+      console.log("up Players", players);
+      for (let id in players) {
+        console.log("player id", id);
+        console.log(Object.keys(players));
         if (players[id].playerId === self.socket.id) {
+          console.log("adding self player");
           this.addPlayer(self, ground);
+        } else {
+          console.log("adding other player");
+          this.addOtherPlayers(self, players[id], ground);
+        }
+      }
+    });
+    this.socket.on("newPlayer", playerInfo => {
+      console.log("adding new player");
+      this.addOtherPlayers(self, playerInfo, ground);
+    });
+    this.socket.on("disconnect", playerId => {
+      self.otherPlayers.getChildren().forEach(otherPlayer => {
+        if (playerId === otherPlayer.playerId) {
+          otherPlayer.destroy();
+        }
+      });
+    });
+
+    this.socket.on("playerMoved", playerInfo => {
+      self.otherPlayers.getChildren().forEach(otherPlayer => {
+        if (playerInfo.playerId === otherPlayer.Id) {
+          otherPlayer.setRotation(playerInfo.rotation);
+          otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
     });
@@ -66,7 +94,8 @@ export default class GameScene extends Phaser.Scene {
     if (this.player) {
       if (this.cursors.left.isDown) {
         this.player.setVelocityX(-160);
-
+        console.log("player", this.player);
+        console.log("this", this);
         this.player.anims.play("left", true);
       } else if (this.cursors.right.isDown) {
         this.player.setVelocityX(160);
@@ -79,17 +108,53 @@ export default class GameScene extends Phaser.Scene {
       }
 
       if (this.cursors.up.isDown && this.player.body.blocked.down) {
-        console.log("jump");
         this.player.setVelocityY(-630);
       }
+
+      let x = this.player.x;
+      let y = this.player.y;
+      let r = this.player.rotation;
+      if (
+        this.player.oldPosition &&
+        (x !== this.player.oldPosition.x ||
+          y !== this.player.oldPosition.y ||
+          r !== this.player.oldPosition.rotation)
+      ) {
+        this.socket.emit("playerMovement", {
+          x: this.player.x,
+          y: this.player.y,
+          rotation: this.player.rotation
+        });
+      }
+
+      this.player.oldPosition = {
+        x: this.player.x,
+        y: this.player.y,
+        rotation: this.player.rotation
+      };
     }
   }
-
+  //   TODO Dry these functions up
   addPlayer(self, collisions) {
     self.player = self.physics.add.sprite(100, 450, "dude");
+    console.log("addPlayer", self.player);
     self.player.body.setGravityY(300);
     self.physics.add.collider(self.player, collisions);
     self.player.setBounce(0.2);
     self.player.setCollideWorldBounds(true);
+  }
+
+  addOtherPlayers(self, playerInfo, collisions) {
+    console.log("self", self);
+    const otherPlayer = self.physics.add.sprite(100, 450, "dude");
+    console.log("this.Other");
+    console.log("otherPlayer", otherPlayer);
+    console.log("Self Player", self.player);
+    otherPlayer.Id = playerInfo.playerId;
+    otherPlayer.body.setGravityY(300);
+    self.physics.add.collider(otherPlayer, collisions);
+    otherPlayer.setBounce(0.2);
+    otherPlayer.setCollideWorldBounds(true);
+    this.otherPlayers.add(otherPlayer);
   }
 }
