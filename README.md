@@ -37,6 +37,11 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
+## For Websockets to work
+
+Create a .env file and put in your host machines private ipv4 address with REACT_APP_HOST as the key
+and a REACT_APP_PORT with the port as 8080 unless you change the proxy and websocket listener
+
 ## Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
