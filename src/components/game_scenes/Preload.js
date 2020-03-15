@@ -26,10 +26,6 @@ export default class Preload extends Phaser.Scene {
 
     this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
     this.load.image('slider', '/assets/images/buttons/slider.png')
-
-
-
-    
     
     this.load.spritesheet('dude',
       '/assets/images/sprites/dude.png',

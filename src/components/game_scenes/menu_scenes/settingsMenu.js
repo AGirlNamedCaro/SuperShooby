@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 
+
 export default class settingsMenu extends Phaser.Scene {
     constructor() {
         super("settingsMenu");
@@ -15,41 +16,36 @@ export default class settingsMenu extends Phaser.Scene {
 
     create() {
       this.add.existing(this.menuBg);
-      this.menuBg.scaleY = 0.50;
+      this.menuBg.scaleY = 0.45;
 
-      const sliderDiff = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.25, "slider");
-      sliderDiff.scale = 0.15;
+        const easy = this.add.image(this.game.renderer.width / 2.2, this.game.renderer.height * 0.28, "cancelButton");
+        easy.scale = 0.08;
+        const easyBombs = 1;
+        const mediumBombs = 2;
+        const hardBombs = 3;
+        const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
+        medium.scale = 0.08;
+        const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
+        hard.scale = 0.08;
 
-      const sliderButtonDiff = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.25, "smallPlayButton");
-      sliderButtonDiff.scale = 0.15;
+        
+        easy.setInteractive();
+        medium.setInteractive();
+        hard.setInteractive();
 
-      const sliderSpeed = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "slider");
-      sliderSpeed.scale = 0.15;
-
-      const sliderButtonSpeed = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.35, "smallPlayButton");
-      sliderButtonSpeed.scale = 0.15;
-
-      sliderButtonDiff.setInteractive();
-      sliderButtonSpeed.setInteractive();
-
-
-      this.input.setDraggable(sliderButtonDiff);
-      this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
-        gameObject.x = dragX;
-        gameObject.y = dragY;
+    easy.on("pointerdown", () => {
+      console.log("Easy");
+      this.scene.stop("settingsMenu");
+      const titleScene = this.scene.get("titleScene");
+      titleScene.scene.transition({
+        target: "settingsExample",
+        duration: 1000,
+        data: {easyBombs}
       })
-
-
-      this.input.setDraggable(sliderButtonSpeed);
-      this.input.on('drag', function(pointer, gameObject, dragX, dragY) {
-        gameObject.x = dragX;
-        gameObject.y = dragY;
-      })
-
+        });
+        
+      }
      
-
-    
-  }
 }
   
 
