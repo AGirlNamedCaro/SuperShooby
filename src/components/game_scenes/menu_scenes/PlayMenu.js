@@ -10,10 +10,12 @@ export default class PlayMenu extends Phaser.Scene{
     this.menuBg.scene = this;
     this.menuBg.active = true;
     this.menuBg.visible = true;
+    this.bombs = data.bombs;
   }
 
   create() {
-
+    console.log(this.bombs);
+    const bombs = this.bombs;
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.32, "singlePlayer");
     singlePlayer.scale = 0.15;
@@ -34,7 +36,8 @@ export default class PlayMenu extends Phaser.Scene{
       const titleScene = this.scene.get("titleScene");
       titleScene.scene.transition({
         target: "gameScene",
-        duration: 1000,
+        data: {bombs},
+        duration: 1000
       })
     });
 

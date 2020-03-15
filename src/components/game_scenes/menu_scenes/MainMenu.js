@@ -4,8 +4,14 @@ export default class MainMenu extends Phaser.Scene{
   constructor() {
     super("mainMenu");
   }
+
+  init(data) {
+    this.bombs = data.bombs;
+    
+  }
   
   create() {
+    
     const menuBg = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.30, "menuBg");
     menuBg.scale = 0.3;
     const playButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.19, "playButton");
@@ -15,15 +21,25 @@ export default class MainMenu extends Phaser.Scene{
     const settingsButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.44, "settingsButton");
     settingsButton.scale = 0.30;
 
+    let bombs = this.bombs;
+    
+  
+    if(!bombs) {
+      bombs = 1;
 
-
+    }
+    else {
+      bombs = this.bombs;
+    }
+    
     
     playButton.setInteractive();
     customizeButton.setInteractive();
     settingsButton.setInteractive();
 
+
     playButton.on("pointerdown", () => {
-      this.scene.start("playMenu", { menuBg: menuBg})
+      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs  })
     })
 
     customizeButton.on("pointerdown", () => {
@@ -33,6 +49,8 @@ export default class MainMenu extends Phaser.Scene{
     settingsButton.on("pointerdown", () => {
       this.scene.start("settingsMenu", { menuBg: menuBg})
     })
+
+    console.log('bombs: ', bombs);
 
   }
 
