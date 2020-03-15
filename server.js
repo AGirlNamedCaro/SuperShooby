@@ -24,11 +24,12 @@ io.on("connection", socket => {
   socket.broadcast.emit("newPlayer", players[socket.id]);
   console.log(players);
 
-  socket.on("playerMovement", movementData => {
-    players[socket.id].x = movementData.x;
-    players[socket.id].y = movementData.y;
-    players[socket.id].rotation = movementData.rotation;
+  socket.on("playerMovement", playerData => {
+    players[socket.id].x = playerData.x;
+    players[socket.id].y = playerData.y;
+    players[socket.id].playerState = playerData;
 
+    console.log(players[socket.id].playerState);
     socket.broadcast.emit("playerMoved", players[socket.id]);
   });
 

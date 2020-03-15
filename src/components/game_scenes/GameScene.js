@@ -60,9 +60,36 @@ export default class GameScene extends Phaser.Scene {
 
     this.socket.on("playerMoved", playerInfo => {
       self.otherPlayers.getChildren().forEach(otherPlayer => {
+        otherPlayer.body.setGravityY(300);
+
         if (playerInfo.playerId === otherPlayer.Id) {
-          otherPlayer.setRotation(playerInfo.rotation);
-          otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+          // TODO this can break later if we have more than 2 players
+          const otherPlayerState = playerInfo;
+          // console.log("otherPlayerState", playerInfo)
+          // console.log("otherplayerId", otherPlayer.Id);
+          // console.log("otherPlayerInfo", playerInfo[otherPlayer.Id]);
+          if (otherPlayerState.playerState.left) {
+            otherPlayer.setVelocityX(-160);
+            otherPlayer.anims.play("left", true);
+          } else if (otherPlayerState.playerState.right) {
+            otherPlayer.setVelocityX(160);
+            otherPlayer.anims.play("right", true);
+          } else {
+            otherPlayer.setVelocityX(0);
+            otherPlayer.anims.play("turn");
+          }
+
+          if (
+            otherPlayerState.playerState.up &&
+            otherPlayer.body.blocked.down
+          ) {
+            otherPlayer.setVelocityY(-630);
+            console.log(otherPlayer);
+            // this.player.setVelocityY(-630);
+          }
+
+          //   otherPlayer.setRotation(playerInfo.rotation);
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
     });
@@ -87,51 +114,146 @@ export default class GameScene extends Phaser.Scene {
       repeat: -1
     });
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = this.input.keyboard.addKeys({
+      up: Phaser.Input.Keyboard.KeyCodes.W,
+      left: Phaser.Input.Keyboard.KeyCodes.A,
+      down: Phaser.Input.Keyboard.KeyCodes.S,
+      right: Phaser.Input.Keyboard.KeyCodes.D
+    });
+
+    this.playerState = this.calcPlayerState();
+
+    console.log(this.cursors);
+    this.input.keyboard.on("keyup-W", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        false,
+        "up"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keyup-A", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        false,
+        "left"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keyup-S", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        false,
+        "down"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keyup-D", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        false,
+        "right"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keydown-W", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        true,
+        "up"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keydown-A", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        true,
+        "left"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keydown-S", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        true,
+        "down"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
+
+    this.input.keyboard.on("keydown-D", event => {
+      this.playerState = this.calcPlayerState(
+        this.player,
+        this.playerState,
+        true,
+        "right"
+      );
+      this.emitSocket(this.socket, "playerMovement", this.playerState);
+    });
   }
 
   update() {
     if (this.player) {
       if (this.cursors.left.isDown) {
         this.player.setVelocityX(-160);
-        console.log("player", this.player);
-        console.log("this", this);
         this.player.anims.play("left", true);
+        //     this.playerState = this.calcPlayerState(
+        //       this.player,
+        //       this.playerState,
+        //       "left"
+        //     );
+        //     this.socket.emit("playerMovement", this, this.playerState);
       } else if (this.cursors.right.isDown) {
         this.player.setVelocityX(160);
-
         this.player.anims.play("right", true);
       } else {
         this.player.setVelocityX(0);
-
         this.player.anims.play("turn");
       }
-
       if (this.cursors.up.isDown && this.player.body.blocked.down) {
         this.player.setVelocityY(-630);
       }
-
-      let x = this.player.x;
-      let y = this.player.y;
-      let r = this.player.rotation;
-      if (
-        this.player.oldPosition &&
-        (x !== this.player.oldPosition.x ||
-          y !== this.player.oldPosition.y ||
-          r !== this.player.oldPosition.rotation)
-      ) {
-        this.socket.emit("playerMovement", {
-          x: this.player.x,
-          y: this.player.y,
-          rotation: this.player.rotation
-        });
-      }
-
-      this.player.oldPosition = {
-        x: this.player.x,
-        y: this.player.y,
-        rotation: this.player.rotation
-      };
+      //   this.socket.on("playerMoved", playerInfo => {
+      //     this.otherPlayers.getChildren().forEach(otherPlayer => {
+      //       //   if (playerInfo.playerId === otherPlayer.Id) {
+      //       //     otherPlayer.setRotation(playerInfo.rotation);
+      //       //     otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+      //       //   }
+      //     });
+      //   });
+      //   let x = this.player.x;
+      //   let y = this.player.y;
+      //   let r = this.player.rotation;
+      //   if (
+      //     this.player.oldPosition &&
+      //     (x !== this.player.oldPosition.x ||
+      //       y !== this.player.oldPosition.y ||
+      //       r !== this.player.oldPosition.rotation)
+      //   ) {
+      //     this.socket.emit("playerMovement", {
+      //       x: this.player.x,
+      //       y: this.player.y,
+      //       rotation: this.player.rotation
+      //     });
+      //   }
+      //   this.player.oldPosition = {
+      //     x: this.player.x,
+      //     y: this.player.y,
+      //     rotation: this.player.rotation
+      //   };
     }
   }
   //   TODO Dry these functions up
@@ -156,5 +278,35 @@ export default class GameScene extends Phaser.Scene {
     otherPlayer.setBounce(0.2);
     otherPlayer.setCollideWorldBounds(true);
     this.otherPlayers.add(otherPlayer);
+  }
+
+  calcPlayerState(player, playerState, isState, state) {
+    let resultsObj = {};
+    if (!playerState) {
+      resultsObj = {
+        up: false,
+        left: false,
+        down: false,
+        right: false,
+        x: 100,
+        y: 450
+      };
+      return resultsObj;
+    }
+
+    resultsObj = playerState;
+
+    if (isState) {
+      resultsObj[state] = true;
+    } else {
+      resultsObj[state] = false;
+    }
+    resultsObj.x = player.x;
+    resultsObj.y = player.y;
+    return resultsObj;
+  }
+
+  emitSocket(socket, event, emitObj) {
+    socket.emit(event, emitObj);
   }
 }
