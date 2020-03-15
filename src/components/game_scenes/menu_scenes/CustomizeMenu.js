@@ -15,16 +15,17 @@ export default class Customize extends Phaser.Scene {
     create() {
         this.add.existing(this.menuBg);
         this.menuBg.scaleY = 0.3;
-        const setMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.32, "setMapButton");
-        setMapButton.scale = 0.15;
-        const createMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.40, "createMapButton");
-        createMapButton.scale = 0.15;
-        const createCharButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.48, "createCharButton");
-        createCharButton.scale = 0.15;
-
-        const smallPlayButton = this.add.image(this.game.renderer.width / 2.8, this.game.renderer.height * 0.23, "smallPlayButton");
-        smallPlayButton.flipX = true;
-        smallPlayButton.scale = 0.09;
+        const setMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.18, "setMapButton");
+        setMapButton.scale = 0.27;
+        const createMapButton = this.add.image(this.game.renderer.width / 1.97, this.game.renderer.height * 0.299, "createMapButton");
+        createMapButton.scale = 0.25;
+        const createCharButton = this.add.image(this.game.renderer.width / 1.95, this.game.renderer.height * 0.43, "createCharButton");
+        createCharButton.scale = 0.28;
+        const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+        backButtonRope.scale = 0.45
+        const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.64, "smallPlayButton");
+        smallPlayButton.scale = 0.35
+        ;
 
         smallPlayButton.setInteractive();
 
