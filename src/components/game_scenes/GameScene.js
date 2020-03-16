@@ -4,8 +4,6 @@ import socketIo from "socket.io-client";
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super("gameScene");
-    const player = this.player;
-    let cursors = this.cursors;
   }
 
   preload() {
@@ -69,12 +67,15 @@ export default class GameScene extends Phaser.Scene {
           // console.log("otherplayerId", otherPlayer.Id);
           // console.log("otherPlayerInfo", playerInfo[otherPlayer.Id]);
           if (otherPlayerState.playerState.left) {
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             otherPlayer.setVelocityX(-160);
             otherPlayer.anims.play("left", true);
           } else if (otherPlayerState.playerState.right) {
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             otherPlayer.setVelocityX(160);
             otherPlayer.anims.play("right", true);
           } else {
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
             otherPlayer.setVelocityX(0);
             otherPlayer.anims.play("turn");
           }
@@ -83,13 +84,14 @@ export default class GameScene extends Phaser.Scene {
             otherPlayerState.playerState.up &&
             otherPlayer.body.blocked.down
           ) {
-            otherPlayer.setVelocityY(-630);
+            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+            otherPlayer.setVelocityY(-150);
             console.log(otherPlayer);
             // this.player.setVelocityY(-630);
           }
 
           //   otherPlayer.setRotation(playerInfo.rotation);
-            otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+            // otherPlayer.setPosition(playerInfo.x, playerInfo.y);
         }
       });
     });
@@ -210,12 +212,6 @@ export default class GameScene extends Phaser.Scene {
       if (this.cursors.left.isDown) {
         this.player.setVelocityX(-160);
         this.player.anims.play("left", true);
-        //     this.playerState = this.calcPlayerState(
-        //       this.player,
-        //       this.playerState,
-        //       "left"
-        //     );
-        //     this.socket.emit("playerMovement", this, this.playerState);
       } else if (this.cursors.right.isDown) {
         this.player.setVelocityX(160);
         this.player.anims.play("right", true);
@@ -224,7 +220,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.anims.play("turn");
       }
       if (this.cursors.up.isDown && this.player.body.blocked.down) {
-        this.player.setVelocityY(-630);
+        this.player.setVelocityY(-150);
       }
       //   this.socket.on("playerMoved", playerInfo => {
       //     this.otherPlayers.getChildren().forEach(otherPlayer => {
@@ -259,7 +255,6 @@ export default class GameScene extends Phaser.Scene {
   //   TODO Dry these functions up
   addPlayer(self, collisions) {
     self.player = self.physics.add.sprite(100, 450, "dude");
-    console.log("addPlayer", self.player);
     self.player.body.setGravityY(300);
     self.physics.add.collider(self.player, collisions);
     self.player.setBounce(0.2);
@@ -267,11 +262,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   addOtherPlayers(self, playerInfo, collisions) {
-    console.log("self", self);
     const otherPlayer = self.physics.add.sprite(100, 450, "dude");
-    console.log("this.Other");
-    console.log("otherPlayer", otherPlayer);
-    console.log("Self Player", self.player);
     otherPlayer.Id = playerInfo.playerId;
     otherPlayer.body.setGravityY(300);
     self.physics.add.collider(otherPlayer, collisions);
