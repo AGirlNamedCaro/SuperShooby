@@ -17,14 +17,16 @@ export default class PlayMenu extends Phaser.Scene{
     console.log(this.bombs);
     const bombs = this.bombs;
     this.add.existing(this.menuBg);
-    const singlePlayer = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.32, "singlePlayer");
-    singlePlayer.scale = 0.15;
-    const multiplayer = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.40, "multiplayer");
-    multiplayer.scale = 0.15;
+    const singlePlayer = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.185, "singlePlayer");
+    singlePlayer.scale = 0.30;
+    const multiplayer = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "multiplayer");
+    multiplayer.scale = 0.30;
 
-    const smallPlayButton = this.add.image(this.game.renderer.width / 2.8, this.game.renderer.height * 0.24, "smallPlayButton");
-    smallPlayButton.flipX = true;
-    smallPlayButton.scale = 0.09;
+    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+    backButtonRope.scale = 0.45
+    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.64, "smallPlayButton");
+    smallPlayButton.scale = 0.35
+    ;
 
     singlePlayer.setInteractive();
     multiplayer.setInteractive();

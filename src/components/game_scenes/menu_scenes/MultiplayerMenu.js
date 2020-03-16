@@ -26,16 +26,16 @@ export default class MultiplayerMenu extends Phaser.Scene {
     this.add.existing(this.menuBg);
     this.add.existing(this.smallPlayButton);
     
-    this.add.text(this.game.renderer.width / 2.65, this.game.renderer.height * 0.32, "Waiting for another player").scale = 0.8;
+    this.add.text(this.game.renderer.width / 2.65, this.game.renderer.height * 0.27, "Waiting for another player").scale = 0.8;
 
-    const cancelButton = this.add.image(this.game.renderer.width / 1.9, this.game.renderer.height * 0.37, "cancelButton");
-    cancelButton.scale = 0.09;
+    const cancelButton = this.add.image(this.game.renderer.width / 2.45, this.game.renderer.height * 0.34, "cancelButton");
+    cancelButton.scale = 0.45;
 
-    const headButton = this.add.image(this.game.renderer.width / 2.1, this.game.renderer.height * 0.37, "headButton");
-    headButton.scale = 0.09;
+    // const headButton = this.add.image(this.game.renderer.width / 2.1, this.game.renderer.height * 0.37, "headButton");
+    // headButton.scale = 0.09;
 
     cancelButton.setInteractive();
-    headButton.setInteractive();
+    //headButton.setInteractive();
     this.smallPlayButton.setInteractive();
 
     // console.log(cancelButton, "cancel");
@@ -43,10 +43,12 @@ export default class MultiplayerMenu extends Phaser.Scene {
       console.log("Show Code");
     });
 
-    headButton.on("pointerdown", () => {
-      console.log("Enter Code");
-    });
+    // headButton.on("pointerdown", () => {
+    //   console.log("Enter Code");
+    // });
     
+    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+    backButtonRope.scale = 0.45
     this.smallPlayButton.on("pointerdown", () => {
       this.scene.start("playMenu", { menuBg: this.menuBg, smPlBtn: this.smallPlayButton})
     });

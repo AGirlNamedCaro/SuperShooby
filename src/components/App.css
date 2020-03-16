@@ -5,14 +5,15 @@
   grid-template-rows: auto auto 12em;
   grid-template-areas:
   "topBar topBar topBar"
-  ". game ."
-  ". game-desc .";
+  "game game-desc game-desc"
+  ". . .";
   background-image: url("/Screen Shot 2020-03-12 at 4.png");
   background-attachment: fixed;
   
 }
 
 #top-bar {
+  padding: 25px;
   grid-area: topBar;
   
 }
@@ -24,8 +25,8 @@
  
 }
 #game-container canvas {
-  border: 8px solid;
-  border-color: rgba(59, 48, 15, 0.322) rgba(219, 183, 85, 0.342) rgba(245, 212, 120, 0.329) rgba(87, 69, 19, 0.342) 
+  margin: 25px;
+  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.205)
   /* box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color]; */
   
 }
