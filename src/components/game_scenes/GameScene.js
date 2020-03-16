@@ -5,6 +5,7 @@ export default class GameScene extends Phaser.Scene {
         super("gameScene");
         const player = this.player;
         let cursors = this.cursors;
+        
     }
 
     preload() {
@@ -30,6 +31,8 @@ export default class GameScene extends Phaser.Scene {
         const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
         // ground.setCollisionByProperty({ collides: true }, true)
         // ground.setCollision([1, 265, 266, 299, 298])
+        this.score = 0;
+       
         ground.setCollisionByExclusion(-1, true)
      
         this.player = this.physics.add.sprite(100, 450, 'dude');
@@ -80,11 +83,18 @@ export default class GameScene extends Phaser.Scene {
           this.bombs = this.physics.add.group();
           this.physics.add.collider(this.bombs,ground);
           this.physics.add.collider(this.player,this.bombs,this.hitBomb,null,this)
+
+          //ScoreTEXT
+
+          this.scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill: '#000'} );
   
     }
 
     collectStar(player, star) {
         star.disableBody(true,true);
+
+        this.score += 10;
+        this.scoreText.setText("score: " + this.score);
   
         if(this.stars.countActive(true) === 0) {
           this.stars.children.iterate(function(child) {
@@ -110,8 +120,8 @@ export default class GameScene extends Phaser.Scene {
   
       hitBomb(player,bomb) {
         this.physics.pause();
-        player.setTint(0xff0000);
-        player.anims.play('turn')
+        this.player.setTint(0xff0000);
+        this.player.anims.play('turn')
         this.gameOver = true;
         
       }
