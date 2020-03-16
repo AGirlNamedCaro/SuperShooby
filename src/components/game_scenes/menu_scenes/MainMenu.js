@@ -25,7 +25,7 @@ export default class MainMenu extends Phaser.Scene{
     
   
     if(!bombs) {
-      bombs = 1;
+      bombs = 2;
 
     }
     else {
