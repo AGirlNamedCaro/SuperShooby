@@ -19,6 +19,7 @@ export default class settingsMenu extends Phaser.Scene {
       this.menuBg.scaleY = 0.45;
 
         let bombs;
+        let score;
         const easy = this.add.image(this.game.renderer.width / 2.2, this.game.renderer.height * 0.28, "cancelButton");
         easy.scale = 0.08;
         const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
@@ -39,22 +40,26 @@ export default class settingsMenu extends Phaser.Scene {
     easy.on("pointerdown", () => {
       console.log("Easy");
       bombs = 1;
+      score = 10;
       
         });
 
         medium.on("pointerdown", () => {
           console.log("Medium");
           bombs = 2;
+          score = 15;
             });
 
         hard.on("pointerdown", () => {
           console.log("Hard");
           bombs = 3;
+          score = 20;
             });
 
         back.on("pointerdown", () => {
           console.log(bombs);
-          this.scene.start("mainMenu", {bombs:bombs})
+          console.log(score);
+          this.scene.start("mainMenu", {bombs:bombs, score:score})
         });
         
       }

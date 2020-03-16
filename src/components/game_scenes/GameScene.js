@@ -19,6 +19,7 @@ export default class GameScene extends Phaser.Scene {
 
     init(data) {
         this.bombs = data.bombs;
+        this.scoreNum = data.score;
     }
 
     create() {
@@ -93,7 +94,7 @@ export default class GameScene extends Phaser.Scene {
     collectStar(player, star) {
         star.disableBody(true,true);
 
-        this.score += 10;
+        this.score += this.scoreNum;
         this.scoreText.setText("score: " + this.score);
   
         if(this.stars.countActive(true) === 0) {
