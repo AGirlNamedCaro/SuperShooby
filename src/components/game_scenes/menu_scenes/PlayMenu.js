@@ -10,10 +10,12 @@ export default class PlayMenu extends Phaser.Scene{
     this.menuBg.scene = this;
     this.menuBg.active = true;
     this.menuBg.visible = true;
+    this.bombs = data.bombs;
   }
 
   create() {
-
+    console.log(this.bombs);
+    const bombs = this.bombs;
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.185, "singlePlayer");
     singlePlayer.scale = 0.30;
@@ -32,7 +34,13 @@ export default class PlayMenu extends Phaser.Scene{
 
     singlePlayer.on("pointerdown", () => {
       console.log("Single Player");
-      // this.scene.start("play")
+      this.scene.stop("playMenu");
+      const titleScene = this.scene.get("titleScene");
+      titleScene.scene.transition({
+        target: "gameScene",
+        data: {bombs},
+        duration: 1000
+      })
     });
 
     multiplayer.on("pointerdown", () => {
