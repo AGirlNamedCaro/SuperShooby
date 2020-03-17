@@ -32,7 +32,7 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.socket.on("currentPlayers", players => {
       Object.keys(players).forEach(id => {
         if (players[id].playerId === self.socket.id) {
-          this.displayPlayers(self, players[id], "dude");
+          this.player = this.displayPlayers(self, players[id], "dude");
         } else {
           this.displayPlayers(self, players[id], "dude");
         }
@@ -54,12 +54,39 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.socket.on("playerUpdates", players => {
       Object.keys(players).forEach(id => {
         self.players.getChildren().forEach(player => {
-          if (players[id].playerid === player.playerId) {
+          if (id === player.playerId) {
+            if (player.x > players[id].x) {
+              player.anims.play("left", true);
+            } else if (player.x < players[id].x) {
+              player.anims.play("right", true);
+            } else {
+              player.anims.play("turn");
+            }
             player.setPosition(players[id].x, players[id].y);
           }
-        })
-      })
-    })
+        });
+      });
+    });
+
+    this.anims.create({
+      key: "left",
+      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: "turn",
+      frames: [{ key: "dude", frame: 4 }],
+      frameRate: 20
+    });
+
+    this.anims.create({
+      key: "right",
+      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+      frameRate: 10,
+      repeat: -1
+    });
 
     this.cursors = this.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -70,42 +97,48 @@ export default class AuthoritativeScene extends Phaser.Scene {
   }
 
   update() {
-    if (this.cursors.left.isDown) {
-      console.log("playerState", this.playerState);
-      console.log("oldPlayerState", this.oldPlayerState);
-      this.playerState.left = true;
-    } else if (this.cursors.right.isDown) {
-      this.playerState.right = true;
-    } else {
-      this.playerState.left = false;
-      this.playerState.right = false;
-    }
+    if (this.player) {
+      if (this.cursors.left.isDown) {
+        console.log(this.socket.id);
+        this.playerState.left = true;
+        // console.log(this.player.a)
+        // this.player.anims.play("left", true);
+      } else if (this.cursors.right.isDown) {
+        this.playerState.right = true;
+        // this.player.anims.play("right", true);
+      } else {
+        this.playerState.left = false;
+        this.playerState.right = false;
+        // this.player.anims.play("turn");
+      }
 
-    // This might break, might need to add physics body on local version also
-    // && this.player.body.blocked.down
-    if (this.cursors.up.isDown) {
-      this.playerState.up = true;
-    } else {
-      this.playerState.up = false;
-    }
+      // This might break, might need to add physics body on local version also
+      // && this.player.body.blocked.down
+      if (this.cursors.up.isDown) {
+        this.playerState.up = true;
+      } else {
+        this.playerState.up = false;
+      }
 
-    if (
-      this.playerState.left !== this.oldPlayerState.left ||
-      this.playerState.right !== this.oldPlayerState.right ||
-      this.playerState.up !== this.oldPlayerState.up
-    ) {
-      console.log("playerState emit", this.playerState);
-      console.log("oldPlayerState emit", this.oldPlayerState);
+      if (
+        this.playerState.left !== this.oldPlayerState.left ||
+        this.playerState.right !== this.oldPlayerState.right ||
+        this.playerState.up !== this.oldPlayerState.up
+      ) {
+        // console.log("playerState emit", this.playerState);
+        // console.log("oldPlayerState emit", this.oldPlayerState);
 
-      this.socket.emit("playerInput", this.playerState);
+        this.socket.emit("playerInput", this.playerState);
+      }
+      this.oldPlayerState = { ...this.playerState };
     }
-    this.oldPlayerState = { ...this.playerState};
   }
 
   displayPlayers(self, playerInfo, sprite) {
     const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
     player.playerId = playerInfo.playerId;
     self.players.add(player);
+    return player;
   }
 
   calcPlayerState(player, playerState, isState, state) {

@@ -8,7 +8,7 @@ const config = {
     default: "arcade",
     arcade: {
       debug: false,
-      gravity: { y: 0 }
+      gravity: { y: 300 }
     }
   },
   scene: {
@@ -25,10 +25,20 @@ function preload() {
     frameWidth: 32,
     frameHeight: 48
   });
+  this.load.image("tiles", "assets/images/prefabs/marioTileset.png");
+  this.load.tilemapTiledJSON("world", "assets/mapData/marioTileset16.json");
 }
 
 function create() {
   const self = this;
+  const worldMap = this.add.tilemap("world");
+  const tileset = worldMap.addTilesetImage("tiles");
+  const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
+  const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
+  const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+  // ground.setCollisionByProperty({ collides: true }, true)
+  // ground.setCollision([1, 265, 266, 299, 298])
+  ground.setCollisionByExclusion(-1, true);
   this.players = this.physics.add.group();
 
   io.on("connection", socket => {
@@ -49,7 +59,7 @@ function create() {
       }
     };
 
-    addPlayer(self, players[socket.id]);
+    addPlayer(self, players[socket.id], ground);
 
     socket.emit("currentPlayers", players);
     socket.broadcast.emit("newPlayer", players[socket.id]);
@@ -62,7 +72,6 @@ function create() {
     });
 
     socket.on("playerInput", playerState => {
-      console.log(playerState);
       handlePlayerInput(self, socket.id, playerState);
     });
   });
@@ -73,10 +82,8 @@ function update() {
     const playerState = players[player.playerId].playerState;
     if (playerState.left) {
       player.setVelocityX(-160);
-      player.anims.play("left", true);
     } else if (playerState.right) {
       player.setVelocityX(160);
-      player.anims.play("right", true);
     } else {
       player.setVelocityX(0);
     }
@@ -89,16 +96,19 @@ function update() {
     players[player.playerId].y = player.y;
   });
 
-  this.physics.world.wrap(this.players, 5);
+  // this.physics.world.wrap(this.players, 5);
   io.emit("playerUpdates", players);
 }
 
-function addPlayer(self, collisions) {
-  self.player = self.physics.add.sprite(100, 450, "dude");
-  self.player.body.setGravityY(300);
-  self.physics.add.collider(self.player, collisions);
-  self.player.setBounce(0.2);
-  self.player.setCollideWorldBounds(true);
+function addPlayer(self, playerInfo, collisions) {
+  const player = self.physics.add.sprite(100, 450, "dude");
+  player.body.setGravityY(300);
+  self.physics.add.collider(player, collisions);
+  
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
+  player.playerId = playerInfo.playerId;
+  self.players.add(player);
 }
 
 function removePlayer(self, playerId) {
@@ -113,6 +123,7 @@ function handlePlayerInput(self, playerId, playerState) {
   self.players.getChildren().forEach(player => {
     if (playerId === player.playerId) {
       players[player.playerId].playerState = playerState;
+      console.log("playerState", players[player.playerId].playerState);
     }
   });
 }
