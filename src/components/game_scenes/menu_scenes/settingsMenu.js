@@ -21,19 +21,20 @@ export default class settingsMenu extends Phaser.Scene {
 
         let bombs;
         let score;
-        // const easy = this.add.image(this.game.renderer.width / 2.2, this.game.renderer.height * 0.28, "cancelButton");
-        // easy.scale = 0.08;
-        // const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
-        // medium.scale = 0.08;
-        // const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
-        // hard.scale = 0.08;
-
-        const easy = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar_hard");
+      
+        const difficulty_bar = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar");
+        difficulty_bar.scale = 0.35;
+        const easy = this.add.image(this.game.renderer.width/ 2.3 , this.game.renderer.height * 0.32, "difficulty_bar_easy");
         easy.scale = 0.35;
-        // const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
-        // medium.scale = 0.08;
-        // const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
-        // hard.scale = 0.08;
+        easy.alpha = 0.05;
+        const medium = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar_medium");
+        medium.scale = 0.35;
+        medium.alpha = 1;
+        const hard = this.add.image(this.game.renderer.width -650/ 2, this.game.renderer.height * 0.29, "difficulty_bar_hard");
+        hard.scale = 0.35;
+        hard.alpha = 0.05;
+        
+
 
         const back = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
         back.scale = 0.35;
@@ -41,27 +42,42 @@ export default class settingsMenu extends Phaser.Scene {
         
 
         
-        easy.setInteractive();
-        // medium.setInteractive();
-        // hard.setInteractive();
+        medium.setInteractive();
+        hard.setInteractive();
+        
         back.setInteractive();
+        
+        easy.setInteractive();
 
-    easy.on("pointerdown", () => {
+     
+        
+        
+      easy.on("pointerdown", () => {
       console.log("Easy");
+      easy.alpha = 1;
+      medium.alpha = 0.05
+      hard.alpha = 0.05
       bombs = 1;
       score = 10;
-      
         });
 
-        // medium.on("pointerdown", () => {
-        //   console.log("Medium");
-        //   bombs = 2;
-        //     });
+        medium.on("pointerdown", () => {
+          console.log("Medium");
+          medium.alpha = 1;
+          easy.alpha = 0.05;
+          hard.alpha = 0.05;
+          bombs = 2;
+          score = 15;
+            });
 
-        // hard.on("pointerdown", () => {
-        //   console.log("Hard");
-        //   bombs = 3;
-        //     });
+        hard.on("pointerdown", () => {
+          console.log("Hard");
+          hard.alpha = 1;
+          easy.alpha = 0.05;
+          medium.alpha = 0.05;
+          bombs = 3;
+          score = 20;
+            });
 
         back.on("pointerdown", () => {
           console.log(bombs);
