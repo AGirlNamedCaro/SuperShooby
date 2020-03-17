@@ -1,1 +1,2 @@
-start: npm serve ./public
+start: npm start
+server: npm run server

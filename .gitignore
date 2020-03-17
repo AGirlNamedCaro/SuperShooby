@@ -18,6 +18,9 @@
 .env.test.local
 .env.production.local
 
+# secret files ENV['ADMIN_USERNAME']
+.env
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
