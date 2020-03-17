@@ -80,9 +80,11 @@ function create() {
 function update() {
   this.players.getChildren().forEach(player => {
     const playerState = players[player.playerId].playerState;
-    if (playerState.left) {
+
+    // TODO bug where pressing right while holding down left wont stop character from moving left
+    if (playerState.left && !playerState.right) {
       player.setVelocityX(-160);
-    } else if (playerState.right) {
+    } else if (playerState.right && !playerState.left) {
       player.setVelocityX(160);
     } else {
       player.setVelocityX(0);

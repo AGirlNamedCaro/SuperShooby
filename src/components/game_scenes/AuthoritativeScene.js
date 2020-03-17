@@ -99,21 +99,14 @@ export default class AuthoritativeScene extends Phaser.Scene {
   update() {
     if (this.player) {
       if (this.cursors.left.isDown) {
-        console.log(this.socket.id);
         this.playerState.left = true;
-        // console.log(this.player.a)
-        // this.player.anims.play("left", true);
       } else if (this.cursors.right.isDown) {
         this.playerState.right = true;
-        // this.player.anims.play("right", true);
       } else {
         this.playerState.left = false;
         this.playerState.right = false;
-        // this.player.anims.play("turn");
       }
 
-      // This might break, might need to add physics body on local version also
-      // && this.player.body.blocked.down
       if (this.cursors.up.isDown) {
         this.playerState.up = true;
       } else {
@@ -125,8 +118,6 @@ export default class AuthoritativeScene extends Phaser.Scene {
         this.playerState.right !== this.oldPlayerState.right ||
         this.playerState.up !== this.oldPlayerState.up
       ) {
-        // console.log("playerState emit", this.playerState);
-        // console.log("oldPlayerState emit", this.oldPlayerState);
 
         this.socket.emit("playerInput", this.playerState);
       }
