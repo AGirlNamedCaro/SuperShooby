@@ -72,27 +72,23 @@ export default class GameScene extends Phaser.Scene {
 
         
         //FISH & BOMBS creation
-        this.fish = this.physics.add.sprite(450, 0, 'fish')
-        this.anims.create({
-        key: 'flop',
-        frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
-        frameRate: 10,
-        repeat: -1
-        });
+        
 
-        this.fish.anims.play('flop', true);
-
-
+        // this.fish.anims.play('flop', true);
         this.fish = this.physics.add.group({
             key: 'fish',
             repeat: 11,
             setXY: {x: 12, y: 0, stepX: 70}
           })
 
+        //
           
           this.fish.children.iterate(function(child) {
               child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8))
+              child.anims.play('flop', true);
             })
+
+
             
             this.physics.add.collider(this.fish,ground);
             
