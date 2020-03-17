@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import socketIo from "socket.io-client";
 
+// THIS FILE ISNT IN USE ANYMORE
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super("gameScene");
