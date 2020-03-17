@@ -137,7 +137,6 @@ export default class GameScene extends Phaser.Scene {
         this.player.setTint(0xff0000);
         this.player.anims.play('turn')
         this.gameOver = true;
-        
     }
     
     
@@ -152,15 +151,22 @@ export default class GameScene extends Phaser.Scene {
             
             this.player.anims.play('right', true);
         }
-        else {
+        else  {
             this.player.setVelocityX(0);
-            
+            this.player.body.setGravityY(500);
             this.player.anims.play('turn');
         }
         
         if (this.cursors.up.isDown && this.player.body.blocked.down) {
             console.log('jump')
             this.player.setVelocityY(-630);
+        }
+
+        if(this.gameOver === true) {
+
+            let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, 'GAME OVER', { fontSize: '32px', fill: '#fff' });
+            
+
         }
 
     } 
