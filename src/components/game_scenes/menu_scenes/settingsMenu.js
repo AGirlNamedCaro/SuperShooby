@@ -12,29 +12,38 @@ export default class settingsMenu extends Phaser.Scene {
         this.menuBg.scene = this;
         this.menuBg.active = true;
         this.menuBg.visible = true;
+        
     }
 
     create() {
       this.add.existing(this.menuBg);
-      this.menuBg.scaleY = 0.45;
+      this.menuBg.scaleY = 0.3;
 
         let bombs;
         let score;
-        const easy = this.add.image(this.game.renderer.width / 2.2, this.game.renderer.height * 0.28, "cancelButton");
-        easy.scale = 0.08;
-        const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
-        medium.scale = 0.08;
-        const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
-        hard.scale = 0.08;
+        // const easy = this.add.image(this.game.renderer.width / 2.2, this.game.renderer.height * 0.28, "cancelButton");
+        // easy.scale = 0.08;
+        // const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
+        // medium.scale = 0.08;
+        // const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
+        // hard.scale = 0.08;
 
-        const back = this.add.image(this.game.renderer.width / 2.8, this.game.renderer.height * 0.24, "smallPlayButton");
-        back.flipX = true;
-        back.scale = 0.09;
+        const easy = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar_hard");
+        easy.scale = 0.35;
+        // const medium = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.28, "smallPlayButton");
+        // medium.scale = 0.08;
+        // const hard = this.add.image(this.game.renderer.width -720 /2, this.game.renderer.height * 0.28, "headButton");
+        // hard.scale = 0.08;
+
+        const back = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
+        back.scale = 0.35;
+        
+        
 
         
         easy.setInteractive();
-        medium.setInteractive();
-        hard.setInteractive();
+        // medium.setInteractive();
+        // hard.setInteractive();
         back.setInteractive();
 
     easy.on("pointerdown", () => {
@@ -44,23 +53,24 @@ export default class settingsMenu extends Phaser.Scene {
       
         });
 
-        medium.on("pointerdown", () => {
-          console.log("Medium");
-          bombs = 2;
-          score = 15;
-            });
+        // medium.on("pointerdown", () => {
+        //   console.log("Medium");
+        //   bombs = 2;
+        //     });
 
-        hard.on("pointerdown", () => {
-          console.log("Hard");
-          bombs = 3;
-          score = 20;
-            });
+        // hard.on("pointerdown", () => {
+        //   console.log("Hard");
+        //   bombs = 3;
+        //     });
 
         back.on("pointerdown", () => {
           console.log(bombs);
           console.log(score);
           this.scene.start("mainMenu", {bombs:bombs, score:score})
         });
+
+        const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+    backButtonRope.scale = 0.45
         
       }
      

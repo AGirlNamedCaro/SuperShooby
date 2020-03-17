@@ -27,7 +27,7 @@ export default class PlayMenu extends Phaser.Scene{
 
     const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
     backButtonRope.scale = 0.45
-    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.64, "smallPlayButton");
+    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
     smallPlayButton.scale = 0.35
     ;
 

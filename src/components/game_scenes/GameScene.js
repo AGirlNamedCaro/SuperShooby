@@ -15,6 +15,8 @@ export default class GameScene extends Phaser.Scene {
             '/assets/images/sprites/dude.png',
             { frameWidth: 32, frameHeight: 48 }
         );
+
+      
     }
 
     init(data) {
