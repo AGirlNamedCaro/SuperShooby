@@ -7,30 +7,44 @@
   "topBar topBar topBar"
   "game game-desc game-desc"
   ". . .";
-  background-image: url("/Screen Shot 2020-03-12 at 4.png");
-  background-attachment: fixed;
+  background-image: url("/assets/images/backgrounds/arcade.png");
+ background-attachment: fixed;
   
 }
 
+.full-height {
+	
+	
+	position: relative;
+z-index: 10;
+	height: 400px;
+}
+
 #top-bar {
+  border: 1px solid;
   padding: 25px;
   grid-area: topBar;
+  height: 200px;
   
 }
 
 #game-container {
+  border: 1px solid red;
   grid-area: game;
-  display: flex;
+  position: relative;
   justify-content: center;
  
 }
 #game-container canvas {
-  margin: 25px;
-  box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, 0.205)
+
+  border: 50px solid rgb(27, 27, 27);
+
   /* box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color]; */
   
 }
 #game-desc {
-  grid-area: game-desc;
+  border: 1px solid blue;
+  grid-area: 'game-desc';
+  
   
 }
