@@ -30,7 +30,7 @@ class TitleScene extends Phaser.Scene {
     this.fish.anims.play('flop', true);
 
     this.physics.add.collider(this.fish, platforms);
-    this.physics.add.overlap(this.player, this.fish, this.collectStars, null, true)
+    this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
@@ -47,7 +47,7 @@ class TitleScene extends Phaser.Scene {
 
     this.fish = this.physics.add.group({
       key: 'fish',
-      repeat: 2,
+      repeat: 4,
       setXY: { x: 450, y: 0, stepX: 70 }
     });
 
@@ -84,6 +84,7 @@ class TitleScene extends Phaser.Scene {
     //   }
 
   }
+  
 
 
 
