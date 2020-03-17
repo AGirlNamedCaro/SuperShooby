@@ -19,6 +19,20 @@ class TitleScene extends Phaser.Scene {
     this.player = this.physics.add.sprite(450, 450, 'dude')
     // player.body.velocity.set(100);
 
+    
+    this.player.setBounce(0.2);
+    this.player.setCollideWorldBounds(true);
+    
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+      frameRate: 10,
+      repeat: -1
+    });
+    
+    this.player.anims.play('right', true);
+    this.physics.add.collider(this.player, platforms);
+
     this.fish = this.physics.add.sprite(450, 0, 'fish')
     this.anims.create({
       key: 'flop',
@@ -32,27 +46,15 @@ class TitleScene extends Phaser.Scene {
     this.physics.add.collider(this.fish, platforms);
     this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
-    this.player.setBounce(0.2);
-    this.player.setCollideWorldBounds(true);
-
-    this.anims.create({
-      key: 'right',
-      frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    this.player.anims.play('right', true);
-    this.physics.add.collider(this.player, platforms);
-
     this.fish = this.physics.add.group({
       key: 'fish',
-      repeat: 4,
+      repeat: 3,
       setXY: { x: 450, y: 0, stepX: 70 }
     });
 
     this.fish.children.iterate(function (child) {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.anims.play('flop', true);
 
     });
 
