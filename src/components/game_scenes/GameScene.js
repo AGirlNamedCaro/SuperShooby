@@ -69,20 +69,20 @@ export default class GameScene extends Phaser.Scene {
 
         
         //STARS & BOMBS creation
-        this.stars = this.physics.add.group({
-            key: 'star',
-            repeat: 7,
+        this.fish = this.physics.add.group({
+            key: 'fish',
+            repeat: 11,
             setXY: {x: 12, y: 0, stepX: 70}
           })
 
           
-          this.stars.children.iterate(function(child) {
+          this.fish.children.iterate(function(child) {
               child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8))
             })
             
-            this.physics.add.collider(this.stars,ground);
+            this.physics.add.collider(this.fish,ground);
             
-            this.physics.add.overlap(this.player,this.stars,this.collectStar,null,this);
+            this.physics.add.overlap(this.player,this.fish,this.collectFish,null,this);
             
             this.bombs = this.physics.add.group();
             this.physics.add.collider(this.bombs,ground);
@@ -94,14 +94,14 @@ export default class GameScene extends Phaser.Scene {
   
     }
     
-    collectStar(player, star) {
-        star.disableBody(true,true);
+    collectFish(player, fish) {
+        fish.disableBody(true,true);
         
         this.score += this.scoreNum;
         this.scoreText.setText("score: " + this.score);
         
-        if(this.stars.countActive(true) === 0) {
-          this.stars.children.iterate(function(child) {
+        if(this.fish.countActive(true) === 0) {
+          this.fish.children.iterate(function(child) {
               child.enableBody(true,child.x,0,true,true)
           });
           
