@@ -17,6 +17,7 @@ class TitleScene extends Phaser.Scene {
     platforms.create(400, 610, 'ground').setScale(2).refreshBody();
 
     this.player = this.physics.add.sprite(450, 450, 'dude')
+    this.fish = this.physics.add.sprite(450, 0, 'fish')
     // player.body.velocity.set(100);
 
     this.player.setBounce(0.2);
@@ -31,20 +32,30 @@ class TitleScene extends Phaser.Scene {
     this.player.anims.play('right', true);
     this.physics.add.collider(this.player, platforms);
 
-    let star = this.physics.add.group({
-      key: 'star',
-      repeat: 2,
-      setXY: { x: 450, y: 0, stepX: 70 }
+
+    this.anims.create({
+      key: 'flop',
+      frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1
     });
 
-    star.children.iterate(function (child) {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    this.fish.anims.play('flop', true);
+    console.log(this.fish);
+    // let star = this.physics.add.group({
+    //   key: 'star',
+    //   repeat: 2,
+    //   setXY: { x: 450, y: 0, stepX: 70 }
+    // });
 
-    });
+    // star.children.iterate(function (child) {
+    //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-    this.physics.add.collider(star, platforms);
+    // });
 
-    this.physics.add.overlap(this.player, star, this.collectStars, null, true)
+    this.physics.add.collider(this.fish, platforms);
+
+    this.physics.add.overlap(this.player, this.fish, this.collectStars, null, true)
 
     setTimeout(() => {
       this.player.setVelocityY(-230);

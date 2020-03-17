@@ -20,7 +20,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image("createMapButton", "/assets/images/buttons/createMapButton.png");
     this.load.image("createCharButton", "/assets/images/buttons/createCharButton.png");
     this.load.image('ground', '/assets/images/prefabs/platform.png');
-    this.load.image('star', '/assets/images/prefabs/star.png');
+    // this.load.image('star', '/assets/images/prefabs/star.png');
     
     
     this.load.spritesheet('dude',
@@ -28,6 +28,10 @@ export default class Preload extends Phaser.Scene {
       { frameWidth: 32, frameHeight: 48 }
     );
 
+    this.load.spritesheet('fish',
+    '/assets/images/sprites/star.png',
+    { frameWidth: 32, frameHeight: 32 }
+  );
 
     this.load.on("progress", () => {
       this.add.text(20, 20, "Loading game...")
