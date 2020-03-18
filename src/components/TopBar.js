@@ -4,7 +4,8 @@ import "./TopBar.css"
 export default function TopBar() {
   return (
     <article id="top-bar" >
-    <img src="/assets/images/backgrounds/logo.png" height="200px" alt=""/>
+    {/* <img class='full-height' src="/assets/images/backgrounds/logo.png" alt=""/> */}
   </article>
   );
 }
+
