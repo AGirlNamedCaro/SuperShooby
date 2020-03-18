@@ -4,8 +4,15 @@ export default class MainMenu extends Phaser.Scene{
   constructor() {
     super("mainMenu");
   }
+
+  init(data) {
+    this.bombs = data.bombs;
+    this.score = data.score;
+    
+  }
   
   create() {
+    
     const menuBg = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.30, "menuBg");
     menuBg.scale = 0.3;
     const playButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.19, "playButton");
@@ -15,18 +22,41 @@ export default class MainMenu extends Phaser.Scene{
     const settingsButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.44, "settingsButton");
     settingsButton.scale = 0.30;
 
+    let bombs = this.bombs;
+    let score = this.score;
+    
+  
+    if(!bombs) {
+      bombs = 2;
+      score = 10;
 
+    }
+    else {
+      bombs = this.bombs;
+      score = this.score;
+    }
+    
     
     playButton.setInteractive();
     customizeButton.setInteractive();
+    settingsButton.setInteractive();
+
 
     playButton.on("pointerdown", () => {
-      this.scene.start("playMenu", { menuBg: menuBg})
+      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score  })
     })
 
     customizeButton.on("pointerdown", () => {
       this.scene.start("customizeMenu", { menuBg: menuBg})
     })
+
+    settingsButton.on("pointerdown", () => {
+      this.scene.start("settingsMenu", { menuBg: menuBg})
+    })
+
+    console.log('bombs: ', bombs);
+    console.log('score: ', score);
+
   }
 
   update() {
