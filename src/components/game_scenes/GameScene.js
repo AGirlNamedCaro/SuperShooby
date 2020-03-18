@@ -20,6 +20,9 @@ export default class GameScene extends Phaser.Scene {
         { frameWidth: 32, frameHeight: 32 }
       );
 
+    this.load.image('back_to_main', '/assets/images/buttons/difficulty_bar_hard1.png');
+    this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
+
     }
 
     init(data) {
@@ -77,7 +80,7 @@ export default class GameScene extends Phaser.Scene {
         // this.fish.anims.play('flop', true);
         this.fish = this.physics.add.group({
             key: 'fish',
-            repeat: 11,
+            repeat: 3,
             setXY: {x: 12, y: 0, stepX: 70}
           })
 
@@ -101,6 +104,7 @@ export default class GameScene extends Phaser.Scene {
             //ScoreTEXT
             
             this.scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill: '#000'} );
+
   
     }
     
@@ -165,6 +169,28 @@ export default class GameScene extends Phaser.Scene {
         if(this.gameOver === true) {
 
             let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, 'GAME OVER', { fontSize: '32px', fill: '#fff' });
+            const back_to_main = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.6, "back_to_main");
+            back_to_main.scale = 0.35;
+            const restart = this.add.image(this.game.renderer.width / 1.55, this.game.renderer.height * 0.6, "restart");
+            restart.scale = 0.35;
+           
+            back_to_main.setInteractive();
+            restart.setInteractive();
+
+                
+            restart.on("pointerdown", () => {
+                console.log("restart");
+                this.gameOver = false;
+                this.scene.restart();
+               
+                });
+
+            back_to_main.on("pointerdown", () => {
+                console.log("back to main");
+                this.gameOver = false;
+                this.scene.start("titleScene");
+            })
+
             
 
         }
