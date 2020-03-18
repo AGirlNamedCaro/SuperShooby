@@ -7,6 +7,9 @@ export default class MainMenu extends Phaser.Scene{
 
   init(data) {
     this.bombs = data.bombs;
+    this.score = data.score;
+    this.fishNum = data.fishNum;
+    this.stepX = data.stepX;
     
   }
   
@@ -22,14 +25,23 @@ export default class MainMenu extends Phaser.Scene{
     settingsButton.scale = 0.30;
 
     let bombs = this.bombs;
+    let score = this.score;
+    let fishNum = this.fishNum;
+    let stepX = this.stepX;
     
-  
+  //Creating default settings
     if(!bombs) {
       bombs = 2;
+      score = 10;
+      fishNum = 7;
+      stepX = 100;
 
     }
     else {
       bombs = this.bombs;
+      score = this.score;
+      fishNum = this.fishNum;
+      stepX = this.stepX;
     }
     
     
@@ -39,7 +51,7 @@ export default class MainMenu extends Phaser.Scene{
 
 
     playButton.on("pointerdown", () => {
-      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs  })
+      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score, fishNum: fishNum, stepX:stepX  })
     })
 
     customizeButton.on("pointerdown", () => {
@@ -51,6 +63,7 @@ export default class MainMenu extends Phaser.Scene{
     })
 
     console.log('bombs: ', bombs);
+    console.log('score: ', score);
 
   }
 

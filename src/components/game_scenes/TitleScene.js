@@ -20,29 +20,19 @@ class TitleScene extends Phaser.Scene {
     this.fish = this.physics.add.sprite(450, 0, 'fish')
     // player.body.velocity.set(100);
 
-    this.fish = this.physics.add.sprite(450, 0, 'fish')
-    this.anims.create({
-      key: 'flop',
-      frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1
-    });
-    this.fish.anims.play('flop', true);
-    this.physics.add.collider(this.fish, platforms);
-    this.physics.add.overlap(this.player, this.fish, this.collectStars, null, true)
-
+    
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
-
+    
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
       frameRate: 10,
       repeat: -1
     });
+    
     this.player.anims.play('right', true);
     this.physics.add.collider(this.player, platforms);
-
 
     this.anims.create({
       key: 'flop',
@@ -52,37 +42,36 @@ class TitleScene extends Phaser.Scene {
     });
 
     this.fish.anims.play('flop', true);
-    console.log(this.fish);
-    // let star = this.physics.add.group({
-    //   key: 'star',
-    //   repeat: 2,
-    //   setXY: { x: 450, y: 0, stepX: 70 }
-    // });
-
-    // star.children.iterate(function (child) {
-    //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-    // });
 
     this.physics.add.collider(this.fish, platforms);
+    this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
-    this.physics.add.overlap(this.player, this.fish, this.collectStars, null, true)
+    this.fish = this.physics.add.group({
+      key: 'fish',
+      repeat: 3,
+      setXY: { x: 450, y: 0, stepX: 70 }
+    });
+
+    this.fish.children.iterate(function (child) {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.anims.play('flop', true);
+    })
+    
+    this.physics.add.collider(this.fish, platforms);
+
+    this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
     setTimeout(() => {
       this.player.setVelocityY(-230);
       this.player.setVelocityX(20);
     }, 2000)
 
-
   }
 
 
-  collectStars(player, star) {
-    star.disableBody(true, true);
-    return true
+  collectFish(player, fish) {
+    fish.disableBody(true, true);
   }
-
-
 
 
   update() {
@@ -94,10 +83,13 @@ class TitleScene extends Phaser.Scene {
     //   }
 
   }
-
-
-
 }
+  
+
+
+
+    
+
 
 
 export default TitleScene;
