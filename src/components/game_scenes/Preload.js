@@ -8,6 +8,7 @@ export default class Preload extends Phaser.Scene {
   preload() {
     this.load.image('sky', '/assets/images/backgrounds/fairy-background-craft-pixel.png');
     this.load.image('playButton', "/assets/images/buttons/playButton.png");
+    this.load.image('backButtonRope', '/assets/images/backgrounds/back-button-rope.png');
     this.load.image('settingsButton', "/assets/images/buttons/settings.png");
     this.load.image('smallPlayButton', "/assets/images/buttons/smallPlayButton.png");
     this.load.image('singlePlayer', "/assets/images/buttons/singlePlayerButton.png");
@@ -21,7 +22,15 @@ export default class Preload extends Phaser.Scene {
     this.load.image("createCharButton", "/assets/images/buttons/createCharButton.png");
     this.load.image('ground', '/assets/images/prefabs/platform.png');
     // this.load.image('star', '/assets/images/prefabs/star.png');
+    this.load.image('difficulty_bar_hard', '/assets/images/buttons/difficulty_bar_hard.png');
+    this.load.image('bomb', '/assets/images/prefabs/bomb.png')
+   
     
+    
+
+
+    this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
+    this.load.image('slider', '/assets/images/buttons/slider.png')
     
     this.load.spritesheet('dude',
       '/assets/images/sprites/dude.png',

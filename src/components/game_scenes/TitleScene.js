@@ -20,6 +20,17 @@ class TitleScene extends Phaser.Scene {
     this.fish = this.physics.add.sprite(450, 0, 'fish')
     // player.body.velocity.set(100);
 
+    this.fish = this.physics.add.sprite(450, 0, 'fish')
+    this.anims.create({
+      key: 'flop',
+      frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1
+    });
+    this.fish.anims.play('flop', true);
+    this.physics.add.collider(this.fish, platforms);
+    this.physics.add.overlap(this.player, this.fish, this.collectStars, null, true)
+
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
