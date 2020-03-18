@@ -28,10 +28,15 @@ export default class Customize extends Phaser.Scene {
         ;
 
         smallPlayButton.setInteractive();
+        createMapButton.setInteractive();
 
         smallPlayButton.on("pointerdown", () => {
             this.scene.start("mainMenu")
           });
+
+          createMapButton.on("pointerdown", () => {
+              this.scene.start("createMap")
+          })
     }
 
 }
