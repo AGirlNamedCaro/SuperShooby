@@ -41,11 +41,13 @@ export default class GameScene extends Phaser.Scene {
         // ground.setCollisionByProperty({ collides: true }, true)
         // ground.setCollision([1, 265, 266, 299, 298])
         this.score = 0;
+        this.highScore = localStorage.getItem('highScore')
+
        
         ground.setCollisionByExclusion(-1, true)
      
         this.player = this.physics.add.sprite(100, 450, 'dude');
-        // this.scene.c
+        
         this.player.body.setGravityY(300);
         this.physics.add.collider(this.player, ground);
         this.player.setBounce(0.2);
@@ -76,11 +78,9 @@ export default class GameScene extends Phaser.Scene {
         
         //FISH & BOMBS creation
         
-
-        // this.fish.anims.play('flop', true);
-        this.fish = this.physics.add.group({
+       this.fish = this.physics.add.group({
             key: 'fish',
-            repeat: 3,
+            repeat: 11,
             setXY: {x: 12, y: 0, stepX: 70}
           })
 
@@ -105,14 +105,18 @@ export default class GameScene extends Phaser.Scene {
             
             this.scoreText = this.add.text(16,16, 'score: 0', {fontSize: '32px', fill: '#000'} );
 
+
   
     }
     
     collectFish(player, fish) {
         fish.disableBody(true,true);
-        
         this.score += this.scoreNum;
         this.scoreText.setText("score: " + this.score);
+
+        if(this.score > this.highScore) {
+            this.scoreText.setText("NEW score: " + this.score);
+        }
         
         if(this.fish.countActive(true) === 0) {
           this.fish.children.iterate(function(child) {
@@ -166,12 +170,31 @@ export default class GameScene extends Phaser.Scene {
             this.player.setVelocityY(-630);
         }
 
+        //Setting highscore
+        
+        if(this.highScore === null) {
+            localStorage.setItem('highScore', 0);
+            this.highScore = 0;
+        }
+        else if (this.score > this.highScore) {
+            localStorage.setItem('highScore', this.score);
+            this.highScore = this.score;
+        }
+
+
+
+
+
+
         if(this.gameOver === true) {
 
             let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, 'GAME OVER', { fontSize: '32px', fill: '#fff' });
-            const back_to_main = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.6, "back_to_main");
+            let highScore = this.add.text(this.game.config.width / 4, this.game.config.height / 1.8, `High Score: ${this.highScore}` ,{ fontSize: '32px', fill: '#fff' });
+            let score = this.add.text(this.game.config.width / 1.6, this.game.config.height / 1.8, `Score: ${this.score} ` ,{ fontSize: '32px', fill: '#fff' });
+
+            const back_to_main = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.65, "back_to_main");
             back_to_main.scale = 0.35;
-            const restart = this.add.image(this.game.renderer.width / 1.55, this.game.renderer.height * 0.6, "restart");
+            const restart = this.add.image(this.game.renderer.width / 1.55, this.game.renderer.height * 0.65, "restart");
             restart.scale = 0.35;
            
             back_to_main.setInteractive();
@@ -194,6 +217,8 @@ export default class GameScene extends Phaser.Scene {
             
 
         }
+
+        
 
     } 
 }
