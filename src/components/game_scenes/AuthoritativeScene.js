@@ -8,12 +8,21 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.oldPlayerState = this.playerState;
   }
 
+  init(data) {
+    this.bombs = data.bombs;
+    this.score = data.score;
+    this.fishNum = data.fishNum;
+    this.stepX = data.stepX;
+  }
+
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
     this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
   }
 
   create() {
+
+    console.log("DATA: ",this.bombs,this.score,this.fishNum,this.stepX);
     const self = this;
     this.socket = socketIo(
       process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
@@ -94,6 +103,8 @@ export default class AuthoritativeScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       right: Phaser.Input.Keyboard.KeyCodes.D
     });
+
+
   }
 
   update() {
