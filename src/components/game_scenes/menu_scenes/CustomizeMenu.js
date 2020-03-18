@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+const axios = require('axios');
 
 export default class Customize extends Phaser.Scene {
     constructor() {
@@ -28,6 +29,20 @@ export default class Customize extends Phaser.Scene {
         ;
 
         smallPlayButton.setInteractive();
+        createMapButton.setInteractive();
+
+        createMapButton.on("pointerdown", () => {
+
+           axios.get('/createMap.html')
+           .then((response) => {
+               window.location = 'http://localhost:3000/createMap.html'
+               console.log("Success")
+           })
+           .catch((error) => {
+               console.log("Failure")
+               console.log(error);
+           })
+        });
 
         smallPlayButton.on("pointerdown", () => {
             this.scene.start("mainMenu")

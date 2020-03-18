@@ -28,6 +28,8 @@ export default class Preload extends Phaser.Scene {
 
 
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')
+    this.load.image('TileDefault', '/assets/Tiles_32x32.png');
+
    
     
     

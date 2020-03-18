@@ -9,6 +9,7 @@ import CustomizeMenu from "./game_scenes/menu_scenes/CustomizeMenu";
 import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 
 
+
 import GameScene from "./game_scenes/GameScene";
 import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
 
@@ -26,7 +27,7 @@ export const config = {
   scale: {
     mode: Phaser.Scale.FIT,
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu,SettingsMenu,  GameScene, AuthoritativeScene]
+  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, SettingsMenu,  GameScene, AuthoritativeScene]
 };
 
 function resize() {
