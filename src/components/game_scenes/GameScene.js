@@ -28,6 +28,8 @@ export default class GameScene extends Phaser.Scene {
     init(data) {
         this.bombs = data.bombs;
         this.scoreNum = data.score;
+        this.fishNum = data.fishNum;
+        this.stepX = data.stepX;
     }
 
     create() {
@@ -80,8 +82,8 @@ export default class GameScene extends Phaser.Scene {
         
        this.fish = this.physics.add.group({
             key: 'fish',
-            repeat: 11,
-            setXY: {x: 12, y: 0, stepX: 70}
+            repeat: this.fishNum,
+            setXY: {x: 12, y: 0, stepX: this.stepX }
           })
 
         
