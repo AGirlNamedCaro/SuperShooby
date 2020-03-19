@@ -2,6 +2,7 @@ const {MongoClient} = require('mongodb');
 
 async function main() { 
 
+
   const uri = "mongodb+srv://mario_MakerJS:fuckingCunts@cluster0-wgdn0.mongodb.net/test?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
 
@@ -13,14 +14,16 @@ async function main() {
       // Make the appropriate DB calls
       await  listDatabases(client);
 
-      await readMaps(client, "Default");
-
-  } catch (e) {
-      console.error(e);
+       await readMaps(client, "Default");
+    }
+    
+   catch (e) {
+    console.error(e);
   } finally {
-      await client.close();
+    await client.close();
   }
-}
+
+
 
 main().catch(console.error);
 
@@ -40,5 +43,7 @@ async function readMaps(client, name) {
 }
   else {
     console.log(`NOT found ${name}`);
+  }
+
   }
 }
