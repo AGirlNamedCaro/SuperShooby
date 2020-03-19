@@ -9,6 +9,7 @@ const { JSDOM } = jsdom;
 const server = require("http").Server(app);
 const io = require("socket.io").listen(server);
 
+
 const players = {};
 
 app.use(express.static(__dirname + "/public"));
