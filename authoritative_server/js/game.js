@@ -92,8 +92,12 @@ window.onload = () => {
     socket.on("joinRoom", roomId => {
       console.log("An Authoritative Shooby has connected");
 
-      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-      roomManager.joinRoom(roomId, player);
+      if (roomManager[roomId]) {
+        const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+        roomManager.joinRoom(roomId, player);
+      } else {
+        io.to(socket.id).emit("errJoinRoom", "Room does not exist");
+      }
     });
 
     socket.on("ready", roomId => {

@@ -4,6 +4,7 @@ import socketIo from "socket.io-client";
 export default class MultiplayerMenu extends Phaser.Scene {
   constructor() {
     super("multiplayerMenu");
+    this.errMsg = "";
   }
 
   init(data) {
@@ -55,8 +56,13 @@ export default class MultiplayerMenu extends Phaser.Scene {
     playButton.setInteractive();
     this.smallPlayButton.setInteractive();
 
-    // TODO create an overarching button to setup multiplayer, that will create the socket connection -- VERY IMPORTANT
+    // TODO create better error handling, this comes in after the player has joined the room and is useless
+    this.socket.on("errJoinRoom", errMsg => {
+      this.errMsg = errMsg;
+      console.log(errMsg);
+    });
 
+    // TODO create an overarching button to setup multiplayer, that will create the socket connection -- VERY IMPORTANT
 
     // console.log(cancelButton, "cancel");
     cancelButton.on("pointerdown", () => {
@@ -83,7 +89,7 @@ export default class MultiplayerMenu extends Phaser.Scene {
               target: "authScene",
               duration: 1000,
               data: { socket: this.socket, roomId: roomId }
-            })
+            });
           }
         });
       });
@@ -103,13 +109,16 @@ export default class MultiplayerMenu extends Phaser.Scene {
           roomId = userInput.value;
           // TODO dry this up
           this.socket.emit("joinRoom", roomId);
-          this.scene.stop("multiplayerMenu");
-          const titleScene = this.scene.get("titleScene");
-          titleScene.scene.transition({
-            target: "authScene",
-            duration: 1000,
-            data: { socket: this.socket, roomId: roomId }
-          })
+          console.log("err", this.errMsg)
+          if (!this.errMsg) {
+            this.scene.stop("multiplayerMenu");
+            const titleScene = this.scene.get("titleScene");
+            titleScene.scene.transition({
+              target: "authScene",
+              duration: 1000,
+              data: { socket: this.socket, roomId: roomId }
+            });
+          }
         }
       });
       // this.scene.stop("multiplayerMenu");
