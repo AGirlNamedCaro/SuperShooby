@@ -42,13 +42,14 @@ background-size: cover;
 #game-container canvas {
 width: 800px !important;
 height: 600px !important;
-  
-padding: 100px;
-
   /* border: 50px solid rgb(27, 27, 27); */
   /* background-image: url("/assets/images/backgrounds/arcade.png"); */
   /* box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color]; */
   
+}
+
+#game-parent {
+  padding: 100px;
 }
 #game-desc {
  
