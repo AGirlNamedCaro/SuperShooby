@@ -8,6 +8,12 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.oldPlayerState = this.playerState;
   }
 
+
+  init(data) {
+    this.socket = data.socket;
+}
+
+
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
     this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
@@ -15,9 +21,10 @@ export default class AuthoritativeScene extends Phaser.Scene {
 
   create() {
     const self = this;
-    this.socket = socketIo(
-      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    );
+    this.socket.emit("ready");
+    // this.socket = socketIo(
+    //   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
+    // );
     const worldMap = this.add.tilemap("world");
     const tileset = worldMap.addTilesetImage("tiles");
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
@@ -39,7 +46,11 @@ export default class AuthoritativeScene extends Phaser.Scene {
       });
     });
 
+    // this.socket.on("test", () => {
+      // console.log("TEST");
+    // })
     this.socket.on("newPlayer", playerInfo => {
+      console.log("newPlayer")
       this.displayPlayers(self, playerInfo, "dude");
     });
 
