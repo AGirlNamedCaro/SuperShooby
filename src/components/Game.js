@@ -26,8 +26,10 @@ export const config = {
   scale: {
     mode: Phaser.Scale.FIT,
   },
+  dom: {
+    createContainer: true,
+  },
   scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, GameScene, AuthoritativeScene, SettingsMenu]
-  
 };
 
 function resize() {
