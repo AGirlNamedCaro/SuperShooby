@@ -11,6 +11,7 @@ export default class AuthoritativeScene extends Phaser.Scene {
 
   init(data) {
     this.socket = data.socket;
+    this.roomId = data.roomId;
 }
 
 
@@ -21,7 +22,7 @@ export default class AuthoritativeScene extends Phaser.Scene {
 
   create() {
     const self = this;
-    this.socket.emit("ready");
+    this.socket.emit("ready", this.roomId);
     // this.socket = socketIo(
     //   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
     // );
@@ -130,6 +131,7 @@ export default class AuthoritativeScene extends Phaser.Scene {
         this.playerState.up !== this.oldPlayerState.up
       ) {
 
+        this.playerState.roomId = this.roomId;
         this.socket.emit("playerInput", this.playerState);
       }
       this.oldPlayerState = { ...this.playerState };

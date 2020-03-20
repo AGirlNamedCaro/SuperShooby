@@ -1,11 +1,13 @@
 const {
   createPreload,
   createUpdate,
+  initPlayer,
   addPlayer,
   removePlayer,
   handlePlayerInput
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
+const randomWord = require("random-words");
 
 // Next time trying to import a class try roomManager = roomManager.RoomManager();
 class RoomManager {
@@ -13,7 +15,7 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomId, user, maxUsers) {
+  createRoom(roomId, player, maxUsers) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
       "assets/images/prefabs/marioTileset.png",
@@ -21,8 +23,6 @@ class RoomManager {
     );
 
     function create() {
-      // console.log("this", this)
-      const self = this;
       const worldMap = this.add.tilemap("world");
       const tileset = worldMap.addTilesetImage("tiles");
       const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
@@ -32,106 +32,105 @@ class RoomManager {
       // ground.setCollision([1, 265, 266, 299, 298])
       ground.setCollisionByExclusion(-1, true);
       this.players = this.physics.add.group();
-      // this.physics.collideTiles(this.players, ground);
       this.physics.add.collider(this.players, ground);
     }
 
     const update = createUpdate(this.rooms, roomId, 160, 150);
-    // const config = ;
+    const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
       roomId: roomId,
-      game: new Phaser.Game(config(preload, create, update, { y: 300 })),
+      game: game,
       players: {
-        [user.playerId]: user
-      },
-      playerGroup: {}
+        [player.playerId]: player
+      }
     };
 
-    console.log("PlayerGroup", this.rooms[roomId].playerGroup)
-    // const game = new Phaser.Game(gameConfig);
+    console.log("players", this.rooms[roomId].players);
+  }
+
+  joinRoom(roomId, player) {
+    const room = this.rooms[roomId];
+    room.scene = room.game.scene.keys.default;
+
+    addPlayer(room.scene, player);
+
+    room.players[player.playerId] = player;
+  }
+
+  getPlayers(roomId) {
+    return this.rooms[roomId].players;
+  }
+
+  deleteRoom(roomId) {
+    this.rooms[roomId].game.destroy(true);
+    delete this.rooms[roomId];
   }
 }
 
-const roomManager = new RoomManager();
-const players = {};
-
 window.onload = () => {
+  const roomManager = new RoomManager();
+  const currentPlayers = {};
+
   io.on("connection", socket => {
-    console.log("A user has connected");
+    console.log("A menu shooby has connected");
 
     socket.on("createRoom", () => {
-      const roomId = "test";
-      players[socket.id] = {
-        playerId: socket.id,
-        roomId: roomId,
-        // have this be map set
-        x: 200,
-        y: 450,
-        playerState: {
-          left: false,
-          right: false,
-          up: false,
-          down: false
-        }
-      };
-      roomManager.createRoom(roomId, players[socket.id], 2);
-      // console.log(roomManager.rooms[players[socket.id].roomId].self)
+      let roomId = randomWord();
+
+      while (roomManager.rooms[roomId]) {
+        console.log("test");
+        roomId = randomWord();
+      }
+
+      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      roomManager.createRoom(roomId, player, 2);
       io.to(socket.id).emit("createdRoom", roomId);
+      currentPlayers[socket.id] = roomId;
     });
 
-    // Need to write eveything below this
-    socket.on("joinRoom", () => {
-      const game = roomManager.rooms[players[socket.id].roomId].game;
-      roomManager.rooms[players[socket.id].roomId].self =
-        game.scene.keys.default;
+    socket.on("joinRoom", roomId => {
+      console.log("An Authoritative Shooby has connected");
 
-      addPlayer(
-        roomManager.rooms[players[socket.id].roomId].self,
-        players[socket.id]
-      );
-
-      roomManager.rooms[
-        players[socket.id].roomId
-      ].playerGroup = game.scene.keys.default.players;
-      
-      // Not sure If I need this anymore
-      // socket.broadcast.emit("newPlayer", players[socket.id]);
+      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      roomManager.joinRoom(roomId, player);
     });
 
-    socket.on("ready", () => {
-      console.log("players - emit", players)      
+    socket.on("ready", roomId => {
+      const players = roomManager.getPlayers(roomId);
       io.to(socket.id).emit("currentPlayers", players);
-      socket.broadcast.emit("newPlayer", players[socket.id])
-    })
-    // // create a new player and add it to our players object
-    // players[socket.id] = {
-    //   playerId: socket.id,
-    //   rotation: 0,
-    //   // TODO Need to change these values to be brought in depending on where the floor is
-    //   x: Math.floor(Math.random() * 100) + 25,
-    //   y: Math.floor(Math.random() * 450),
-    //   playerState: {
-    //     left: false,
-    //     right: false,
-    //     up: false,
-    //     down: false
-    //   }
-    // };
 
-
+      // TODO change this to socket groups
+      for (socketId of Object.keys(players)) {
+        io.to(socketId).emit("newPlayer", players[socket.id]);
+      }
+      currentPlayers[socket.id] = roomId;
+    });
 
     socket.on("disconnect", () => {
-      removePlayer(roomManager.rooms[players[socket.id].roomId].self, socket.id);
-      delete players[socket.id];
-      io.emit("disconnect", socket.id);
-      console.log("An Authoritative Shooby has disconnected");
+      if (currentPlayers[socket.id]) {
+        const roomId = currentPlayers[socket.id];
+        if (roomManager.rooms[roomId].scene) {
+          removePlayer(
+            roomManager.rooms[roomId].scene,
+            socket.id,
+            currentPlayers
+          );
+          io.emit("disconnect", socket.id);
+          console.log("An Authoritative Shooby has disconnected");
+        }
+        delete currentPlayers[socket.id];
+        roomManager.deleteRoom(roomId);
+      }
     });
 
     socket.on("playerInput", playerState => {
-      console.log("players", players)
-      // console.log("playerInput", playerState)
-      handlePlayerInput(roomManager.rooms[players[socket.id].roomId].self, players, socket.id, playerState);
+      handlePlayerInput(
+        roomManager.rooms[playerState.roomId].scene,
+        roomManager.getPlayers(playerState.roomId),
+        socket.id,
+        playerState
+      );
     });
   });
 };

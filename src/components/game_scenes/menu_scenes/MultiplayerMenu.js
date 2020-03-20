@@ -9,6 +9,9 @@ export default class MultiplayerMenu extends Phaser.Scene {
   init(data) {
     this.menuBg = data.menuBg;
     this.smallPlayButton = data.smPlBtn;
+    this.socket = socketIo(
+      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
+    );
   }
 
   makeActVis(gameObject, scene) {
@@ -54,20 +57,18 @@ export default class MultiplayerMenu extends Phaser.Scene {
 
     // TODO create an overarching button to setup multiplayer, that will create the socket connection -- VERY IMPORTANT
 
+
     // console.log(cancelButton, "cancel");
     cancelButton.on("pointerdown", () => {
       console.log("Show Code");
-      this.socket = socketIo(
-        process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-      );
 
       this.socket.emit("createRoom");
-      this.socket.on("createdRoom", data => {
-        console.log("created", data);
+      this.socket.on("createdRoom", roomId => {
+        console.log("created", roomId);
 
         const divCode = `
         <div id="showCode" style="background-color: blue">
-          Your code is: ${data}
+          Your code is: ${roomId}
           <button id="joinRoom" name="joinRoom">Join</button>
         </div>`;
 
@@ -75,13 +76,13 @@ export default class MultiplayerMenu extends Phaser.Scene {
         htmlCode.addListener("click");
         htmlCode.on("click", event => {
           if (event.target.name === "joinRoom") {
-            this.socket.emit("joinRoom");
+            this.socket.emit("joinRoom", roomId);
             this.scene.stop("multiplayerMenu");
             const titleScene = this.scene.get("titleScene");
             titleScene.scene.transition({
               target: "authScene",
               duration: 1000,
-              data: { socket: this.socket }
+              data: { socket: this.socket, roomId: roomId }
             })
           }
         });
@@ -89,20 +90,26 @@ export default class MultiplayerMenu extends Phaser.Scene {
     });
 
     playButton.on("pointerdown", () => {
-      this.socket = socketIo(
-        process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-      );
-
+      let roomId = "";
       const htmlForm = this.add
         .dom(300, 180)
         .createFromCache("multiplayerForm");
 
       htmlForm.addListener("click");
       // Have it setup so a random word gets set as server name
-      htmlForm.on("click", function(event) {
+      htmlForm.on("click", event => {
         if (event.target.name === "submitBtn") {
-          const userInput = this.getChildByName("serverName");
-          console.log(userInput.value);
+          const userInput = htmlForm.getChildByName("serverName");
+          roomId = userInput.value;
+          // TODO dry this up
+          this.socket.emit("joinRoom", roomId);
+          this.scene.stop("multiplayerMenu");
+          const titleScene = this.scene.get("titleScene");
+          titleScene.scene.transition({
+            target: "authScene",
+            duration: 1000,
+            data: { socket: this.socket, roomId: roomId }
+          })
         }
       });
       // this.scene.stop("multiplayerMenu");
