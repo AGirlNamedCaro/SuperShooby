@@ -21,6 +21,8 @@ export default class settingsMenu extends Phaser.Scene {
 
         let bombs;
         let score;
+        let fishNum;
+        let stepX;
       
         const difficulty_bar = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar");
         difficulty_bar.scale = 0.35;
@@ -59,6 +61,8 @@ export default class settingsMenu extends Phaser.Scene {
       hard.alpha = 0.05
       bombs = 1;
       score = 10;
+      fishNum = 11;
+      stepX = 70;
         });
 
         medium.on("pointerdown", () => {
@@ -68,6 +72,8 @@ export default class settingsMenu extends Phaser.Scene {
           hard.alpha = 0.05;
           bombs = 2;
           score = 15;
+          fishNum = 7;
+          stepX = 100;
             });
 
         hard.on("pointerdown", () => {
@@ -77,12 +83,14 @@ export default class settingsMenu extends Phaser.Scene {
           medium.alpha = 0.05;
           bombs = 3;
           score = 20;
+          fishNum = 4;
+          stepX = 190;
             });
 
         back.on("pointerdown", () => {
           console.log(bombs);
           console.log(score);
-          this.scene.start("mainMenu", {bombs:bombs, score:score})
+          this.scene.start("mainMenu", {bombs:bombs, score:score, fishNum: fishNum, stepX: stepX})
         });
 
         const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
