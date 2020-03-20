@@ -120,12 +120,13 @@ window.onload = () => {
     socket.on("joinRoom", roomId => {
       console.log("An Authoritative Shooby has connected");
 
-      if (roomManager[roomId]) {
+      // if (roomManager[roomId]) {
         const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
         roomManager.joinRoom(roomId, player);
-      } else {
-        io.to(socket.id).emit("errJoinRoom", "Room does not exist");
-      }
+        // TODO fix broken error handling
+      // } else {
+      //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
+      // }
     });
 
     socket.on("ready", roomId => {
