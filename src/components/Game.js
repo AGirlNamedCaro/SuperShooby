@@ -11,6 +11,7 @@ import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 
 import GameScene from "./game_scenes/GameScene";
 import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
+import settingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 
 export const config = {
   type: Phaser.CANVAS,
@@ -29,7 +30,7 @@ export const config = {
   dom: {
     createContainer: true,
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, GameScene, AuthoritativeScene]
+  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, settingsMenu, AuthoritativeScene]
 };
 
 function resize() {

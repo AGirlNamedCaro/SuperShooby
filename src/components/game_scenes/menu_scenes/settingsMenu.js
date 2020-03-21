@@ -44,12 +44,11 @@ export default class settingsMenu extends Phaser.Scene {
         
 
         
+        easy.setInteractive();
         medium.setInteractive();
         hard.setInteractive();
-        
         back.setInteractive();
         
-        easy.setInteractive();
 
      
         
