@@ -14,6 +14,7 @@
     "jsdom": "^16.2.1",
     "mongodb": "^3.5.5",
     "phaser": "^3.22.0",
+    "random-words": "^1.1.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
@@ -25,7 +26,9 @@
     "server": "npx nodemon server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "bundle": "browserify authoritative_server/js/game.js -o authoritative_server/js/bundle.js",
+    "watch": "watchify authoritative_server/js/game.js -o authoritative_server/js/bundle.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -41,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "watchify": "^3.11.1"
   }
 }
