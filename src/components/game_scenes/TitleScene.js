@@ -7,7 +7,11 @@ class TitleScene extends Phaser.Scene {
     super('titleScene')
   }
 
+  
+
+
   create() {
+    
     this.scene.launch("mainMenu");
     this.bg = this.add.tileSprite(400, 300, 800, 600, 'sky')
     this.bg.scaleY = 1.15;
