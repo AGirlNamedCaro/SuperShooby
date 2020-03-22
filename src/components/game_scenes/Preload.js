@@ -46,10 +46,20 @@ export default class Preload extends Phaser.Scene {
     { frameWidth: 32, frameHeight: 48 }
   );
 
+  this.load.spritesheet('booshy',
+  '/assets/images/sprites/booshy.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('shabby',
+  '/assets/images/sprites/shabby.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
     this.load.spritesheet('fish',
     '/assets/images/sprites/star.png',
     { frameWidth: 32, frameHeight: 32 }
   );
+
 
     this.load.on("progress", () => {
       this.add.text(20, 20, "Loading game...")
