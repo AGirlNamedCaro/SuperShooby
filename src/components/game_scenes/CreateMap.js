@@ -27,6 +27,8 @@ export default class CreateMap extends Phaser.Scene {
 
     this.selectedLayer = this.groundLayer;
 
+    this.text = this.add.text(10, 10, this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name));
+
     this.marker = this.add.graphics();
     this.marker.lineStyle(5, 0xffffff, 1);
     this.marker.strokeRect(0, 0, map.tileWidth, map.tileHeight);
@@ -64,6 +66,7 @@ export default class CreateMap extends Phaser.Scene {
     this.input.keyboard.on("keydown-" + "H", event => {
       this.selectedLayer.setActive(!this.selectedLayer.active)
       this.selectedLayer.setVisible(!this.selectedLayer.visible)
+      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
     });
 
     this.mapTilesToLayer(
@@ -113,16 +116,17 @@ export default class CreateMap extends Phaser.Scene {
 
     if (this.cursors.one.isDown) {
       this.selectedLayer = this.skyLayer;
+      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
     }
 
     if (this.cursors.two.isDown) {
       this.selectedLayer = this.cloudsLayer;
-
+      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
     }
 
     if (this.cursors.three.isDown) {
       this.selectedLayer = this.groundLayer;
-
+      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
     }
   }
 
@@ -145,5 +149,17 @@ export default class CreateMap extends Phaser.Scene {
     dimensionalArray.forEach((array, index) => {
       tileLayer.putTilesAt(array, 0, index);
     });
+  }
+
+  setText(layers, layerName) {
+    const text = "";
+    const skyLayerActive = layers[0].active;
+    const cloudLayerActive = layers[1].active;
+    const groundLayerActive = layers[2].active;
+
+    return `Selected Layer: ${layerName}` +
+           `\nSkyLayer: ${skyLayerActive ? "Not Hidden" : "Hidden"}` +
+           `\nCloudLayer: ${cloudLayerActive ? "Not Hidden" : "Hidden"}` +
+           `\nGroundLayer: ${groundLayerActive ? "Not Hidden" : "Hidden"}`
   }
 }
