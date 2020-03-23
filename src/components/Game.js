@@ -7,9 +7,12 @@ import PlayMenu from "./game_scenes/menu_scenes/PlayMenu";
 import MultiplayerMenu from "./game_scenes/menu_scenes/MultiplayerMenu";
 import CustomizeMenu from "./game_scenes/menu_scenes/CustomizeMenu";
 import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
+import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
+
 
 import GameScene from "./game_scenes/GameScene";
 import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
+import CreateMap from "./game_scenes/CreateMap";
 
 export const config = {
   type: Phaser.CANVAS,
@@ -28,7 +31,7 @@ export const config = {
   dom: {
     createContainer: true,
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, GameScene, AuthoritativeScene, SettingsMenu]
+  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, GameScene, AuthoritativeScene, SettingsMenu, CreateMap]
   
 };
 
@@ -55,7 +58,10 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game() {
+export default function Game({ setGameMode }) {
+  // pass the statechange method down to the game
+  game.setState = setGameMode;
+
   return (
     <div id="game-container">
       <div id="game-parent"></div>
