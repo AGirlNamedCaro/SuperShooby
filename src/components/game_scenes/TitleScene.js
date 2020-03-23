@@ -82,18 +82,19 @@ class TitleScene extends Phaser.Scene {
     this.fish.children.iterate(function (child) {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
       child.anims.play('flop', true);
+ })
 
-    });
+ this.physics.add.collider(this.fish, platforms);
 
-    
-    
-   this.createAnimation(this.key)
-   this.physics.add.collider(this.fish, platforms);
-  }
-  
+ this.createAnimation(this.key)
 
-  collectFish(player, fish) {
-    fish.disableBody(true, true);
+  this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
+
+ setTimeout(() => {
+  this.player.setVelocityY(-230);
+  this.player.setVelocityX(20);
+}, 2000)
+
   }
 
   createAnimation(key) {
@@ -109,15 +110,21 @@ class TitleScene extends Phaser.Scene {
 
   }
 
+  
+update() {
+  this.bg.tilePositionX += 5;
 
-  update() {
-    this.bg.tilePositionX += 5;
-    
-   
-  }
+
 
 
 }
+collectFish(player, fish) {
+  fish.disableBody(true, true);
+  
+  }
+
+}
+
 
 export default TitleScene;
 

@@ -8,12 +8,14 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.oldPlayerState = this.playerState;
   }
 
-
   init(data) {
+    this.bombs = data.bombs;
+    this.score = data.score;
+    this.fishNum = data.fishNum;
+    this.stepX = data.stepX;
     this.socket = data.socket;
     this.roomId = data.roomId;
-}
-
+  }
 
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
@@ -21,6 +23,8 @@ export default class AuthoritativeScene extends Phaser.Scene {
   }
 
   create() {
+
+    console.log("DATA: ",this.bombs,this.score,this.fishNum,this.stepX);
     const self = this;
     this.socket.emit("ready", this.roomId);
     // this.socket = socketIo(
@@ -106,6 +110,8 @@ export default class AuthoritativeScene extends Phaser.Scene {
       down: Phaser.Input.Keyboard.KeyCodes.S,
       right: Phaser.Input.Keyboard.KeyCodes.D
     });
+
+
   }
 
   update() {
