@@ -1,9 +1,14 @@
 import Phaser from "phaser";
+import socketIo from "socket.io-client";
+const { MongoClient } = require("mongodb");
 
 export default class CreateMap extends Phaser.Scene {
   constructor() {
     super("createMap");
     this.selectedIndex = 1;
+    this.socket = socketIo(
+      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
+    );
   }
 
   preload() {
@@ -27,7 +32,14 @@ export default class CreateMap extends Phaser.Scene {
 
     this.selectedLayer = this.groundLayer;
 
-    this.text = this.add.text(10, 10, this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name));
+    this.text = this.add.text(
+      10,
+      10,
+      this.setText(
+        [this.skyLayer, this.cloudsLayer, this.groundLayer],
+        this.selectedLayer.layer.name
+      )
+    );
 
     this.marker = this.add.graphics();
     this.marker.lineStyle(5, 0xffffff, 1);
@@ -39,6 +51,9 @@ export default class CreateMap extends Phaser.Scene {
     // console.log("tiles", this.groundLayer.findByIndex(1))
     console.log("Tileset", tiles.getTileTextureCoordinates(2));
     console.log("tileimage", tiles);
+    console.log("map", map);
+    console.log("layer", this.skyLayer);
+    console.log("layer", this.cloudsLayer);
 
     this.cursors = this.input.keyboard.addKeys({
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
@@ -64,9 +79,45 @@ export default class CreateMap extends Phaser.Scene {
     });
 
     this.input.keyboard.on("keydown-" + "H", event => {
-      this.selectedLayer.setActive(!this.selectedLayer.active)
-      this.selectedLayer.setVisible(!this.selectedLayer.visible)
-      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
+      this.selectedLayer.setActive(!this.selectedLayer.active);
+      this.selectedLayer.setVisible(!this.selectedLayer.visible);
+      this.text.text = this.setText(
+        [this.skyLayer, this.cloudsLayer, this.groundLayer],
+        this.selectedLayer.layer.name
+      );
+    });
+
+    this.input.keyboard.on("keyup-" + "E", event => {
+      console.log("exporting");
+      const exportObj = this.exportJSON(map, tiles, [
+        this.skyLayer,
+        this.cloudsLayer,
+        this.groundLayer
+      ]);
+
+      // console.log(JSON.stringify(exportObj));
+
+      // const uri =
+      // "mongodb+srv://mario_MakerJS:fuckingCunts@cluster0-wgdn0.mongodb.net/test?retryWrites=true&w=majority";
+      // const client = new MongoClient(uri, { useNewUrlParser: true });
+      // console.log(client)
+
+      // MongoClient.connect(uri, (err, client) => {
+      //   console.log("connected to server")
+
+      //   client.close();
+      // });
+
+      // client.connect(err => {
+      //   const collection = client.db("game_db").collection("maps");
+      //   console.log(collection);
+      //   console.log("err", err)
+      //   client.close();
+      // });
+
+      // console.log("columns", tiles.image.source[0].width);
+      // this.game.setLayer(this.skyLayer);
+      // console.log(map.)
     });
 
     this.mapTilesToLayer(
@@ -116,17 +167,26 @@ export default class CreateMap extends Phaser.Scene {
 
     if (this.cursors.one.isDown) {
       this.selectedLayer = this.skyLayer;
-      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
+      this.text.text = this.setText(
+        [this.skyLayer, this.cloudsLayer, this.groundLayer],
+        this.selectedLayer.layer.name
+      );
     }
 
     if (this.cursors.two.isDown) {
       this.selectedLayer = this.cloudsLayer;
-      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
+      this.text.text = this.setText(
+        [this.skyLayer, this.cloudsLayer, this.groundLayer],
+        this.selectedLayer.layer.name
+      );
     }
 
     if (this.cursors.three.isDown) {
       this.selectedLayer = this.groundLayer;
-      this.text.text = this.setText([this.skyLayer, this.cloudsLayer, this.groundLayer], this.selectedLayer.layer.name);
+      this.text.text = this.setText(
+        [this.skyLayer, this.cloudsLayer, this.groundLayer],
+        this.selectedLayer.layer.name
+      );
     }
   }
 
@@ -152,14 +212,75 @@ export default class CreateMap extends Phaser.Scene {
   }
 
   setText(layers, layerName) {
-    const text = "";
     const skyLayerActive = layers[0].active;
     const cloudLayerActive = layers[1].active;
     const groundLayerActive = layers[2].active;
 
-    return `Selected Layer: ${layerName}` +
-           `\nSkyLayer: ${skyLayerActive ? "Not Hidden" : "Hidden"}` +
-           `\nCloudLayer: ${cloudLayerActive ? "Not Hidden" : "Hidden"}` +
-           `\nGroundLayer: ${groundLayerActive ? "Not Hidden" : "Hidden"}`
+    return (
+      `Selected Layer: ${layerName}` +
+      `\nSkyLayer: ${skyLayerActive ? "Not Hidden" : "Hidden"}` +
+      `\nCloudLayer: ${cloudLayerActive ? "Not Hidden" : "Hidden"}` +
+      `\nGroundLayer: ${groundLayerActive ? "Not Hidden" : "Hidden"}`
+    );
+  }
+
+  exportJSON(map, tileSet, tileLayers) {
+    const jsonObj = {
+      compressionlevel: -1,
+      height: map.height,
+      infinite: false,
+      layers: [],
+      nextlayerid: map.layers.length + 1,
+      nextobjectid: 1,
+      orientation: map.orientation,
+      renderorder: map.renderOrder,
+      // tiledversion: "1.3.3",
+      tileheight: map.tileHeight,
+      tilesets: [
+        {
+          columns: tileSet.columns,
+          firstgid: tileSet.firstgid,
+          // not sure how to set this up
+          image: "../../Pictures/marioTileset2.png",
+          imageheight: tileSet.image.source[0].height,
+          imagewidth: tileSet.image.source[0].width,
+          margin: tileSet.tileMargin,
+          name: tileSet.name,
+          spacing: tileSet.tileSpacing,
+          tilecount: tileSet.total,
+          tileheight: tileSet.tileHeight,
+          tilewidth: tileSet.tileWidth
+        }
+      ],
+      tilewidth: map.tileWidth,
+      type: "map",
+      version: map.version,
+      width: map.width
+    };
+
+    tileLayers.forEach(layer => {
+      let dataObj = {
+        data: [],
+        height: layer.layer.height,
+        id: layer.layerIndex + 1,
+        name: layer.layer.name,
+        // Might be wrong
+        opacity: layer.layer.alpha,
+        type: "tilelayer",
+        visible: true,
+        width: layer.layer.width,
+        x: layer.layer.x,
+        y: layer.layer.y
+      };
+      layer.forEachTile(tile => {
+        if (tile.index === -1) {
+          dataObj.data.push(0);
+        } else {
+          dataObj.data.push(tile.index);
+        }
+      });
+      jsonObj.layers.push(dataObj);
+    });
+    return jsonObj;
   }
 }

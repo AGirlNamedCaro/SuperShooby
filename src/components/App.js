@@ -7,12 +7,12 @@ import CreateMap from "./CreateMap";
 
 
 function App() {
-  const [gameMode, setgameMode] = useState("game");
+  const [layer, setLayer] = useState({});
 
   return (
     <section id="body">
       <TopBar />
-      {gameMode === "game" ? <Game setGameMode={setgameMode} /> : <CreateMap />}
+      <Game passedLayer={layer} setLayer={setLayer} />
       <GameDesc />     
     </section>
   );
