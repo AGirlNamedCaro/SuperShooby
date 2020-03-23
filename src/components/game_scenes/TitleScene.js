@@ -34,6 +34,7 @@ class TitleScene extends Phaser.Scene {
     this.player.anims.play('right', true);
     this.physics.add.collider(this.player, platforms);
 
+    
     this.anims.create({
       key: 'flop',
       frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
@@ -55,42 +56,41 @@ class TitleScene extends Phaser.Scene {
     this.fish.children.iterate(function (child) {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
       child.anims.play('flop', true);
-    })
-    
-    this.physics.add.collider(this.fish, platforms);
+
+   
+
+    // });
+
+   
+ })
+
+ this.physics.add.collider(this.fish, platforms);
 
     this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
-    setTimeout(() => {
-      this.player.setVelocityY(-230);
-      this.player.setVelocityX(20);
-    }, 2000)
-
-  }
+ setTimeout(() => {
+  this.player.setVelocityY(-230);
+  this.player.setVelocityX(20);
+}, 2000)
 
 
-  collectFish(player, fish) {
-    fish.disableBody(true, true);
-  }
-
-
-  update() {
-    this.bg.tilePositionX += 5;
-
-    // if(this.star.countActive(true) === 0) {
-    //   this.player.setVelocityX(0);    
-
-    //   }
-
-  }
 }
+
   
+update() {
+  this.bg.tilePositionX += 5;
 
+  // if(this.star.countActive(true) === 0) {
+  //   this.player.setVelocityX(0);    
 
+  //   }
 
-    
-
-
+}
+collectFish(player, fish) {
+  fish.disableBody(true, true);
+  
+}
+}
 
 export default TitleScene;
 

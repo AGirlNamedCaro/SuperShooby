@@ -46,7 +46,7 @@ export default class PlayMenu extends Phaser.Scene{
       titleScene.scene.transition({
         target: "authScene",
         duration: 1000,
-        data: {bombs, score, fishNum, stepX}
+        data: {bombs, score, fishNum, stepX},
       })
     });
 
