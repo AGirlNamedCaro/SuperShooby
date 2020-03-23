@@ -40,7 +40,6 @@ class TitleScene extends Phaser.Scene {
       
       this.key = this.character
       
-      
     }
 
     this.player = this.physics.add.sprite(450, 450, this.key)
@@ -58,6 +57,7 @@ class TitleScene extends Phaser.Scene {
     
     this.physics.add.collider(this.player, platforms);
 
+    
     this.anims.create({
       key: 'flop',
       frames: this.anims.generateFrameNumbers('fish', { start: 0, end: 3 }),
@@ -81,52 +81,47 @@ class TitleScene extends Phaser.Scene {
     this.fish.children.iterate(function (child) {
       child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
       child.anims.play('flop', true);
-    })
-    
-    this.physics.add.collider(this.fish, platforms);
+ })
 
-    this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
+ this.physics.add.collider(this.fish, platforms);
 
-    setTimeout(() => {
-      this.player.setVelocityY(-230);
-      this.player.setVelocityX(20);
-    }, 2000)
+ this.createAnimation(this.key)
 
-    this.createAnimation(this.key)
-   
+  this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
-  }
+ setTimeout(() => {
+  this.player.setVelocityY(-230);
+  this.player.setVelocityX(20);
+}, 2000)
 
-
-  collectFish(player, fish) {
-    fish.disableBody(true, true);
   }
 
   createAnimation(key) {
-    console.log("in",key)
     this.anims.create({
       key: key,
       frames: this.anims.generateFrameNumbers(key, { start: 5, end: 8 }),
       frameRate: 10,
       repeat: -1
     });
+
     this.player.anims.play(key, true);
 
   }
 
-
-  update() {
-    this.bg.tilePositionX += 5;
-    
-   
-  }
-}
   
+update() {
+  this.bg.tilePositionX += 5;
 
 
 
-    
 
+}
+collectFish(player, fish) {
+  fish.disableBody(true, true);
+  
+  }
+
+}
 
 
 export default TitleScene;

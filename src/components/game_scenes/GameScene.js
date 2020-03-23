@@ -43,12 +43,9 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
     const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
     const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
-    // ground.setCollisionByProperty({ collides: true }, true)
-    // ground.setCollision([1, 265, 266, 299, 298])
+  
     ground.setCollisionByExclusion(-1, true);
 
-
-   
 
    
       console.log(this.bombs);
@@ -93,20 +90,20 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
         
         //FISH & BOMBS creation
         
-       this.fish = this.physics.add.group({
-            key: 'fish',
-            repeat: this.fishNum,
-            setXY: {x: 12, y: 0, stepX: this.stepX }
-          })
-
         
-          
-          this.fish.children.iterate(function(child) {
-              child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8))
-              child.anims.play('flop', true);
-            })
-
-
+        this.fish = this.physics.add.group({
+             key: 'fish',
+             repeat: this.fishNum,
+             setXY: {x: 12, y: 0, stepX: this.stepX }
+           })
+ 
+         
+           
+           this.fish.children.iterate(function(child) {
+               child.setBounceY(Phaser.Math.FloatBetween(0.4,0.8))
+               child.anims.play('flop', true);
+             })
+        
             
             this.physics.add.collider(this.fish,ground);
             

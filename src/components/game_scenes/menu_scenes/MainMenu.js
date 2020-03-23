@@ -10,10 +10,13 @@ export default class MainMenu extends Phaser.Scene{
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
+    this.character = data.character
     
   }
   
   create() {
+
+    
     
     const menuBg = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.30, "menuBg");
     menuBg.scale = 0.3;
@@ -28,8 +31,10 @@ export default class MainMenu extends Phaser.Scene{
     let score = this.score;
     let fishNum = this.fishNum;
     let stepX = this.stepX;
+    let key = this.character
     
   //Creating default settings
+  
     if(!bombs) {
       bombs = 2;
       score = 10;
@@ -45,6 +50,20 @@ export default class MainMenu extends Phaser.Scene{
     }
     
     
+    
+    if(!key) {
+      key = 'dude'
+      
+    }
+    else {
+      
+      key = this.character
+      
+    }
+   
+
+    
+    
     playButton.setInteractive();
     customizeButton.setInteractive();
     settingsButton.setInteractive();
@@ -55,7 +74,7 @@ export default class MainMenu extends Phaser.Scene{
     })
 
     customizeButton.on("pointerdown", () => {
-      this.scene.start("customizeMenu", { menuBg: menuBg})
+      this.scene.start("customizeMenu", { menuBg: menuBg, key: key})
     })
 
     settingsButton.on("pointerdown", () => {

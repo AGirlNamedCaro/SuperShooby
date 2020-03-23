@@ -52,7 +52,6 @@ export default class MultiplayerMenu extends Phaser.Scene {
     );
     playButton.scale = 0.09;
 
-    cancelButton.setInteractive();
     playButton.setInteractive();
     this.smallPlayButton.setInteractive();
 
@@ -95,6 +94,12 @@ export default class MultiplayerMenu extends Phaser.Scene {
       });
     });
 
+    // headButton.on("pointerdown", () => {
+    //   console.log("Enter Code");
+    // });
+    
+    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+    backButtonRope.scale = 0.45
     playButton.on("pointerdown", () => {
       let roomId = "";
       const htmlForm = this.add
