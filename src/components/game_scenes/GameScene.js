@@ -256,7 +256,8 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
       up: Phaser.Input.Keyboard.KeyCodes.W,
       left: Phaser.Input.Keyboard.KeyCodes.A,
       down: Phaser.Input.Keyboard.KeyCodes.S,
-      right: Phaser.Input.Keyboard.KeyCodes.D
+      right: Phaser.Input.Keyboard.KeyCodes.D,
+      pause: Phaser.Input.Keyboard.KeyCodes.ESC
     });
 
     this.playerState = this.calcPlayerState();
@@ -341,6 +342,11 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
       );
       this.emitSocket(this.socket, "playerMovement", this.playerState);
     });
+
+    this.input.keyboard.on("keyup-ESC", event => {
+      this.scene.pause()
+      
+    });
   }
     
         //Setting highscore
@@ -385,6 +391,14 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
             
 
         }
+
+       
+
+
+
+
+
+
 
       }
 
