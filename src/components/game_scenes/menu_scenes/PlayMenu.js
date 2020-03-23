@@ -63,7 +63,7 @@ export default class PlayMenu extends Phaser.Scene {
       this.scene.stop("playMenu");
       const titleScene = this.scene.get("titleScene");
       titleScene.scene.transition({
-        target: "gameScene",
+        target: "singlePlayer",
         duration: 1000,
         data: { bombs, score, fishNum, stepX }
       });
