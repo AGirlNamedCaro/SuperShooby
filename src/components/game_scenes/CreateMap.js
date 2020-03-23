@@ -1,11 +1,14 @@
 import Phaser from "phaser";
 import socketIo from "socket.io-client";
-const { MongoClient } = require("mongodb");
 
 export default class CreateMap extends Phaser.Scene {
   constructor() {
     super("createMap");
     this.selectedIndex = 1;
+  }
+
+  init() {
+    // Find better way to do this so it doesnt create a new socket.
     this.socket = socketIo(
       process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
     );
@@ -94,6 +97,8 @@ export default class CreateMap extends Phaser.Scene {
         this.cloudsLayer,
         this.groundLayer
       ]);
+
+      this.socket.emit("createMap", exportObj);
 
       // console.log(JSON.stringify(exportObj));
 

@@ -7,7 +7,7 @@ const {
   handlePlayerInput
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
-const randomWord = require("random-words");
+const chance = require("chance").Chance();
 
 // Next time trying to import a class try roomManager = roomManager.RoomManager();
 class RoomManager {
@@ -76,11 +76,11 @@ window.onload = () => {
     console.log("A menu shooby has connected");
 
     socket.on("createRoom", () => {
-      let roomId = randomWord();
+      let roomId = chance.word({ syllables: 3 });
 
       while (roomManager.rooms[roomId]) {
         console.log("test");
-        roomId = randomWord();
+        roomId = chance.word({ syllables: 3 });
       }
 
       const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
@@ -135,6 +135,21 @@ window.onload = () => {
         socket.id,
         playerState
       );
+    });
+
+    socket.on("createMap", mapData => {
+      mapData["mapId"] = chance.word({ syllables: 3 });
+
+      client.connect(err => {
+        // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
+        // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+        // TODO need to send user confirmation with the map id name
+        const collection = client.db("game_db").collection("maps");
+        collection
+          .insertOne(mapData)
+          .then(res => client.close())
+          .catch(err => console.log("err", err));
+      });
     });
   });
 };
