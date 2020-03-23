@@ -21,6 +21,9 @@ export default class CreateCharacter extends Phaser.Scene {
     this.load.image("shabbyImage", "/assets/images/sprites/shabbyImage.png");
     this.load.image("shoobyImage", "/assets/images/sprites/shoobyImage.png");
 
+    this.load.image('bowler_hat', '/assets/images/prefabs/hat.png');
+
+
 
 
 
@@ -36,6 +39,9 @@ export default class CreateCharacter extends Phaser.Scene {
 
     this.cameras.main.fadeIn(2000);
     this.cameras.main.setBackgroundColor(0,0,0,0.5);
+
+    const bowler_hatImage = this.add.image(310,230,'bowler_hat');
+    bowler_hatImage.setScale(0.08);
     
     let shooby = this.physics.add.sprite(640, 150, 'dude')
     let box = this.physics.add.staticGroup();
@@ -52,6 +58,8 @@ export default class CreateCharacter extends Phaser.Scene {
 
     let shoobyImage = this.add.image(470,150, 'shoobyImage')
     shoobyImage.setScale(2); 
+
+    bowler_hatImage.setInteractive();
   
 
     
@@ -74,12 +82,24 @@ export default class CreateCharacter extends Phaser.Scene {
     shabbyImage.setInteractive();
     shoobyImage.setInteractive();
     
-    let bashy = this.physics.add.sprite(640, 150, 'bashy')
+    let bashy = this.physics.add.sprite(640, 0, 'bashy')
     bashy.visible = false;
-    let booshy = this.physics.add.sprite(640, 150, 'booshy')
+    let booshy = this.physics.add.sprite(640, 0, 'booshy')
     booshy.visible = false;
-    let shabby = this.physics.add.sprite(640, 150, 'shabby')
+    let shabby = this.physics.add.sprite(640, 0, 'shabby')
     shabby.visible = false;
+    let bowler_hat = this.add.sprite(shooby.x,shooby.y + 30,'bowler_hat');
+    bowler_hat.visible = false;
+
+
+    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
+    backButtonRope.scale = 0.45
+    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
+    smallPlayButton.scale = 0.35
+
+    smallPlayButton.setInteractive();
+    let character = '';
+
 
     
     bashyImage.on("pointerdown", () => {
@@ -88,6 +108,7 @@ export default class CreateCharacter extends Phaser.Scene {
       bashy.visible = true;
       booshy.visible = false;
       shabby.visible = false;
+      character = 'bashy'
       
       this.anims.create({
         key: "front",
@@ -102,6 +123,9 @@ export default class CreateCharacter extends Phaser.Scene {
       bashy.setScale(3);
       this.physics.add.collider(bashy, box);
       
+      
+      
+      
     })
 
     booshyImage.on("pointerdown", () => {
@@ -111,6 +135,8 @@ export default class CreateCharacter extends Phaser.Scene {
       bashy.visible = false;
       booshy.visible = true;
       shabby.visible = false;
+
+      character = 'booshy'
       
 
 
@@ -136,6 +162,8 @@ export default class CreateCharacter extends Phaser.Scene {
       bashy.visible = false;
       booshy.visible = false;
       shabby.visible = true;
+
+      character = 'shabby'
       
       this.anims.create({
         key: "nose",
@@ -154,11 +182,12 @@ export default class CreateCharacter extends Phaser.Scene {
 
     shoobyImage.on("pointerdown", () => {
       
-      
       shooby.visible = true;
       bashy.visible = false;
       booshy.visible = false;
       shabby.visible = false;
+
+      character = 'dude'
       
       this.anims.create({
         key: "turn",
@@ -175,8 +204,14 @@ export default class CreateCharacter extends Phaser.Scene {
       
     })
 
+    bowler_hatImage.on("pointerdown", () => {
+      bowler_hat.visible = true;
+      bowler_hat.setScale(0.08);
+    })
 
-
+    smallPlayButton.on("pointerdown", () => {
+      this.scene.start("titleScene", {character: character})
+    });
 
 }
 
