@@ -10,6 +10,7 @@ class TitleScene extends Phaser.Scene {
 
   init(data) {
     this.character = data.character
+    this.container = data.container
 
    
   }
@@ -18,6 +19,7 @@ class TitleScene extends Phaser.Scene {
   create() {
    
     this.scene.launch("mainMenu");
+    
     this.bg = this.add.tileSprite(400, 300, 800, 600, 'sky')
     this.bg.scaleY = 1.15;
     this.ground = this.add.tileSprite(0, 0, 'ground')
@@ -37,18 +39,11 @@ class TitleScene extends Phaser.Scene {
     else {
       
       this.key = this.character
+      console.log("container: ",this.container[0])
       
     }
 
     this.player = this.physics.add.sprite(450, 450, this.key)
-    
-
-    // this.anims.create({
-    //   key: 'right',
-    //   frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-    //   frameRate: 10,
-    //   repeat: -1
-    // });
 
    
 
@@ -60,10 +55,6 @@ class TitleScene extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
 
     
-   
-   
-    
-   
     
     this.physics.add.collider(this.player, platforms);
 
