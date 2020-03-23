@@ -39,7 +39,7 @@ class TitleScene extends Phaser.Scene {
     else {
       
       this.key = this.character
-      console.log("container: ",this.container[0])
+      
       
     }
 

@@ -23,11 +23,6 @@ export default class CreateCharacter extends Phaser.Scene {
 
     this.load.image('bowler_hat', '/assets/images/prefabs/hat.png');
 
-
-
-
-
-
   }
 
   create() {
@@ -211,7 +206,7 @@ export default class CreateCharacter extends Phaser.Scene {
     })
 
     smallPlayButton.on("pointerdown", () => {
-      container.add(bowler_hat)
+      
       this.scene.start("titleScene", {character: character, container: container})
     });
 
