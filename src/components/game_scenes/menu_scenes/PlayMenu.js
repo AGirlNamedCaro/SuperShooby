@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 
-export default class PlayMenu extends Phaser.Scene{
+export default class PlayMenu extends Phaser.Scene {
   constructor() {
     super("playMenu");
   }
@@ -16,24 +16,43 @@ export default class PlayMenu extends Phaser.Scene{
     this.stepX = data.stepX;
   }
 
+  preload() {
+    this.load.html("multiplayerForm", "/assets/html/multiplayerForm.html");
+  }
+
   create() {
     console.log(this.bombs);
-    console.log("score:" ,this.score)
+    console.log("score:", this.score);
     const bombs = this.bombs;
     const score = this.score;
     const fishNum = this.fishNum;
     const stepX = this.stepX;
     this.add.existing(this.menuBg);
-    const singlePlayer = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.185, "singlePlayer");
-    singlePlayer.scale = 0.30;
-    const multiplayer = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "multiplayer");
-    multiplayer.scale = 0.30;
+    const singlePlayer = this.add.image(
+      this.game.renderer.width / 1.96,
+      this.game.renderer.height * 0.185,
+      "singlePlayer"
+    );
+    singlePlayer.scale = 0.3;
+    const multiplayer = this.add.image(
+      this.game.renderer.width / 1.96,
+      this.game.renderer.height * 0.3,
+      "multiplayer"
+    );
+    multiplayer.scale = 0.3;
 
-    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.48, "backButtonRope");
-    backButtonRope.scale = 0.45
-    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
-    smallPlayButton.scale = 0.35
-    ;
+    const backButtonRope = this.add.image(
+      this.game.renderer.width / 2.68,
+      this.game.renderer.height * 0.48,
+      "backButtonRope"
+    );
+    backButtonRope.scale = 0.45;
+    const smallPlayButton = this.add.image(
+      this.game.renderer.width / 2.75,
+      this.game.renderer.height * 0.63,
+      "smallPlayButton"
+    );
+    smallPlayButton.scale = 0.35;
 
     singlePlayer.setInteractive();
     multiplayer.setInteractive();
@@ -44,19 +63,34 @@ export default class PlayMenu extends Phaser.Scene{
       this.scene.stop("playMenu");
       const titleScene = this.scene.get("titleScene");
       titleScene.scene.transition({
-        target: "authScene",
+        target: "gameScene",
         duration: 1000,
-        data: {bombs, score, fishNum, stepX}
-      })
+        data: { bombs, score, fishNum, stepX }
+      });
     });
 
     multiplayer.on("pointerdown", () => {
       console.log("Multiplayer");
-      this.scene.start("multiplayerMenu", { menuBg: this.menuBg, smPlBtn: smallPlayButton})
+      this.scene.start("multiplayerMenu", {
+        menuBg: this.menuBg,
+        smPlBtn: smallPlayButton
+      });
     });
 
     smallPlayButton.on("pointerdown", () => {
-      this.scene.start("mainMenu")
+      this.scene.start("mainMenu");
+    });
+
+    const htmlForm = this.add.dom(300, 100).createFromCache("multiplayerForm");
+
+    htmlForm.addListener("click");
+    // Have it setup so a random word gets set as server name
+    htmlForm.on("click", event => {
+      if (event.target.name === "submitBtn") {
+        const userInput = htmlForm.getChildByName("serverName");
+        const roomId = userInput.value;
+        console.log(roomId)
+      }
     });
   }
 }
