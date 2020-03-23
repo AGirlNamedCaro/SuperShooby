@@ -28,6 +28,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image('difficulty_bar', '/assets/images/buttons/difficulty_bar.png');
 
 
+
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')
    
     
@@ -42,6 +43,20 @@ export default class Preload extends Phaser.Scene {
       { frameWidth: 32, frameHeight: 48 }
     );
 
+    this.load.spritesheet('bashy',
+    '/assets/images/sprites/bashy.png',
+    { frameWidth: 32, frameHeight: 48 }
+  );
+
+  this.load.spritesheet('booshy',
+  '/assets/images/sprites/booshy.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('shabby',
+  '/assets/images/sprites/shabby.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
     this.load.spritesheet('fish',
     '/assets/images/sprites/star.png',
     { frameWidth: 32, frameHeight: 32 }
