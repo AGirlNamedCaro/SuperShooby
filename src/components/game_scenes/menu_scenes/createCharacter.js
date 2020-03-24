@@ -40,7 +40,7 @@ export default class CreateCharacter extends Phaser.Scene {
     let box = this.physics.add.staticGroup();
     box.create(640, 310, 'box').setScale(0.7).refreshBody();
     //Creating the images for the shoobys
-    let shooby = this.physics.add.sprite(640, 150, 'dude')
+    
     let bashyImage = this.add.image(310,150,'bashyImage')
     bashyImage.setScale(2)
     let booshyImage = this.add.image(370,150, 'booshyImage')
@@ -57,16 +57,6 @@ export default class CreateCharacter extends Phaser.Scene {
     backButtonRope.scale = 0.45
     const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
     smallPlayButton.scale = 0.35
-   
-
-    shooby.setCollideWorldBounds(true);
-    this.physics.add.collider(shooby, box);
-    shooby.setScale(3);
-    
-//Initial animation
-    
-    shooby.setBounce(0.2);
-
 
     bashyImage.setInteractive();
     booshyImage.setInteractive();
@@ -77,6 +67,7 @@ export default class CreateCharacter extends Phaser.Scene {
     smallPlayButton.setInteractive();
 
     //Creating Sprites
+    let shooby = this.physics.add.sprite(640, 150, 'dude')
     let bashy = this.physics.add.sprite(640, 0, 'bashy')
     bashy.visible = false;
     let booshy = this.physics.add.sprite(640, 0, 'booshy')
@@ -88,9 +79,14 @@ export default class CreateCharacter extends Phaser.Scene {
     let shoobyGlasses = this.physics.add.sprite(640, 0, 'shoobyGlasses')
     shoobyGlasses.visible = false;
     
-    // this.createAnimation(this.prevKey, currentChar )
-    this.createAnimation(this.prevKey, shooby)
-  
+    //Initial animation
+   
+    this.createAnimationStand(this.prevKey, shooby)
+    this.physics.add.collider(shooby, box);
+    shooby.setCollideWorldBounds(true);
+    shooby.setScale(3);
+    shooby.setBounce(0.2);
+    
     let character = '';
 
     bashyImage.on("pointerdown", () => {
@@ -103,7 +99,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyHat.visible = false;
       shoobyGlasses.visible = false;
 
-      this.createAnimation(character,bashy)
+      this.createAnimationStand(character,bashy)
 
       
       this.physics.add.collider(bashy, box);
@@ -122,7 +118,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyGlasses.visible = false;
 
 
-      this.createAnimation(character,booshy)
+      this.createAnimationStand(character,booshy)
       
 
       this.physics.add.collider(booshy, box);
@@ -141,7 +137,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyGlasses.visible = false;
 
       
-      this.createAnimation(character,shabby)
+      this.createAnimationStand(character,shabby)
 
      
       this.physics.add.collider(shabby, box);
@@ -159,7 +155,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyGlasses.visible = false;
 
       
-      this.createAnimation(character,shooby)
+      this.createAnimationStand(character,shooby)
 
     
       this.physics.add.collider(shooby, box);
@@ -177,7 +173,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyGlasses.visible = false
 
       
-      this.createAnimation(character,shoobyHat)
+      this.createAnimationStand(character,shoobyHat)
 
     
       this.physics.add.collider(shoobyHat, box);
@@ -194,7 +190,7 @@ export default class CreateCharacter extends Phaser.Scene {
       shoobyHat.visible = false;
       shoobyGlasses.visible = true
 
-      this.createAnimation(character,shoobyGlasses)
+      this.createAnimationStand(character,shoobyGlasses)
 
     
       this.physics.add.collider(shoobyGlasses, box);
@@ -210,15 +206,12 @@ export default class CreateCharacter extends Phaser.Scene {
     });
 
 }
-
-createAnimation(key, object) {
+createAnimationStand(key, object) {
   this.anims.create({
     key: key + 1,
     frames: [{ key: key, frame: 4 }],
     frameRate: 20
   });
-  
-  
   
   object.anims.play(key + 1, true);
   object.setBounce(0.2);
