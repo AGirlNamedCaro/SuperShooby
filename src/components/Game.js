@@ -31,7 +31,7 @@ export const config = {
   dom: {
     createContainer: true,
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, GameScene, AuthoritativeScene, SettingsMenu, CreateMap]
+  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, AuthoritativeScene, SettingsMenu, CreateMap]
   
 };
 

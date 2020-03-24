@@ -50,14 +50,6 @@ export default class CreateMap extends Phaser.Scene {
     this.marker.lineStyle(3, 0x0c6fd8, 1);
     this.marker.strokeRect(0, 0, map.tileWidth, map.tileHeight);
 
-    // console.log("test", Phaser.Tilemaps.Parsers.Tiled.BuildTilesetIndex(map));
-    // console.log("tiles", this.groundLayer.findByIndex(1))
-    console.log("Tileset", tiles.getTileTextureCoordinates(2));
-    console.log("tileimage", tiles);
-    console.log("map", map);
-    console.log("layer", this.skyLayer);
-    console.log("layer", this.cloudsLayer);
-
     this.cursors = this.input.keyboard.addKeys({
       shift: Phaser.Input.Keyboard.KeyCodes.SHIFT,
       q: Phaser.Input.Keyboard.KeyCodes.Q,
@@ -99,30 +91,6 @@ export default class CreateMap extends Phaser.Scene {
       ]);
 
       this.socket.emit("createMap", exportObj);
-
-      // console.log(JSON.stringify(exportObj));
-
-      // const uri =
-      // "mongodb+srv://mario_MakerJS:fuckingCunts@cluster0-wgdn0.mongodb.net/test?retryWrites=true&w=majority";
-      // const client = new MongoClient(uri, { useNewUrlParser: true });
-      // console.log(client)
-
-      // MongoClient.connect(uri, (err, client) => {
-      //   console.log("connected to server")
-
-      //   client.close();
-      // });
-
-      // client.connect(err => {
-      //   const collection = client.db("game_db").collection("maps");
-      //   console.log(collection);
-      //   console.log("err", err)
-      //   client.close();
-      // });
-
-      // console.log("columns", tiles.image.source[0].width);
-      // this.game.setLayer(this.skyLayer);
-      // console.log(map.)
     });
 
     this.mapTilesToLayer(
