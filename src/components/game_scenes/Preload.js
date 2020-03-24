@@ -60,6 +60,16 @@ this.load.spritesheet('shabby',
   '/assets/images/sprites/shabby.png',
   { frameWidth: 32, frameHeight: 48 }
 );
+
+this.load.spritesheet('shoobyHat',
+  '/assets/images/sprites/shoobyHat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('shoobyGlasses',
+  '/assets/images/sprites/shoobyGlasses.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
     this.load.spritesheet('fish',
     '/assets/images/sprites/star.png',
     { frameWidth: 32, frameHeight: 32 }

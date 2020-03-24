@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import TitleScene from "../TitleScene";
 
 export default class CreateCharacter extends Phaser.Scene {
     constructor() {
@@ -11,6 +10,7 @@ export default class CreateCharacter extends Phaser.Scene {
       this.menuBg.scene = this;
       this.menuBg.active = true;
       this.menuBg.visible = true;
+      this.prevKey = data.key
   }
 
   preload() {
@@ -28,9 +28,13 @@ export default class CreateCharacter extends Phaser.Scene {
 
 
 
+    this.load.image("shoobyHatImage", "/assets/images/sprites/shoobyHatImage.png");
+    this.load.image("shoobyGlassesImage", "/assets/images/sprites/shoobyGlassesImage.png");
   }
 
   create() {
+
+   
 
     this.add.existing(this.menuBg);
     this.menuBg.scale = .5;
@@ -60,24 +64,18 @@ createCharBackground.setScale(.5);
 
     let shoobyImage = this.add.image(325,377, 'shoobyImage')
     shoobyImage.setScale(2); 
-
-    
-  
-
-    
-    shooby.setCollideWorldBounds(true);
-    this.physics.add.collider(shooby, box);
-    shooby.setScale(3);
-
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
-      frameRate: 20
-    });
-    
-    shooby.anims.play('turn', true);
-    shooby.setBounce(0.2);
-
+    let shoobyHatImage = this.add.image(310,250, 'shoobyHatImage')
+    shoobyHatImage.setScale(2); 
+    let shoobyGlassesImage = this.add.image(370,250, 'shoobyGlassesImage')
+    shoobyGlassesImage.setScale(2); 
+    const backButtonRope = this.add.image(this.game.renderer.width / 1.18, this.game.renderer.height * 0.57, "backButtonRope");
+    backButtonRope.scale = 0.45
+    const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
+    smallPlayButton.scale = 0.35
+    // const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.55, "backButtonRope");
+    // backButtonRope.scale = 0.45
+    // const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
+    // smallPlayButton.scale = 0.35
 
     bashyImage.setInteractive();
     booshyImage.setInteractive();
@@ -85,6 +83,12 @@ createCharBackground.setScale(.5);
     shoobyImage.setInteractive();
     // bowler_hatImage.setInteractive();
     
+    shoobyHatImage.setInteractive();
+    shoobyGlassesImage.setInteractive();
+    smallPlayButton.setInteractive();
+
+    //Creating Sprites
+    // let shooby = this.physics.add.sprite(640, 150, 'dude')
     let bashy = this.physics.add.sprite(640, 0, 'bashy')
     bashy.visible = false;
     let booshy = this.physics.add.sprite(640, 0, 'booshy')
@@ -95,134 +99,161 @@ createCharBackground.setScale(.5);
     // bowler_hat.visible = false;
 
 
-    const backButtonRope = this.add.image(this.game.renderer.width / 1.18, this.game.renderer.height * 0.57, "backButtonRope");
-    backButtonRope.scale = 0.45
-    const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
-    smallPlayButton.scale = 0.35
+  
 
     smallPlayButton.setInteractive();
+    let shoobyHat = this.physics.add.sprite(640, 0, 'shoobyHat')
+    shoobyHat.visible = false;
+    let shoobyGlasses = this.physics.add.sprite(640, 0, 'shoobyGlasses')
+    shoobyGlasses.visible = false;
+    
+    //Initial animation
+   
+    this.createAnimationStand(this.prevKey, shooby)
+    this.physics.add.collider(shooby, box);
+    shooby.setCollideWorldBounds(true);
+    shooby.setScale(3);
+    shooby.setBounce(0.2);
+    
     let character = '';
 
-    let container = this.add.container(300,300)
-
-
-    
     bashyImage.on("pointerdown", () => {
+      character = 'bashy'
       
       shooby.visible = false;
       bashy.visible = true;
       booshy.visible = false;
       shabby.visible = false;
-      character = 'bashy'
+      shoobyHat.visible = false;
+      shoobyGlasses.visible = false;
+
+      this.createAnimationStand(character,bashy)
+
       
-      this.anims.create({
-        key: "front",
-        frames: [{ key: "bashy", frame: 4 }],
-        frameRate: 20
-      });
-
-      bashy.anims.play('front', true);
-      bashy.setBounce(0.2);
-
-      bashy.setCollideWorldBounds(true);
-      bashy.setScale(3);
       this.physics.add.collider(bashy, box);
       
     })
 
     booshyImage.on("pointerdown", () => {
       
+      character = 'booshy'
       
       shooby.visible = false;
       bashy.visible = false;
       booshy.visible = true;
       shabby.visible = false;
+      shoobyHat.visible = false;
+      shoobyGlasses.visible = false;
 
-      character = 'booshy'
+
+      this.createAnimationStand(character,booshy)
       
 
-
-      this.anims.create({
-        key: "face",
-        frames: [{ key: "booshy", frame: 4 }],
-        frameRate: 20
-      });
-
-      booshy.anims.play('face', true);
-      booshy.setBounce(0.2);
-
-      booshy.setCollideWorldBounds(true);
-      booshy.setScale(3);
       this.physics.add.collider(booshy, box);
       
     })
 
     shabbyImage.on("pointerdown", () => {
       
+      character = 'shabby'
       
       shooby.visible = false;
       bashy.visible = false;
       booshy.visible = false;
       shabby.visible = true;
+      shoobyHat.visible = false;
+      shoobyGlasses.visible = false;
 
-      character = 'shabby'
       
-      this.anims.create({
-        key: "nose",
-        frames: [{ key: "shabby", frame: 4 }],
-        frameRate: 20
-      });
+      this.createAnimationStand(character,shabby)
 
-      shabby.anims.play('nose', true);
-      shabby.setBounce(0.2);
-
-      shabby.setCollideWorldBounds(true);
-      shabby.setScale(3);
+     
       this.physics.add.collider(shabby, box);
       
     })
 
     shoobyImage.on("pointerdown", () => {
+      character = 'dude'
       
       shooby.visible = true;
       bashy.visible = false;
       booshy.visible = false;
       shabby.visible = false;
+      shoobyHat.visible = false;
+      shoobyGlasses.visible = false;
 
-      character = 'dude'
       
-      this.anims.create({
-        key: "turn",
-        frames: [{ key: "dude", frame: 4 }],
-        frameRate: 20
-      });
+      this.createAnimationStand(character,shooby)
 
-      shooby.anims.play('turn', true);
-      shooby.setBounce(0.2);
-
-      shooby.setCollideWorldBounds(true);
-      shooby.setScale(3);
+    
       this.physics.add.collider(shooby, box);
       
     })
 
-    // bowler_hatImage.on("pointerdown", () => {
-    //   bowler_hat.visible = true;
-    //   bowler_hat.setScale(0.08);
+    shoobyHatImage.on("pointerdown", () => {
+      character = 'shoobyHat'
       
-    // })
+      shooby.visible = false;
+      bashy.visible = false;
+      booshy.visible = false;
+      shabby.visible = false;
+      shoobyHat.visible = true
+      shoobyGlasses.visible = false
 
+      
+      this.createAnimationStand(character,shoobyHat)
+
+    
+      this.physics.add.collider(shoobyHat, box);
+      
+    })
+
+    shoobyGlassesImage.on("pointerdown", () => {
+      character = 'shoobyGlasses'
+      
+      shooby.visible = false;
+      bashy.visible = false;
+      booshy.visible = false;
+      shabby.visible = false;
+      shoobyHat.visible = false;
+      shoobyGlasses.visible = true
+
+      this.createAnimationStand(character,shoobyGlasses)
+
+    
+      this.physics.add.collider(shoobyGlasses, box);
+      
+     })
+
+   
     smallPlayButton.on("pointerdown", () => {
-      // container.add(bowler_hat)
-      this.scene.start("titleScene", {character: character, container: container})
+      
+      this.scene.start("titleScene",  {character: character})
+      this.scene.start("mainMenu",  {character: character})
+
     });
 
+  }
+  
+createAnimationStand(key, object) {
+  this.anims.create({
+    key: key + 1,
+    frames: [{ key: key, frame: 4 }],
+    frameRate: 20
+  });
+  
+  object.anims.play(key + 1, true);
+  object.setBounce(0.2);
+  object.setCollideWorldBounds(true);
+  object.setScale(3);
+
+  
 }
 
-    
+}
     
 
 
-  }
+  
 
     

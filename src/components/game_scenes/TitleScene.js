@@ -39,7 +39,6 @@ class TitleScene extends Phaser.Scene {
     else {
       
       this.key = this.character
-      console.log("container: ",this.container[0])
       
     }
 
@@ -98,7 +97,6 @@ class TitleScene extends Phaser.Scene {
   }
 
   createAnimation(key) {
-    console.log("in",key)
     this.anims.create({
       key: key,
       frames: this.anims.generateFrameNumbers(key, { start: 5, end: 8 }),
