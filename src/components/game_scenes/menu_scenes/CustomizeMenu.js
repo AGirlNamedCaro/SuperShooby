@@ -11,11 +11,13 @@ export default class Customize extends Phaser.Scene {
         this.menuBg.scene = this;
         this.menuBg.active = true;
         this.menuBg.visible = true;
+        this.key = data.key
     }
 
     create() {
         this.add.existing(this.menuBg);
         this.menuBg.scaleY = 0.3;
+        
         const setMapButton = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.18, "setMapButton");
         setMapButton.scale = 0.27;
         const createMapButton = this.add.image(this.game.renderer.width / 1.97, this.game.renderer.height * 0.299, "createMapButton");
@@ -54,7 +56,7 @@ export default class Customize extends Phaser.Scene {
           
         createCharButton.on("pointerdown", () => {
             
-            this.scene.start("createCharacter", { menuBg: this.menuBg})
+            this.scene.start("createCharacter", { menuBg: this.menuBg, key: this.key})
         })
     }
 
