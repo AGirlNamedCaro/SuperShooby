@@ -33,7 +33,7 @@ export default class CreateCharacter extends Phaser.Scene {
   create() {
 
     this.add.existing(this.menuBg);
-    this.menuBg.scaleY = 0.6;
+    this.menuBg.scale = 1;
     
 
 
