@@ -10,9 +10,7 @@ export default class MultiplayerMenu extends Phaser.Scene {
   init(data) {
     this.menuBg = data.menuBg;
     this.smallPlayButton = data.smPlBtn;
-    this.socket = socketIo(
-      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    );
+    this.socket = this.game.socket;
   }
 
   makeActVis(gameObject, scene) {

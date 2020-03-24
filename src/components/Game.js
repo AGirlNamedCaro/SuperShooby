@@ -1,5 +1,6 @@
 import React from "react";
 import Phaser from "phaser";
+import socketIo from "socket.io-client"
 import Preload from "./game_scenes/Preload";
 import TitleScene from "./game_scenes/TitleScene";
 import MainMenu from "./game_scenes/menu_scenes/MainMenu";
@@ -8,11 +9,10 @@ import MultiplayerMenu from "./game_scenes/menu_scenes/MultiplayerMenu";
 import CustomizeMenu from "./game_scenes/menu_scenes/CustomizeMenu";
 import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
-
-
 import SinglePlayer from "./game_scenes/SinglePlayerScene";
 import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
 import CreateMap from "./game_scenes/CreateMap";
+import SetMapMenu from "./game_scenes/menu_scenes/SetMapMenu";
 
 export const config = {
   type: Phaser.CANVAS,
@@ -29,10 +29,22 @@ export const config = {
     mode: Phaser.Scale.FIT
   },
   dom: {
-    createContainer: true,
+    createContainer: true
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, AuthoritativeScene, SettingsMenu, CreateMap, SinglePlayer]
-  
+  scene: [
+    Preload,
+    TitleScene,
+    MainMenu,
+    PlayMenu,
+    MultiplayerMenu,
+    CustomizeMenu,
+    CreateCharacterMenu,
+    AuthoritativeScene,
+    SettingsMenu,
+    CreateMap,
+    SinglePlayer,
+    SetMapMenu
+  ]
 };
 
 function resize() {
@@ -53,6 +65,12 @@ function resize() {
 
 const game = new Phaser.Game(config);
 
+game.socket = socketIo(
+  process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
+);
+
+console.log(process.env.REACT_APP_HOST)
+console.log(game)
 window.onload = function() {
   resize();
   window.addEventListener("resize", resize, false);

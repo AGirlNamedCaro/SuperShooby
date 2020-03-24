@@ -80,17 +80,5 @@ export default class PlayMenu extends Phaser.Scene {
     smallPlayButton.on("pointerdown", () => {
       this.scene.start("mainMenu");
     });
-
-    const htmlForm = this.add.dom(300, 100).createFromCache("multiplayerForm");
-
-    htmlForm.addListener("click");
-    // Have it setup so a random word gets set as server name
-    htmlForm.on("click", event => {
-      if (event.target.name === "submitBtn") {
-        const userInput = htmlForm.getChildByName("serverName");
-        const roomId = userInput.value;
-        console.log(roomId)
-      }
-    });
   }
 }

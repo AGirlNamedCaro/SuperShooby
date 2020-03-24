@@ -8,10 +8,7 @@ export default class CreateMap extends Phaser.Scene {
   }
 
   init() {
-    // Find better way to do this so it doesnt create a new socket.
-    this.socket = socketIo(
-      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    );
+    this.socket = this.game.socket;
   }
 
   preload() {
