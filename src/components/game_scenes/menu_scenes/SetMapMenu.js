@@ -16,6 +16,16 @@ export default class SetMapMenu extends Phaser.Scene {
     this.setMapButton.active = true;
     this.setMapButton.visible = true;
 
+    this.backButtonRope = data.backButtonRope;
+    this.backButtonRope.scene = this;
+    this.backButtonRope.active = true;
+    this.backButtonRope.visible = true;
+
+    this.backButton = data.backButton;
+    this.backButton.scene = this;
+    this.backButton.active = true;
+    this.backButton.visible = true;
+
     this.socket = this.game.socket;
   }
 
@@ -26,7 +36,10 @@ export default class SetMapMenu extends Phaser.Scene {
   create() {
     this.add.existing(this.menuBg);
     this.add.existing(this.setMapButton);
+    this.add.existing(this.backButton);
+    this.add.existing(this.backButtonRope);
 
+    this.backButton.setInteractive();
     this.setMapButton.setInteractive();
     this.setMapButton.on("pointerdown", () => {
       console.log("clicked")
@@ -39,10 +52,20 @@ export default class SetMapMenu extends Phaser.Scene {
       htmlForm.on("click", event => {
         if (event.target.name === "submitBtn") {
           const userInput = htmlForm.getChildByName("serverName");
-          const roomId = userInput.value;
-          console.log(roomId)
+          const levelId = userInput.value;
+          console.log(levelId)
+          this.socket.emit("getLevel", levelId);
         }
       });
+
+      this.socket.on("returnedMap" , mapData => {
+        this.game.setLevel(mapData[0])
+      });
     });
+
+    this.backButton.on("pointerdown", () => {
+      this.scene.start("customizeMenu")
+    })
+    
   }
 }

@@ -34,7 +34,7 @@ export default class Customize extends Phaser.Scene {
         createCharButton.setInteractive();
 
         setMapButton.on("pointerdown", () => {
-            this.scene.start("setMapMenu", { menuBg: this.menuBg, setMapButton: setMapButton });
+            this.scene.start("setMapMenu", { menuBg: this.menuBg, setMapButton: setMapButton, backButtonRope: backButtonRope, backButton: smallPlayButton });
         })
         
         createMapButton.on("pointerdown", () => {

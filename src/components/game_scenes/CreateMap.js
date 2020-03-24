@@ -12,7 +12,7 @@ export default class CreateMap extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
+    this.load.image("tiles", "/assets/images/prefabs/marioTileSet.png");
     this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
   }
 
@@ -200,7 +200,7 @@ export default class CreateMap extends Phaser.Scene {
       height: map.height,
       infinite: false,
       layers: [],
-      nextlayerid: map.layers.length + 1,
+      nextlayerid: map.layers.length,
       nextobjectid: 1,
       orientation: map.orientation,
       renderorder: map.renderOrder,

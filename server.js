@@ -11,7 +11,6 @@ const datauri = new Datauri();
 const { JSDOM } = jsdom;
 const server = require("http").Server(app);
 const io = require("socket.io").listen(server);
-const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const players = {};
 
@@ -45,7 +44,8 @@ function setupAuthoritativePhaser() {
           console.log(`Listening on ${server.address().port}`);
         });
         dom.window.io = io;
-        dom.window.client = client;
+        dom.window.MongoClient = MongoClient;
+        dom.window.MONGODB = process.env.MONGODB;
       };
     })
     .catch(err => console.log(err.message));

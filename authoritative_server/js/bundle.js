@@ -121,9 +121,9 @@ window.onload = () => {
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
-        const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-        roomManager.joinRoom(roomId, player);
-        // TODO fix broken error handling
+      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      roomManager.joinRoom(roomId, player);
+      // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
       // }
@@ -169,6 +169,11 @@ window.onload = () => {
     socket.on("createMap", mapData => {
       mapData["mapId"] = chance.word({ syllables: 3 });
 
+      const client = new MongoClient(MONGODB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+
       client.connect(err => {
         // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
         // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -178,6 +183,22 @@ window.onload = () => {
           .insertOne(mapData)
           .then(res => client.close())
           .catch(err => console.log("err", err));
+      });
+    });
+
+    socket.on("getLevel", levelId => {
+      const client = new MongoClient(MONGODB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+
+      client.connect(err => {
+        const collection = client.db("game_db").collection("maps");
+        collection.find({ mapId: levelId }).toArray((err, map) => {
+          if (err) throw err;
+          io.to(socket.id).emit("returnedMap", map);
+          client.close();
+        })
       });
     });
   });

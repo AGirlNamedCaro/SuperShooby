@@ -64,21 +64,20 @@ function resize() {
 }
 
 const game = new Phaser.Game(config);
-
+window.game = game;
 game.socket = socketIo(
   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
 );
 
-console.log(process.env.REACT_APP_HOST)
-console.log(game)
 window.onload = function() {
   resize();
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ setGameMode }) {
-  // pass the statechange method down to the game
-  game.setState = setGameMode;
+export default function Game({ level, setLevel }) {
+  // pass the setLevel method down to the game
+  game.level = level;
+  game.setLevel = setLevel;
 
   return (
     <div id="game-container">
