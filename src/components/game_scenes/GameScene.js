@@ -49,7 +49,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
 
    
-      
+        
          this.bombsNum = this.bombs;
         // ground.setCollisionByProperty({ collides: true }, true)
         // ground.setCollision([1, 265, 266, 299, 298])
@@ -91,7 +91,6 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
         
         //FISH & BOMBS creation
-        
         
         this.fish = this.physics.add.group({
              key: 'fish',

@@ -68,7 +68,7 @@ export default class PlayMenu extends Phaser.Scene {
       titleScene.scene.transition({
         target: "singlePlayer",
         duration: 1000,
-        data: { bombs, score, fishNum, stepX, key }
+        data: { bombs, score, fishNum, stepX, key, menuBg: this.menuBg }
       });
     });
 
