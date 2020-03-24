@@ -20,8 +20,8 @@ export default class CreateCharacter extends Phaser.Scene {
     this.load.image("booshyImage", "/assets/images/sprites/booshyImage.png");
     this.load.image("shabbyImage", "/assets/images/sprites/shabbyImage.png");
     this.load.image("shoobyImage", "/assets/images/sprites/shoobyImage.png");
-
-    this.load.image('bowler_hat', '/assets/images/prefabs/hat.png');
+    // this.load.image('bowler_hat', '/assets/images/prefabs/hat.png');
+    this.load.image('createCharBackground', '/assets/images/backgrounds/createCharBackground.png');
 
 
 
@@ -33,30 +33,32 @@ export default class CreateCharacter extends Phaser.Scene {
   create() {
 
     this.add.existing(this.menuBg);
-    this.menuBg.scale = 1;
+    this.menuBg.scale = .5;
     
 
 
     this.cameras.main.fadeIn(2000);
     this.cameras.main.setBackgroundColor(0,0,0,0.5);
+let createCharBackground = this.add.image(400,320, 'createCharBackground')
+createCharBackground.setScale(.5);
 
-    const bowler_hatImage = this.add.image(310,230,'bowler_hat');
-    bowler_hatImage.setScale(0.08);
+    // const bowler_hatImage = this.add.image(310,230,'bowler_hat');
+    // bowler_hatImage.setScale(0.08);
     
-    let shooby = this.physics.add.sprite(640, 150, 'dude')
+    let shooby = this.physics.add.sprite(497, 150, 'dude')
     let box = this.physics.add.staticGroup();
-    box.create(640, 310, 'box').setScale(0.7).refreshBody();
+    box.create(500, 545, 'box').setScale(0.7).refreshBody();
 
-    let bashyImage = this.add.image(310,150,'bashyImage')
+    let bashyImage = this.add.image(100,377,'bashyImage')
     bashyImage.setScale(2)
 
-    let booshyImage = this.add.image(370,150, 'booshyImage')
+    let booshyImage = this.add.image(175,377, 'booshyImage')
     booshyImage.setScale(2);
 
-    let shabbyImage = this.add.image(410,150, 'shabbyImage')
+    let shabbyImage = this.add.image(250,377, 'shabbyImage')
     shabbyImage.setScale(2); 
 
-    let shoobyImage = this.add.image(470,150, 'shoobyImage')
+    let shoobyImage = this.add.image(325,377, 'shoobyImage')
     shoobyImage.setScale(2); 
 
     
@@ -81,7 +83,7 @@ export default class CreateCharacter extends Phaser.Scene {
     booshyImage.setInteractive();
     shabbyImage.setInteractive();
     shoobyImage.setInteractive();
-    bowler_hatImage.setInteractive();
+    // bowler_hatImage.setInteractive();
     
     let bashy = this.physics.add.sprite(640, 0, 'bashy')
     bashy.visible = false;
@@ -89,13 +91,13 @@ export default class CreateCharacter extends Phaser.Scene {
     booshy.visible = false;
     let shabby = this.physics.add.sprite(640, 0, 'shabby')
     shabby.visible = false;
-    let bowler_hat = this.add.sprite(shooby.x,shooby.y + 30,'bowler_hat');
-    bowler_hat.visible = false;
+    // let bowler_hat = this.add.sprite(shooby.x,shooby.y + 30,'bowler_hat');
+    // bowler_hat.visible = false;
 
 
-    const backButtonRope = this.add.image(this.game.renderer.width / 2.68, this.game.renderer.height * 0.55, "backButtonRope");
+    const backButtonRope = this.add.image(this.game.renderer.width / 1.18, this.game.renderer.height * 0.57, "backButtonRope");
     backButtonRope.scale = 0.45
-    const smallPlayButton = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
+    const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
     smallPlayButton.scale = 0.35
 
     smallPlayButton.setInteractive();
@@ -204,14 +206,14 @@ export default class CreateCharacter extends Phaser.Scene {
       
     })
 
-    bowler_hatImage.on("pointerdown", () => {
-      bowler_hat.visible = true;
-      bowler_hat.setScale(0.08);
+    // bowler_hatImage.on("pointerdown", () => {
+    //   bowler_hat.visible = true;
+    //   bowler_hat.setScale(0.08);
       
-    })
+    // })
 
     smallPlayButton.on("pointerdown", () => {
-      container.add(bowler_hat)
+      // container.add(bowler_hat)
       this.scene.start("titleScene", {character: character, container: container})
     });
 
