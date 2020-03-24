@@ -10,7 +10,7 @@ import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
 
 
-import GameScene from "./game_scenes/GameScene";
+import SinglePlayer from "./game_scenes/SinglePlayerScene";
 import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
 import CreateMap from "./game_scenes/CreateMap";
 
@@ -31,7 +31,7 @@ export const config = {
   dom: {
     createContainer: true,
   },
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, AuthoritativeScene, SettingsMenu, CreateMap]
+  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, AuthoritativeScene, SettingsMenu, CreateMap, SinglePlayer]
   
 };
 
