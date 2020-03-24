@@ -70,7 +70,7 @@ export default class MainMenu extends Phaser.Scene{
 
 
     playButton.on("pointerdown", () => {
-      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score, fishNum: fishNum, stepX:stepX  })
+      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score, fishNum: fishNum, stepX:stepX, key: key  })
     })
 
     customizeButton.on("pointerdown", () => {

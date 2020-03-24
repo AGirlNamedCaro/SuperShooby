@@ -31,6 +31,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
     this.scoreNum = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
+    this.key = data.key
 }
 
 
@@ -48,7 +49,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
 
    
-      console.log(this.bombs);
+      
          this.bombsNum = this.bombs;
         // ground.setCollisionByProperty({ collides: true }, true)
         // ground.setCollision([1, 265, 266, 299, 298])
@@ -56,9 +57,10 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
         this.highScore = localStorage.getItem('highScore')
 
        
+        
         ground.setCollisionByExclusion(-1, true)
      
-        this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player = this.physics.add.sprite(100, 450, this.key);
         
         this.player.body.setGravityY(300);
         this.physics.add.collider(this.player, ground);
@@ -67,20 +69,20 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers(this.key, { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
             key: 'turn',
-            frames: [{ key: 'dude', frame: 4 }],
+            frames: [{ key: this.key, frame: 4 }],
             frameRate: 20
         });
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers(this.key, { start: 5, end: 8 }),
             frameRate: 10,
             repeat: -1
         });
@@ -234,20 +236,20 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
     this.anims.create({
       key: "left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+      frames: this.anims.generateFrameNumbers(this.key, { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1
     });
 
     this.anims.create({
       key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
+      frames: [{ key: this.key, frame: 4 }],
       frameRate: 20
     });
 
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+      frames: this.anims.generateFrameNumbers(this.key, { start: 5, end: 8 }),
       frameRate: 10,
       repeat: -1
     });
@@ -390,7 +392,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
       //   TODO Dry these functions up
   addPlayer(self, collisions) {
-    self.player = self.physics.add.sprite(100, 450, "dude");
+    self.player = self.physics.add.sprite(100, 450, this.key);
     self.player.body.setGravityY(300);
     self.physics.add.collider(self.player, collisions);
     self.player.setBounce(0.2);
@@ -398,7 +400,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
   }
 
   addOtherPlayers(self, playerInfo, collisions) {
-    const otherPlayer = self.physics.add.sprite(100, 450, "dude");
+    const otherPlayer = self.physics.add.sprite(100, 450, this.key);
     otherPlayer.Id = playerInfo.playerId;
     otherPlayer.body.setGravityY(300);
     self.physics.add.collider(otherPlayer, collisions);
