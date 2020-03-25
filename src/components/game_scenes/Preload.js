@@ -65,15 +65,70 @@ this.load.spritesheet('shabby',
   { frameWidth: 32, frameHeight: 48 }
 );
 
-this.load.spritesheet('shoobyHat',
+//Accessories
+
+//HATS
+
+this.load.spritesheet('dudeHat',
   '/assets/images/sprites/shoobyHat.png',
   { frameWidth: 32, frameHeight: 48 }
 );
+this.load.spritesheet('bashyHat',
+  '/assets/images/sprites/bashyHat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+this.load.spritesheet('booshyHat',
+  '/assets/images/sprites/booshyHat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+this.load.spritesheet('shabbyHat',
+  '/assets/images/sprites/shabbyHat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
 
-this.load.spritesheet('shoobyGlasses',
+//Glasses
+
+this.load.spritesheet('dudeGlasses',
   '/assets/images/sprites/shoobyGlasses.png',
   { frameWidth: 32, frameHeight: 48 }
 );
+this.load.spritesheet('bashyGlasses',
+  '/assets/images/sprites/bashyGlasses.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+this.load.spritesheet('booshyGlasses',
+  '/assets/images/sprites/booshyGlasses.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+this.load.spritesheet('shabbyGlasses',
+  '/assets/images/sprites/shabbyGlasses.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+
+
+//Coats
+this.load.spritesheet('dudeCoat',
+  '/assets/images/sprites/shoobyCoat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('bashyCoat',
+  '/assets/images/sprites/bashyCoat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('booshyCoat',
+  '/assets/images/sprites/booshyCoat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+this.load.spritesheet('shabbyCoat',
+  '/assets/images/sprites/shabbyCoat.png',
+  { frameWidth: 32, frameHeight: 48 }
+);
+
+
     this.load.spritesheet('fish',
     '/assets/images/sprites/star.png',
     { frameWidth: 32, frameHeight: 32 }

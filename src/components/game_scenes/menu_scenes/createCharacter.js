@@ -22,14 +22,6 @@ export default class CreateCharacter extends Phaser.Scene {
     this.load.image("shoobyImage", "/assets/images/sprites/shoobyImage.png");
     // this.load.image('bowler_hat', '/assets/images/prefabs/hat.png');
     this.load.image('createCharBackground', '/assets/images/backgrounds/createCharBackground.png');
-
-
-
-
-
-
-    this.load.image("shoobyHatImage", "/assets/images/sprites/shoobyHatImage.png");
-    this.load.image("shoobyGlassesImage", "/assets/images/sprites/shoobyGlassesImage.png");
   }
 
   create() {
@@ -43,8 +35,8 @@ export default class CreateCharacter extends Phaser.Scene {
 
     this.cameras.main.fadeIn(2000);
     this.cameras.main.setBackgroundColor(0,0,0,0.5);
-let createCharBackground = this.add.image(400,320, 'createCharBackground')
-createCharBackground.setScale(.5);
+    let createCharBackground = this.add.image(400,320, 'createCharBackground')
+    createCharBackground.setScale(.5);
   
     
     let shooby = this.physics.add.sprite(497, 350, 'dude')
@@ -63,12 +55,18 @@ createCharBackground.setScale(.5);
 
     let shoobyImage = this.add.image(100,377, 'shoobyImage')
     shoobyImage.setScale(2); 
-    let shoobyHatImage = this.add.image(310,250, 'shoobyHatImage')
-    shoobyHatImage.setScale(2); 
-    let shoobyGlassesImage = this.add.image(370,250, 'shoobyGlassesImage')
-    shoobyGlassesImage.setScale(2); 
+//Accessories buttons
+    let glasses = this.add.image(325,250, 'glasses')
+    glasses.setScale(0.5);
+    let coat = this.add.image(250,250, 'coat')
+    coat.setScale(0.5);
+    let headGear = this.add.image(175,250, 'headgear')
+    headGear.setScale(0.5);
+
+    
     const backButtonRope = this.add.image(this.game.renderer.width / 1.18, this.game.renderer.height * 0.57, "backButtonRope");
     backButtonRope.scale = 0.45
+
     const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
     smallPlayButton.scale = 0.35
 
@@ -78,8 +76,10 @@ createCharBackground.setScale(.5);
     shabbyImage.setInteractive();
     shoobyImage.setInteractive();
     
-    shoobyHatImage.setInteractive();
-    shoobyGlassesImage.setInteractive();
+    glasses.setInteractive();
+    coat.setInteractive();
+    headGear.setInteractive();
+
     smallPlayButton.setInteractive();
 
     //Creating Sprites
@@ -94,10 +94,7 @@ createCharBackground.setScale(.5);
     
 
     smallPlayButton.setInteractive();
-    let shoobyHat = this.physics.add.sprite(500, 450, 'shoobyHat')
-    shoobyHat.visible = false;
-    let shoobyGlasses = this.physics.add.sprite(500, 450, 'shoobyGlasses')
-    shoobyGlasses.visible = false;
+   
     
     //Initial animation
    
@@ -107,7 +104,17 @@ createCharBackground.setScale(.5);
     shooby.setScale(3);
     shooby.setBounce(0.2);
     
-    let character = '';
+    let character = 'dude';
+    let previous = ''
+    
+
+    //Character Accessories
+    let characterHat = this.physics.add.sprite(500, 450, character +'Hat')
+    characterHat.visible = false;
+    let characterCoat = this.physics.add.sprite(500, 450, character +'Coat')
+    characterCoat.visible = false;
+    let characterGlasses = this.physics.add.sprite(500, 450, character +'Glasses')
+    characterGlasses.visible = false;
     
 
 
@@ -122,8 +129,11 @@ createCharBackground.setScale(.5);
       shooby.destroy();
       booshy.destroy();
       shabby.destroy();
-      shoobyHat.destroy();
-      shoobyGlasses.destroy();
+      characterHat.destroy();
+      characterCoat.destroy();
+      characterGlasses.destroy();
+
+    
      
 
       this.createAnimationStand(character,bashy)
@@ -142,11 +152,12 @@ createCharBackground.setScale(.5);
       shooby.destroy();
       bashy.destroy();
       shabby.destroy();
-      shoobyHat.destroy();
-      shoobyGlasses.destroy();
+      characterHat.destroy();
+      characterCoat.destroy();
+      characterGlasses.destroy();
+
+     
       
-
-
       this.createAnimationStand(character,booshy)
       
 
@@ -163,8 +174,11 @@ createCharBackground.setScale(.5);
       shooby.destroy();
       bashy.destroy();
       booshy.destroy();
-      shoobyHat.destroy();
-      shoobyGlasses.destroy();
+      characterHat.destroy();
+      characterCoat.destroy();
+      characterGlasses.destroy();
+
+  
 
       
       this.createAnimationStand(character,shabby)
@@ -175,14 +189,18 @@ createCharBackground.setScale(.5);
     })
 
     shoobyImage.on("pointerdown", () => {
+      
       character = 'dude'
       shooby = this.physics.add.sprite(497, 350, 'dude')
 
       bashy.destroy();
       booshy.destroy();
       shabby.destroy();
-      shoobyHat.destroy();
-      shoobyGlasses.destroy();
+      characterHat.destroy();
+      characterCoat.destroy();
+      characterGlasses.destroy();
+
+      
       
       
       this.createAnimationStand(character,shooby)
@@ -191,51 +209,71 @@ createCharBackground.setScale(.5);
       
     })
 
-    shoobyHatImage.on("pointerdown", () => {
-      character = 'shoobyHat'
+    headGear.on('pointerdown', () => {
+      previous = character
+      character = character+'Hat'
 
-      shoobyHat = this.physics.add.sprite(497, 350, 'shoobyHat')
+      characterHat.destroy();
 
+      
+      characterHat = this.physics.add.sprite(497, 350, character)
 
+      shooby.destroy();
       bashy.destroy();
       booshy.destroy();
       shabby.destroy();
-      shooby.destroy();
-      shoobyGlasses.destroy();
-    
+      characterCoat.destroy();
+      characterGlasses.destroy();
 
-      
-      this.createAnimationStand(character,shoobyHat)
+      this.createAnimationStand(character,characterHat);
+      this.physics.add.collider(characterHat, box);
+      character = previous
 
-    
-      this.physics.add.collider(shoobyHat, box);
-      
     })
 
-    shoobyGlassesImage.on("pointerdown", () => {
-      character = 'shoobyGlasses'
+    coat.on('pointerdown', () => {
+      previous = character
+      character = character+'Coat'
 
-      shoobyGlasses = this.physics.add.sprite(497, 350, 'shoobyGlasses')
+      characterCoat.destroy();
 
+      
+      characterCoat = this.physics.add.sprite(497, 350, character)
+
+      shooby.destroy();
       bashy.destroy();
       booshy.destroy();
       shabby.destroy();
-      shooby.destroy();
-      shoobyHat.destroy();
-    
-    
+      characterHat.destroy();
+      characterGlasses.destroy();
 
-      this.createAnimationStand(character,shoobyGlasses)
+      this.createAnimationStand(character,characterCoat);
+      this.physics.add.collider(characterCoat, box);
+      character = previous
+    })
 
-    
-      this.physics.add.collider(shoobyGlasses, box);
+    glasses.on('pointerdown', () => {
+      previous = character
+      character = character+'Glasses'
+
+      characterGlasses.destroy();
+
       
-     })
+      characterGlasses = this.physics.add.sprite(497, 350, character)
+
+      shooby.destroy();
+      bashy.destroy();
+      booshy.destroy();
+      shabby.destroy();
+      characterHat.destroy();
+      characterCoat.destroy();
 
 
-  
+      this.createAnimationStand(character,characterGlasses);
+      this.physics.add.collider(characterGlasses, box);
+      character = previous
+    })
 
-   
     smallPlayButton.on("pointerdown", () => {
       
       this.scene.start("titleScene",  {character: character})
