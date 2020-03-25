@@ -106,6 +106,7 @@ export default class CreateCharacter extends Phaser.Scene {
     
     let character = 'dude';
     let previous = ''
+    let finalSelection = ''
     
 
     //Character Accessories
@@ -116,10 +117,9 @@ export default class CreateCharacter extends Phaser.Scene {
     let characterGlasses = this.physics.add.sprite(500, 450, character +'Glasses')
     characterGlasses.visible = false;
     
-
-
+    
     bashyImage.on("pointerdown", () => {
-      
+      previous = character
       character = 'bashy'
       console.log(character)
 
@@ -140,11 +140,12 @@ export default class CreateCharacter extends Phaser.Scene {
 
       
       this.physics.add.collider(bashy, box);
+      finalSelection = character;
       
     })
 
     booshyImage.on("pointerdown", () => {
-      
+      previous = character
       character = 'booshy'
 
       booshy = this.physics.add.sprite(500, 350, 'booshy')
@@ -162,11 +163,11 @@ export default class CreateCharacter extends Phaser.Scene {
       
 
       this.physics.add.collider(booshy, box);
-      
+      finalSelection = character;
     })
 
     shabbyImage.on("pointerdown", () => {
-      
+      previous = character
       character = 'shabby'
 
       shabby = this.physics.add.sprite(500, 350, 'shabby')
@@ -185,11 +186,11 @@ export default class CreateCharacter extends Phaser.Scene {
 
      
       this.physics.add.collider(shabby, box);
-      
+      finalSelection = character;
     })
 
     shoobyImage.on("pointerdown", () => {
-      
+      previous = character
       character = 'dude'
       shooby = this.physics.add.sprite(497, 350, 'dude')
 
@@ -206,11 +207,12 @@ export default class CreateCharacter extends Phaser.Scene {
       this.createAnimationStand(character,shooby)
     
       this.physics.add.collider(shooby, box);
-      
+      finalSelection = character;
     })
-
     headGear.on('pointerdown', () => {
       previous = character
+    
+     
       character = character+'Hat'
 
       characterHat.destroy();
@@ -227,12 +229,13 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterHat);
       this.physics.add.collider(characterHat, box);
+      finalSelection = character;
       character = previous
-
     })
 
     coat.on('pointerdown', () => {
       previous = character
+     
       character = character+'Coat'
 
       characterCoat.destroy();
@@ -249,11 +252,13 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterCoat);
       this.physics.add.collider(characterCoat, box);
+      finalSelection = character;
       character = previous
     })
 
     glasses.on('pointerdown', () => {
       previous = character
+      
       character = character+'Glasses'
 
       characterGlasses.destroy();
@@ -271,13 +276,14 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterGlasses);
       this.physics.add.collider(characterGlasses, box);
+      finalSelection = character;
       character = previous
     })
 
     smallPlayButton.on("pointerdown", () => {
       
-      this.scene.start("titleScene",  {character: character})
-      this.scene.start("mainMenu",  {character: character})
+      this.scene.start("titleScene",  {character: finalSelection})
+      this.scene.start("mainMenu",  {character: finalSelection})
 
     });
 
