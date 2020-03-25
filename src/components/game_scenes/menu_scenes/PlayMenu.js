@@ -30,6 +30,7 @@ export default class PlayMenu extends Phaser.Scene {
     const fishNum = this.fishNum;
     const stepX = this.stepX;
     const key = this.key;
+    
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(
       this.game.renderer.width / 1.96,

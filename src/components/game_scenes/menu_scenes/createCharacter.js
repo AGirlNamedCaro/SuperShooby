@@ -43,12 +43,11 @@ export default class CreateCharacter extends Phaser.Scene {
 
     this.cameras.main.fadeIn(2000);
     this.cameras.main.setBackgroundColor(0,0,0,0.5);
-let createCharBackground = this.add.image(400,320, 'createCharBackground')
-createCharBackground.setScale(.5);
+    let createCharBackground = this.add.image(400,320, 'createCharBackground')
+    createCharBackground.setScale(.5);
   
     
-    let shooby = this.physics.add.sprite(497, 350, 'dude')
-    shooby.visible = true;
+   
     let box = this.physics.add.staticGroup();
     box.create(500, 545, 'box').setScale(0.7).refreshBody();
 
@@ -83,6 +82,9 @@ createCharBackground.setScale(.5);
     smallPlayButton.setInteractive();
 
     //Creating Sprites
+    let shooby = this.physics.add.sprite(497, 350, 'dude')
+    shooby.visible = true;
+
     let bashy = this.physics.add.sprite(500, 450, 'bashy')
     bashy.visible = false;
     
@@ -92,8 +94,6 @@ createCharBackground.setScale(.5);
     let shabby = this.physics.add.sprite(500, 450, 'shabby')
     shabby.visible = false;
     
-
-    smallPlayButton.setInteractive();
     let shoobyHat = this.physics.add.sprite(500, 450, 'shoobyHat')
     shoobyHat.visible = false;
     let shoobyGlasses = this.physics.add.sprite(500, 450, 'shoobyGlasses')
@@ -114,7 +114,6 @@ createCharBackground.setScale(.5);
     bashyImage.on("pointerdown", () => {
       
       character = 'bashy'
-      console.log(character)
 
       bashy = this.physics.add.sprite(500, 350, 'bashy')
       
