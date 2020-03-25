@@ -50,6 +50,7 @@ export default class MainMenu extends Phaser.Scene{
     
     if(!key) {
       key = 'dude'
+      localStorage.setItem('characterKey', key);
       
     }
     else {
@@ -63,6 +64,7 @@ export default class MainMenu extends Phaser.Scene{
 
 
     let key2 = localStorage.getItem('characterKey')
+    console.log("key2: ",key2);
 
    
     
