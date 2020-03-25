@@ -53,7 +53,7 @@ createCharBackground.setScale(.5);
     let box = this.physics.add.staticGroup();
     box.create(500, 545, 'box').setScale(0.7).refreshBody();
 
-    let bashyImage = this.add.image(100,377,'bashyImage')
+    let bashyImage = this.add.image(325,377,'bashyImage')
     bashyImage.setScale(2)
 
     let booshyImage = this.add.image(175,377, 'booshyImage')
@@ -62,7 +62,7 @@ createCharBackground.setScale(.5);
     let shabbyImage = this.add.image(250,377, 'shabbyImage')
     shabbyImage.setScale(2); 
 
-    let shoobyImage = this.add.image(325,377, 'shoobyImage')
+    let shoobyImage = this.add.image(100,377, 'shoobyImage')
     shoobyImage.setScale(2); 
     let shoobyHatImage = this.add.image(310,250, 'shoobyHatImage')
     shoobyHatImage.setScale(2); 

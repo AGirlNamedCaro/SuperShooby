@@ -26,6 +26,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image('difficulty_bar_easy', '/assets/images/buttons/difficulty_bar_easy1.png');
     this.load.image('difficulty_bar', '/assets/images/buttons/difficulty_bar.png');
     this.load.image('createCharBackground', '/assets/images/backgrounds/createCharBackground.png');
+    this.load.image('foreground', '/assets/images/backgrounds/foreground.png');
 
 
 
