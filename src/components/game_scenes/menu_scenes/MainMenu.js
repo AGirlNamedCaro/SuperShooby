@@ -55,10 +55,12 @@ export default class MainMenu extends Phaser.Scene{
     else {
       
       key = this.character
+      localStorage.setItem('characterKey', key);
+      console.log("key: ", key)
+      console.log( "localStorage: ", localStorage.getItem('characterKey'))
       
     }
 
-    localStorage.setItem('characterKey', key);
 
     let key2 = localStorage.getItem('characterKey')
 
