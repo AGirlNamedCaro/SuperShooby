@@ -22,6 +22,7 @@ export default class PlayMenu extends Phaser.Scene {
   }
 
   create() {
+    console.log('key:',this.key)
     console.log(this.bombs);
     console.log("score:", this.score);
     const bombs = this.bombs;
