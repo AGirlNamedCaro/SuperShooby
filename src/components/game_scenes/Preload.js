@@ -14,6 +14,9 @@ export default class Preload extends Phaser.Scene {
     this.load.image('singlePlayer', "/assets/images/buttons/singlePlayerButton.png");
     this.load.image('multiplayer', "/assets/images/buttons/multiplayerButton.png");
     this.load.image("menuBg", "/assets/images/backgrounds/menu-bg.png");
+    this.load.image("multiplayer_menu", "/assets/images/backgrounds/multiplayer_menu.png");
+    this.load.image("createRoomButton", "/assets/images/buttons/createRoomButton.png");
+    this.load.image("joinRoomButton", "/assets/images/buttons/joinRoomButton.png");
     this.load.image("cancelButton", "/assets/images/buttons/cancelButton.png");
     this.load.image("headButton", "/assets/images/buttons/headButton.png");
     this.load.image("customizeButton", "/assets/images/buttons/customizeButton.png");

@@ -116,7 +116,7 @@ createCharBackground.setScale(.5);
       character = 'bashy'
       console.log(character)
 
-      bashy = this.physics.add.sprite(500, 350, 'bashy')
+      bashy = this.physics.add.sprite(494, 350, 'bashy')
       
       
       shooby.destroy();
@@ -137,7 +137,7 @@ createCharBackground.setScale(.5);
       
       character = 'booshy'
 
-      booshy = this.physics.add.sprite(500, 350, 'booshy')
+      booshy = this.physics.add.sprite(494, 350, 'booshy')
       
       shooby.destroy();
       bashy.destroy();
@@ -158,7 +158,7 @@ createCharBackground.setScale(.5);
       
       character = 'shabby'
 
-      shabby = this.physics.add.sprite(500, 350, 'shabby')
+      shabby = this.physics.add.sprite(494, 350, 'shabby')
 
       shooby.destroy();
       bashy.destroy();
@@ -194,7 +194,7 @@ createCharBackground.setScale(.5);
     shoobyHatImage.on("pointerdown", () => {
       character = 'shoobyHat'
 
-      shoobyHat = this.physics.add.sprite(497, 350, 'shoobyHat')
+      shoobyHat = this.physics.add.sprite(494, 350, 'shoobyHat')
 
 
       bashy.destroy();
@@ -215,7 +215,7 @@ createCharBackground.setScale(.5);
     shoobyGlassesImage.on("pointerdown", () => {
       character = 'shoobyGlasses'
 
-      shoobyGlasses = this.physics.add.sprite(497, 350, 'shoobyGlasses')
+      shoobyGlasses = this.physics.add.sprite(494, 350, 'shoobyGlasses')
 
       bashy.destroy();
       booshy.destroy();

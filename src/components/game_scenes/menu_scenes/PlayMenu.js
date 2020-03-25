@@ -74,8 +74,8 @@ export default class PlayMenu extends Phaser.Scene {
 
     multiplayer.on("pointerdown", () => {
       console.log("Multiplayer");
-      this.scene.start("multiplayerMenu", {
-        menuBg: this.menuBg,
+      this.scene.start("roomSelectMenu", {
+        
         smPlBtn: smallPlayButton
       });
     });
