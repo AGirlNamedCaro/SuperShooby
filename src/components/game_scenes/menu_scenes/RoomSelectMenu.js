@@ -36,23 +36,9 @@ export default class Customize extends Phaser.Scene {
         createRoomButton.setInteractive();
         joinRoomButton.setInteractive();
         
-
-        createRoomButton.on("pointerdown", () => {
-            // TODO can implement this when rewrite the titlescene logic to not use setTimeout
-            // this.scene.stop("titleScene");
-            //this.scene.start("createMap");
-            // this.game.setState("createMap");
-        //    axios.get('/createMap.html')
-        //    .then((response) => {
-        //        window.location = 'http://localhost:3000/createMap.html'
-        //        console.log("Success")
-        //    })
-        //    .catch((error) => {
-        //        console.log("Failure")
-        //        console.log(error);
-        //    })
-        });
-
+        
+        
+        
         smallPlayButton.on("pointerdown", () => {
             this.scene.start("mainMenu")
           });
@@ -61,6 +47,10 @@ export default class Customize extends Phaser.Scene {
             
            // this.scene.start("createCharacter", { menuBg: this.menuBg, key: this.key})
         })
+        createRoomButton.on("pointerdown", () => {
+             console.log("hi")
+             this.scene.start("createRoomMenu", { menuBg: this.menuBg, key: this.key})
+         })
     }
 
 }
