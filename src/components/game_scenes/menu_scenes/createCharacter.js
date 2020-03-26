@@ -26,8 +26,6 @@ export default class CreateCharacter extends Phaser.Scene {
 
   create() {
 
-   
-
     this.add.existing(this.menuBg);
     this.menuBg.scale = .5;
     
@@ -136,6 +134,8 @@ export default class CreateCharacter extends Phaser.Scene {
       character = 'bashy'
       console.log(character)
 
+      bashy.destroy();
+
       bashy = this.physics.add.sprite(494, 350, 'bashy')
       
       
@@ -160,6 +160,7 @@ export default class CreateCharacter extends Phaser.Scene {
     booshyImage.on("pointerdown", () => {
       previous = character
       character = 'booshy'
+      booshy.destroy();
 
       booshy = this.physics.add.sprite(494, 350, 'booshy')
       
@@ -183,6 +184,8 @@ export default class CreateCharacter extends Phaser.Scene {
       previous = character
       character = 'shabby'
 
+      shabby.destroy();
+
       shabby = this.physics.add.sprite(494, 350, 'shabby')
 
       shooby.destroy();
@@ -205,6 +208,8 @@ export default class CreateCharacter extends Phaser.Scene {
     shoobyImage.on("pointerdown", () => {
       previous = character
       character = 'dude'
+
+      shooby.destroy();
       shooby = this.physics.add.sprite(497, 350, 'dude')
 
       bashy.destroy();
@@ -229,12 +234,7 @@ export default class CreateCharacter extends Phaser.Scene {
       character = character+'Hat'
 
       characterHat.destroy();
-    shoobyHatImage.on("pointerdown", () => {
-      character = 'shoobyHat'
-
-      shoobyHat = this.physics.add.sprite(494, 350, 'shoobyHat')
-
-      
+    
       characterHat = this.physics.add.sprite(497, 350, character)
 
       shooby.destroy();
@@ -249,6 +249,7 @@ export default class CreateCharacter extends Phaser.Scene {
       finalSelection = character;
       character = previous
     })
+  
 
     coat.on('pointerdown', () => {
       previous = character
@@ -259,7 +260,6 @@ export default class CreateCharacter extends Phaser.Scene {
 
       
       characterCoat = this.physics.add.sprite(497, 350, character)
-      shoobyGlasses = this.physics.add.sprite(494, 350, 'shoobyGlasses')
 
       shooby.destroy();
       bashy.destroy();
@@ -308,6 +308,8 @@ export default class CreateCharacter extends Phaser.Scene {
   }
 
   
+
+  
 createAnimationStand(key, object) {
   this.anims.create({
     key: key + 1,
@@ -319,7 +321,6 @@ createAnimationStand(key, object) {
   object.setBounce(0.2);
   object.setCollideWorldBounds(true);
   object.setScale(3);
-  
 }
 
 }
