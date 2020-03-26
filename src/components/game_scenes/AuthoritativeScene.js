@@ -18,8 +18,8 @@ export default class AuthoritativeScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
-    this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
+    this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
+    this.load.tilemapTiledJSON("world", this.game.level);
   }
 
   create() {

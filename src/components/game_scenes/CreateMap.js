@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import socketIo from "socket.io-client";
 
 export default class CreateMap extends Phaser.Scene {
   constructor() {
@@ -8,15 +7,12 @@ export default class CreateMap extends Phaser.Scene {
   }
 
   init() {
-    // Find better way to do this so it doesnt create a new socket.
-    this.socket = socketIo(
-      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    );
+    this.socket = this.game.socket;
   }
 
   preload() {
-    this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
-    this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
+    this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
+    this.load.tilemapTiledJSON("world", this.game.level);
   }
 
   create() {
@@ -83,15 +79,39 @@ export default class CreateMap extends Phaser.Scene {
     });
 
     this.input.keyboard.on("keyup-" + "E", event => {
+      // TODO this is where the exporting happens, should make a menu that pops up when this is pressed or something
       console.log("exporting");
-      const exportObj = this.exportJSON(map, tiles, [
-        this.skyLayer,
-        this.cloudsLayer,
-        this.groundLayer
-      ]);
+      const saveThumbnail = new Promise((res, rej) => {
+        this.text.setVisible(false);
+        this.marker.setVisible(false);
+        this.game.renderer.snapshot(image => {
+          this.marker.setVisible(true);
+          this.text.setVisible(true);
+          if (image) {
+            res(image);
+          } else {
+            rej(Error("couldnt save image"));
+          }
+        });
+      });
 
-      this.socket.emit("createMap", exportObj);
+      saveThumbnail.then(image => {
+        const exportObj = this.exportJSON(map, tiles, [
+          this.skyLayer,
+          this.cloudsLayer,
+          this.groundLayer
+        ]);
+
+        const mapData = {
+          thumbnail: image.src,
+          levelData: exportObj
+        };
+
+        this.game.setLevel(exportObj);
+        this.socket.emit("createMap", mapData);
+      });
     });
+
 
     this.mapTilesToLayer(
       this.create2DArray(tiles.columns, tiles.rows),
@@ -203,7 +223,7 @@ export default class CreateMap extends Phaser.Scene {
       height: map.height,
       infinite: false,
       layers: [],
-      nextlayerid: map.layers.length + 1,
+      nextlayerid: map.layers.length,
       nextobjectid: 1,
       orientation: map.orientation,
       renderorder: map.renderOrder,
