@@ -137,6 +137,8 @@ export default class CreateCharacter extends Phaser.Scene {
       previous = character
       character = 'bashy'
 
+      bashy.destroy();
+
       bashy = this.physics.add.sprite(500, 350, 'bashy')
       
       
@@ -162,6 +164,8 @@ export default class CreateCharacter extends Phaser.Scene {
       previous = character
       character = 'booshy'
 
+      booshy.destroy();
+
       booshy = this.physics.add.sprite(500, 350, 'booshy')
       
       shooby.destroy();
@@ -183,6 +187,8 @@ export default class CreateCharacter extends Phaser.Scene {
     shabbyImage.on("pointerdown", () => {
       previous = character
       character = 'shabby'
+
+      shabby.destroy();
 
       shabby = this.physics.add.sprite(500, 350, 'shabby')
 
@@ -206,6 +212,9 @@ export default class CreateCharacter extends Phaser.Scene {
     shoobyImage.on("pointerdown", () => {
       previous = character
       character = 'dude'
+
+      shooby.destroy();
+
       shooby = this.physics.add.sprite(497, 350, 'dude')
 
       bashy.destroy();
