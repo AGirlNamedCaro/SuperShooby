@@ -228,14 +228,11 @@ export default class CreateCharacter extends Phaser.Scene {
      
       character = character+'Hat'
 
-<<<<<<< HEAD
       characterHat.destroy();
-=======
     shoobyHatImage.on("pointerdown", () => {
       character = 'shoobyHat'
 
       shoobyHat = this.physics.add.sprite(494, 350, 'shoobyHat')
->>>>>>> feature/css
 
       
       characterHat = this.physics.add.sprite(497, 350, character)
@@ -260,12 +257,9 @@ export default class CreateCharacter extends Phaser.Scene {
 
       characterCoat.destroy();
 
-<<<<<<< HEAD
       
       characterCoat = this.physics.add.sprite(497, 350, character)
-=======
       shoobyGlasses = this.physics.add.sprite(494, 350, 'shoobyGlasses')
->>>>>>> feature/css
 
       shooby.destroy();
       bashy.destroy();
