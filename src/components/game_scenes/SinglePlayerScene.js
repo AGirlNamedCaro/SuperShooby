@@ -6,7 +6,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("tiles", "/assets/images/prefabs/marioTileSet.png");
+    this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
     this.load.tilemapTiledJSON("world", this.game.level);
   }
 

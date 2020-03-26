@@ -25,17 +25,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image('difficulty_bar_medium', '/assets/images/buttons/difficulty_bar_medium1.png');
     this.load.image('difficulty_bar_easy', '/assets/images/buttons/difficulty_bar_easy1.png');
     this.load.image('difficulty_bar', '/assets/images/buttons/difficulty_bar.png');
-
-
-
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')
-    this.load.image('TileDefault', '/assets/Tiles_32x32.png');
-
-   
-    
-    
-
-
     this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
     this.load.image('slider', '/assets/images/buttons/slider.png')
     
@@ -45,28 +35,29 @@ export default class Preload extends Phaser.Scene {
     );
 
     this.load.spritesheet('bashy',
-    '/assets/images/sprites/bashy.png',
-    { frameWidth: 32, frameHeight: 48 }
-  );
+      '/assets/images/sprites/bashy.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
 
-  this.load.spritesheet('booshy',
-  '/assets/images/sprites/booshy.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
+    this.load.spritesheet('booshy',
+      '/assets/images/sprites/booshy.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
 
-this.load.spritesheet('shabby',
-  '/assets/images/sprites/shabby.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
+    this.load.spritesheet('shabby',
+      '/assets/images/sprites/shabby.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
     this.load.spritesheet('fish',
-    '/assets/images/sprites/star.png',
-    { frameWidth: 32, frameHeight: 32 }
-  );
+      '/assets/images/sprites/star.png',
+      { frameWidth: 32, frameHeight: 32 }
+    );
     this.load.on("progress", () => {
       this.add.text(20, 20, "Loading game...")
     })
 
     this.load.on("complete", () => {
+      this.game.setLevel("/assets/mapData/shoobyTileset16.json")
       this.scene.start("titleScene")
     });
   }

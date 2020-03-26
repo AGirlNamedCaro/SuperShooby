@@ -64,7 +64,6 @@ function resize() {
 }
 
 const game = new Phaser.Game(config);
-window.game = game;
 game.socket = socketIo(
   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
 );
