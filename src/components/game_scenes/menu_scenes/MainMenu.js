@@ -24,8 +24,8 @@ export default class MainMenu extends Phaser.Scene{
     playButton.scale = 0.3;
     const customizeButton = this.add.image(this.game.renderer.width / 1.95, this.game.renderer.height * 0.29, "customizeButton");
     customizeButton.scale = 0.27;
-    const settingsButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.44, "settingsButton");
-    settingsButton.scale = 0.30;
+    const settingsButton = this.add.image(this.game.renderer.width / 1.90, this.game.renderer.height * 0.42, "settingsButton");
+    settingsButton.scale = 0.35;
 
     let bombs = this.bombs;
     let score = this.score;

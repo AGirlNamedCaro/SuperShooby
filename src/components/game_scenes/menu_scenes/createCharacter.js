@@ -136,7 +136,7 @@ export default class CreateCharacter extends Phaser.Scene {
       character = 'bashy'
       console.log(character)
 
-      bashy = this.physics.add.sprite(500, 350, 'bashy')
+      bashy = this.physics.add.sprite(494, 350, 'bashy')
       
       
       shooby.destroy();
@@ -161,7 +161,7 @@ export default class CreateCharacter extends Phaser.Scene {
       previous = character
       character = 'booshy'
 
-      booshy = this.physics.add.sprite(500, 350, 'booshy')
+      booshy = this.physics.add.sprite(494, 350, 'booshy')
       
       shooby.destroy();
       bashy.destroy();
@@ -183,7 +183,7 @@ export default class CreateCharacter extends Phaser.Scene {
       previous = character
       character = 'shabby'
 
-      shabby = this.physics.add.sprite(500, 350, 'shabby')
+      shabby = this.physics.add.sprite(494, 350, 'shabby')
 
       shooby.destroy();
       bashy.destroy();
@@ -228,7 +228,14 @@ export default class CreateCharacter extends Phaser.Scene {
      
       character = character+'Hat'
 
+<<<<<<< HEAD
       characterHat.destroy();
+=======
+    shoobyHatImage.on("pointerdown", () => {
+      character = 'shoobyHat'
+
+      shoobyHat = this.physics.add.sprite(494, 350, 'shoobyHat')
+>>>>>>> feature/css
 
       
       characterHat = this.physics.add.sprite(497, 350, character)
@@ -253,8 +260,12 @@ export default class CreateCharacter extends Phaser.Scene {
 
       characterCoat.destroy();
 
+<<<<<<< HEAD
       
       characterCoat = this.physics.add.sprite(497, 350, character)
+=======
+      shoobyGlasses = this.physics.add.sprite(494, 350, 'shoobyGlasses')
+>>>>>>> feature/css
 
       shooby.destroy();
       bashy.destroy();
