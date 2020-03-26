@@ -54,17 +54,30 @@ export default class CreateCharacter extends Phaser.Scene {
 
     let shoobyImage = this.add.image(100,377, 'shoobyImage')
     shoobyImage.setScale(2); 
+
 //Accessories buttons
-    let glasses = this.add.image(325,250, 'glasses')
-    glasses.setScale(0.5);
-    let coat = this.add.image(250,250, 'coat')
-    coat.setScale(0.5);
-    let headGear = this.add.image(175,250, 'headgear')
-    headGear.setScale(0.5);
+    const backButtonRope1 = this.add.image(this.game.renderer.width / 2.67, this.game.renderer.height * 0.15, "backButtonRope");
+    backButtonRope1.scale = 0.45
+    let glasses = this.add.image(300,180, 'glasses')
+    glasses.setScale(0.6);
+    const backButtonRope2 = this.add.image(this.game.renderer.width / 3.8, this.game.renderer.height * 0.30, "backButtonRope");
+    backButtonRope2.scale = 0.45
+    const backButtonRope3 = this.add.image(this.game.renderer.width / 3.78, this.game.renderer.height * 0.10, "backButtonRope");
+    backButtonRope3.scale = 0.45
+    let coat = this.add.image(215,250, 'coat')
+    coat.setScale(0.8);
+    const backButtonRope4 = this.add.image(this.game.renderer.width / 5.9, this.game.renderer.height * 0.10, "backButtonRope");
+    backButtonRope4.scale = 0.45
+    let headGear = this.add.image(130,160, 'headgear')
+    headGear.setScale(0.6);
 
     
     const backButtonRope = this.add.image(this.game.renderer.width / 1.18, this.game.renderer.height * 0.57, "backButtonRope");
     backButtonRope.scale = 0.45
+    
+    
+    
+    
 
     const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
     smallPlayButton.scale = 0.35
