@@ -50,7 +50,8 @@ export const config = {
     SinglePlayer,
     SetMapMenu,
     RoomSelectMenu, 
-    CreateRoomMenu
+    CreateRoomMenu,
+    JoinRoomMenu
   ]
 };
 
@@ -80,10 +81,12 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ level, setLevel }) {
+export default function Game({ level, setLevel, character, setCharacter }) {
   // pass the setLevel method down to the game
   game.level = level;
   game.setLevel = setLevel;
+  game.character = character;
+  game.setCharacter = setCharacter;
 
   return (
     <div id="game-container">

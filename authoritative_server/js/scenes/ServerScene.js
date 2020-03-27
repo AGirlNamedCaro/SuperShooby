@@ -69,13 +69,13 @@ function addPlayer(self, playerInfo, collisions) {
   self.players.add(player);
 }
 
-function removePlayer(self, playerId, currentPlayers) {
-  console.log("self", self);
+function removePlayer(self, playerId, currentPlayers, roomPlayers) {
   self.players.getChildren().forEach(player => {
     if (playerId === player.playerId) {
       player.destroy();
     }
   });
+  delete roomPlayers[playerId];
   delete currentPlayers[playerId];
 }
 

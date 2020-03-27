@@ -14,7 +14,7 @@ export default class PlayMenu extends Phaser.Scene {
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.key = data.key
+    
   }
 
   preload() {
@@ -29,7 +29,7 @@ export default class PlayMenu extends Phaser.Scene {
     const score = this.score;
     const fishNum = this.fishNum;
     const stepX = this.stepX;
-    const key = this.key;
+    
 
      
     
@@ -72,14 +72,14 @@ export default class PlayMenu extends Phaser.Scene {
       titleScene.scene.transition({
         target: "singlePlayer",
         duration: 1000,
-        data: { bombs, score, fishNum, stepX, key }
+        data: { bombs, score, fishNum, stepX }
       });
     });
 
     multiplayer.on("pointerdown", () => {
       console.log("Multiplayer");
       this.scene.start("roomSelectMenu", {
-        
+        menuBg: this.menuBg,
         smPlBtn: smallPlayButton
       });
     });

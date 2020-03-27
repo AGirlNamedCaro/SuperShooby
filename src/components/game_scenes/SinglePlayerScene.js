@@ -11,7 +11,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.key = data.key
+    
     this.bombs = data.bombs;
     this.scoreNum = data.score;
     this.fishNum = data.fishNum;
@@ -19,8 +19,6 @@ export default class SinglePlayerScene extends Phaser.Scene {
   }
 
   create() {
-    this.charKey = localStorage.getItem('characterKey')
-    console.log('in SinglePlayer', this.charKey)
     const worldMap = this.add.tilemap("world");
     const tileset = worldMap.addTilesetImage("tiles");
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
@@ -35,28 +33,28 @@ export default class SinglePlayerScene extends Phaser.Scene {
     this.score = 0;
     this.highScore = localStorage.getItem('highScore')
 
-    this.player = this.physics.add.sprite(100, 450, this.charKey);
+    this.player = this.physics.add.sprite(100, 450, this.game.character);
     this.player.body.setGravityY(300);
     this.physics.add.collider(this.player, ground);
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
     this.anims.create({
-      key: this.charKey + "left",
-      frames: this.anims.generateFrameNumbers(this.charKey, { start: 0, end: 3 }),
+      key: this.game.character + "left",
+      frames: this.anims.generateFrameNumbers(this.game.character, { start: 0, end: 3 }),
       frameRate: 10,
       repeat: -1
     });
 
     this.anims.create({
-      key: this.charKey +"turn",
-      frames: [{ key: this.charKey, frame: 4 }],
+      key: this.game.character +"turn",
+      frames: [{ key: this.game.character, frame: 4 }],
       frameRate: 20
     });
 
     this.anims.create({
-      key: this.charKey + "right",
-      frames: this.anims.generateFrameNumbers(this.charKey, { start: 5, end: 8 }),
+      key: this.game.character + "right",
+      frames: this.anims.generateFrameNumbers(this.game.character, { start: 5, end: 8 }),
       frameRate: 10,
       repeat: -1
     });
@@ -124,7 +122,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
 hitBomb(player,bomb) {
   this.physics.pause();
   this.player.setTint(0xff0000);
-  this.player.anims.play(this.charKey +'turn')
+  this.player.anims.play(this.game.character +'turn')
   this.gameOver = true;
 }
 
@@ -132,13 +130,13 @@ hitBomb(player,bomb) {
   update() {
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
-      this.player.anims.play(this.charKey +"left", true);
+      this.player.anims.play(this.game.character +"left", true);
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160);
-      this.player.anims.play(this.charKey +"right", true);
+      this.player.anims.play(this.game.character +"right", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play(this.charKey +"turn");
+      this.player.anims.play(this.game.character +"turn");
     }
 
     if (this.cursors.up.isDown && this.player.body.blocked.down) {

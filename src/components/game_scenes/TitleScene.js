@@ -9,10 +9,9 @@ class TitleScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.character = data.character
+  //   this.character = data.character
     this.container = data.container
 
-   
   }
   
 
@@ -27,22 +26,8 @@ class TitleScene extends Phaser.Scene {
     let platforms = this.physics.add.staticGroup();
     platforms.create(400, 610, 'ground').setScale(2).refreshBody();
     
-    
-    
-     this.key = this.character
-    
-    
-    if(!this.key) {
-      this.key = 'dude'
-      
-    }
-    else {
-      
-      this.key = this.character
-      
-    }
 
-    this.player = this.physics.add.sprite(450, 450, this.key)
+    this.player = this.physics.add.sprite(450, 450, this.game.character)
 
    
 
@@ -85,7 +70,7 @@ class TitleScene extends Phaser.Scene {
 
  this.physics.add.collider(this.fish, platforms);
 
- this.createAnimation(this.key)
+ this.createAnimation(this.game.character)
 
   this.physics.add.overlap(this.player, this.fish, this.collectFish, null, true)
 
