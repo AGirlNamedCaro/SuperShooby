@@ -36,10 +36,6 @@ export const config = {
   dom: {
     createContainer: true
   },
-<<<<<<< HEAD
-  scene: [Preload, TitleScene, MainMenu, PlayMenu, MultiplayerMenu, CustomizeMenu, CreateCharacterMenu, AuthoritativeScene, SettingsMenu, CreateMap, SinglePlayer, RoomSelectMenu, CreateRoomMenu, JoinRoomMenu]
-  
-=======
   scene: [
     Preload,
     TitleScene,
@@ -54,9 +50,9 @@ export const config = {
     SinglePlayer,
     SetMapMenu,
     RoomSelectMenu, 
-    CreateRoomMenu
+    CreateRoomMenu,
+    JoinRoomMenu
   ]
->>>>>>> 12940726a5466ea11e0c7bc40c30915c67590bf7
 };
 
 function resize() {
