@@ -10,10 +10,6 @@ export default class Customize extends Phaser.Scene {
     this.roomId = "";
   }
 
-  preload() {
-    this.load.html("multiplayerForm", "/assets/html/multiplayerForm.html");
-  }
-
   create() {
     const backButtonRope = this.add.image(
       this.game.renderer.width / 2.8,
@@ -50,49 +46,48 @@ export default class Customize extends Phaser.Scene {
     smallPlayButton.setInteractive();
     joinCreateButton.setInteractive();
 
+    const inputField = `
+        <div id="inputField">
+            <input type="text" name="roomName" placeholder="Enter Room Name" />
+        </div>`;
+    //
     const htmlForm = this.add
       .dom(this.game.renderer.width / 2.1, this.game.renderer.height * 0.3)
-      .createFromCache("multiplayerForm");
-
-    htmlForm.addListener("click");
-    // Have it setup so a random word gets set as server name
-    htmlForm.on("click", event => {
-      if (event.target.name === "submitBtn") {
-        const userInput = htmlForm.getChildByName("serverName");
-        this.roomId = userInput.value;
-        console.log(this.roomId);
-        // TODO dry this up
-        this.game.socket.emit("joinRoom", this.roomId);
-        this.game.socket.on("roomMap", roomMap => {
-          // if (roomMap === "assets/mapData/shoobyTileset16.json")
-          this.game.setLevel(
-            roomMap === "assets/mapData/shoobyTileset16.json"
-              ? "/assets/mapData/shoobyTileset16.json"
-              : roomMap
-          );
-        });
-        // console.log("err", this.errMsg);
-        // if (!this.errMsg) {
-        //   this.scene.stop("multiplayerMenu");
-        //   const titleScene = this.scene.get("titleScene");
-        //   titleScene.scene.transition({
-        //     target: "authScene",
-        //     duration: 1000,
-        //     data: { socket: this.socket, roomId: roomId }
-        //   });
-        // }
-      }
-    });
+      .createFromHTML(inputField);
 
     joinCreateButton.on("pointerdown", () => {
-        this.scene.stop("multiplayerMenu");
+      const userInput = htmlForm.getChildByName("roomName");
+      this.roomId = userInput.value;
+      console.log(this.roomId);
+
+      this.game.socket.emit("joinRoom", this.roomId);
+      this.game.socket.on("roomMap", roomMap => {
+        const changeLevel = new Promise((res, rej) => {
+          const roomData =
+            roomMap === "assets/mapData/shoobyTileset16.json"
+              ? "/assets/mapData/shoobyTileset16.json"
+              : roomMap;
+
+          this.game.setLevel(roomData);
+
+          if (this.game.level === roomData) {
+            res("level Set");
+          } else {
+            rej(Error("Level not set correctly"));
+          }
+        });
+
+        changeLevel.then(res => {
+          this.scene.stop("joinRoomMenu");
           const titleScene = this.scene.get("titleScene");
           titleScene.scene.transition({
             target: "authScene",
             duration: 1000,
             data: { roomId: this.roomId }
           });
-    })
+        });
+      });
+    });
 
     smallPlayButton.on("pointerdown", () => {
       this.scene.start("roomSelectMenu");
