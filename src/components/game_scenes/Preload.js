@@ -39,6 +39,10 @@ export default class Preload extends Phaser.Scene {
     this.load.image('lowJump', '/assets/images/buttons/lowJump.png');
     this.load.image('medJump', '/assets/images/buttons/medJump.png');
     this.load.image('highJump', '/assets/images/buttons/hiJump.png');
+    this.load.image('resume', '/assets/images/buttons/resumeButton.png');
+    this.load.image('exit', '/assets/images/buttons/exitButton.png');
+
+
 
 
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')

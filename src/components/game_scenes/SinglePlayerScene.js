@@ -25,6 +25,11 @@ export default class SinglePlayerScene extends Phaser.Scene {
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
     const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
     const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+
+    this.resume = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.65, "resume");
+          this.resume.scale = 0.20;
+          this.resume.alpha = 0.05
+          this.resume.setInteractive();
     
 
     ground.setCollisionByExclusion(-1, true);
@@ -68,6 +73,8 @@ export default class SinglePlayerScene extends Phaser.Scene {
       right: Phaser.Input.Keyboard.KeyCodes.D,
       pause: Phaser.Input.Keyboard.KeyCodes.ESC
     });
+
+   
 
     //FISH & BOMBS creation
     this.fish = this.physics.add.group({
@@ -130,7 +137,7 @@ hitBomb(player,bomb) {
 
 
   update() {
-    let pause = false;
+    
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
       this.player.anims.play(this.game.character +"left", true);
@@ -147,16 +154,14 @@ hitBomb(player,bomb) {
     }
 
      if(this.cursors.pause.isDown) {
-       console.log('pause')
-      if(!pause) {
-        this.scene.pause("singlePlayer")
-        pause = true;
-      }
-      else {
-        this.scene.resume("singlePlayer");
-        pause = false;
-      }
+      this.resume.alpha = 1
+       this.scene.pause();
+      
+
+     
     }
+
+   
 
 
         //Setting highscore
