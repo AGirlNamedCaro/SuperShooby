@@ -26,8 +26,6 @@ export default class CreateCharacter extends Phaser.Scene {
 
   create() {
 
-   
-
     this.add.existing(this.menuBg);
     this.menuBg.scale = .5;
     
@@ -139,7 +137,7 @@ export default class CreateCharacter extends Phaser.Scene {
 
       bashy.destroy();
 
-      bashy = this.physics.add.sprite(500, 350, 'bashy')
+      bashy = this.physics.add.sprite(494, 350, 'bashy')
       
       
       shooby.destroy();
@@ -163,10 +161,9 @@ export default class CreateCharacter extends Phaser.Scene {
     booshyImage.on("pointerdown", () => {
       previous = character
       character = 'booshy'
-
       booshy.destroy();
 
-      booshy = this.physics.add.sprite(500, 350, 'booshy')
+      booshy = this.physics.add.sprite(494, 350, 'booshy')
       
       shooby.destroy();
       bashy.destroy();
@@ -190,7 +187,7 @@ export default class CreateCharacter extends Phaser.Scene {
 
       shabby.destroy();
 
-      shabby = this.physics.add.sprite(500, 350, 'shabby')
+      shabby = this.physics.add.sprite(494, 350, 'shabby')
 
       shooby.destroy();
       bashy.destroy();
@@ -214,7 +211,6 @@ export default class CreateCharacter extends Phaser.Scene {
       character = 'dude'
 
       shooby.destroy();
-
       shooby = this.physics.add.sprite(497, 350, 'dude')
 
       bashy.destroy();
@@ -239,8 +235,7 @@ export default class CreateCharacter extends Phaser.Scene {
       character = character+'Hat'
 
       characterHat.destroy();
-
-      
+    
       characterHat = this.physics.add.sprite(497, 350, character)
 
       shooby.destroy();
@@ -255,6 +250,7 @@ export default class CreateCharacter extends Phaser.Scene {
       finalSelection = character;
       character = previous
     })
+  
 
     coat.on('pointerdown', () => {
       previous = character
@@ -313,6 +309,8 @@ export default class CreateCharacter extends Phaser.Scene {
   }
 
   
+
+  
 createAnimationStand(key, object) {
   this.anims.create({
     key: key + 1,
@@ -324,7 +322,6 @@ createAnimationStand(key, object) {
   object.setBounce(0.2);
   object.setCollideWorldBounds(true);
   object.setScale(3);
-  
 }
 
 }

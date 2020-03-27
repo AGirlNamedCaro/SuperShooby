@@ -8,6 +8,7 @@ const {
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
 const chance = require("chance").Chance();
+const S3 = require("aws-sdk/clients/s3");
 
 // Next time trying to import a class try roomManager = roomManager.RoomManager();
 class RoomManager {
@@ -71,6 +72,10 @@ class RoomManager {
 window.onload = () => {
   const roomManager = new RoomManager();
   const currentPlayers = {};
+  const s3 = new S3({
+    accessKeyId: "AKIAXWMT5LDDO6DMEIOR",
+    secretAccessKey: "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"
+  });
 
   io.on("connection", socket => {
     console.log("A menu shooby has connected");
@@ -93,9 +98,9 @@ window.onload = () => {
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
-        const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-        roomManager.joinRoom(roomId, player);
-        // TODO fix broken error handling
+      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      roomManager.joinRoom(roomId, player);
+      // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
       // }
@@ -139,17 +144,64 @@ window.onload = () => {
     });
 
     socket.on("createMap", mapData => {
-      mapData["mapId"] = chance.word({ syllables: 3 });
+      mapData.levelData["mapId"] = chance.word({ syllables: 3 });
+      console.log("Id", mapData.levelData.mapId);
+
+      const params = {
+        Bucket: "super-shooby-assets/thumbnails",
+        Key: mapData.levelData.mapId,
+        Body: mapData.thumbnail
+      };
+
+      s3.upload(params, (err, data) => {
+        if (err) throw err;
+        console.log(`File uploaded sucess, ${data.Location}`);
+        mapData.levelData["thumbnail"] = data.Location;
+
+        const client = new MongoClient(MONGODB, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true
+        });
+
+        client.connect(err => {
+          // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
+          // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+          // TODO need to send user confirmation with the map id name
+          const collection = client.db("game_db").collection("maps");
+          collection
+            .insertOne(mapData.levelData)
+            .then(res => client.close())
+            .catch(err => console.log("err", err));
+        });
+      });
+    });
+
+    socket.on("getLevel", levelId => {
+      const mapData = {};
+      const client = new MongoClient(MONGODB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
 
       client.connect(err => {
-        // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
-        // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
-        // TODO need to send user confirmation with the map id name
         const collection = client.db("game_db").collection("maps");
-        collection
-          .insertOne(mapData)
-          .then(res => client.close())
-          .catch(err => console.log("err", err));
+        collection.find({ mapId: levelId }).toArray((err, map) => {
+          if (err) throw err;
+          mapData["levelData"] = map;
+
+          const params = {
+            Bucket: "super-shooby-assets/thumbnails",
+            Key: levelId,
+          }
+          
+          s3.getObject(params, (err, data) => {
+            if (err) throw err;
+            // console.log(data.Body.toString())
+            mapData["thumbnail"] = data.Body.toString();
+            io.to(socket.id).emit("returnedMap", mapData);
+          })
+          client.close();
+        });
       });
     });
   });

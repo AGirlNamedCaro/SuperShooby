@@ -6,12 +6,12 @@ import GameDesc from "./GameDesc"
 
 
 function App() {
-  const [layer, setLayer] = useState({});
+  const [level, setLevel] = useState({});
 
   return (
     <section id="body">
       <TopBar />
-      <Game passedLayer={layer} setLayer={setLayer} />
+      <Game level={level} setLevel={setLevel} />
       <GameDesc />     
     </section>
   );

@@ -31,23 +31,18 @@ export default class Customize extends Phaser.Scene {
         ;
 
         smallPlayButton.setInteractive();
+        setMapButton.setInteractive();
         createMapButton.setInteractive();
         createCharButton.setInteractive();
 
+        setMapButton.on("pointerdown", () => {
+            this.scene.start("setMapMenu", { menuBg: this.menuBg, setMapButton: setMapButton, backButtonRope: backButtonRope, backButton: smallPlayButton });
+        })
+        
         createMapButton.on("pointerdown", () => {
             // TODO can implement this when rewrite the titlescene logic to not use setTimeout
             // this.scene.stop("titleScene");
             this.scene.start("createMap");
-            // this.game.setState("createMap");
-        //    axios.get('/createMap.html')
-        //    .then((response) => {
-        //        window.location = 'http://localhost:3000/createMap.html'
-        //        console.log("Success")
-        //    })
-        //    .catch((error) => {
-        //        console.log("Failure")
-        //        console.log(error);
-        //    })
         });
 
         smallPlayButton.on("pointerdown", () => {

@@ -14,6 +14,11 @@ export default class Preload extends Phaser.Scene {
     this.load.image('singlePlayer', "/assets/images/buttons/singlePlayerButton.png");
     this.load.image('multiplayer', "/assets/images/buttons/multiplayerButton.png");
     this.load.image("menuBg", "/assets/images/backgrounds/menu-bg.png");
+    this.load.image("multiplayer_menu", "/assets/images/backgrounds/multiplayer_menu.png");
+    this.load.image("createRoomButton", "/assets/images/buttons/createRoomButton.png");
+    this.load.image("joinRoomButton", "/assets/images/buttons/joinRoomButton.png");
+    this.load.image('createRoomMenu', '/assets/images/backgrounds/createRoomMenu.png');
+    this.load.image('join_createButton', '/assets/images/buttons/join_createButton.png');
     this.load.image("cancelButton", "/assets/images/buttons/cancelButton.png");
     this.load.image("headButton", "/assets/images/buttons/headButton.png");
     this.load.image("customizeButton", "/assets/images/buttons/customizeButton.png");
@@ -30,18 +35,12 @@ export default class Preload extends Phaser.Scene {
     this.load.image('coat', '/assets/images/buttons/coat.png');
     this.load.image('glasses', '/assets/images/buttons/glasses.png');
     this.load.image('headgear', '/assets/images/buttons/headgear.png');
-
-
+    this.load.image('lowJump', '/assets/images/buttons/lowJump.png');
+    this.load.image('medJump', '/assets/images/buttons/medJump.png');
+    this.load.image('highJump', '/assets/images/buttons/hiJump.png');
 
 
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')
-    this.load.image('TileDefault', '/assets/Tiles_32x32.png');
-
-   
-    
-    
-
-
     this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
     this.load.image('slider', '/assets/images/buttons/slider.png')
     
@@ -51,93 +50,94 @@ export default class Preload extends Phaser.Scene {
     );
 
     this.load.spritesheet('bashy',
-    '/assets/images/sprites/bashy.png',
-    { frameWidth: 32, frameHeight: 48 }
-  );
+      '/assets/images/sprites/bashy.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
 
-  this.load.spritesheet('booshy',
-  '/assets/images/sprites/booshy.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
+    this.load.spritesheet('booshy',
+      '/assets/images/sprites/booshy.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
 
-this.load.spritesheet('shabby',
-  '/assets/images/sprites/shabby.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-//Accessories
-
-//HATS
-
-this.load.spritesheet('dudeHat',
-  '/assets/images/sprites/shoobyHat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('bashyHat',
-  '/assets/images/sprites/bashyHat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('booshyHat',
-  '/assets/images/sprites/booshyHat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('shabbyHat',
-  '/assets/images/sprites/shabbyHat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-//Glasses
-
-this.load.spritesheet('dudeGlasses',
-  '/assets/images/sprites/shoobyGlasses.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('bashyGlasses',
-  '/assets/images/sprites/bashyGlasses.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('booshyGlasses',
-  '/assets/images/sprites/booshyGlasses.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-this.load.spritesheet('shabbyGlasses',
-  '/assets/images/sprites/shabbyGlasses.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-
-
-//Coats
-this.load.spritesheet('dudeCoat',
-  '/assets/images/sprites/shoobyCoat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-this.load.spritesheet('bashyCoat',
-  '/assets/images/sprites/bashyCoat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-this.load.spritesheet('booshyCoat',
-  '/assets/images/sprites/booshyCoat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
-
-this.load.spritesheet('shabbyCoat',
-  '/assets/images/sprites/shabbyCoat.png',
-  { frameWidth: 32, frameHeight: 48 }
-);
+    this.load.spritesheet('shabby',
+      '/assets/images/sprites/shabby.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+    //Accessories
+      
+    //HATS
+      
+    this.load.spritesheet('dudeHat',
+      '/assets/images/sprites/shoobyHat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('bashyHat',
+      '/assets/images/sprites/bashyHat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('booshyHat',
+      '/assets/images/sprites/booshyHat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('shabbyHat',
+      '/assets/images/sprites/shabbyHat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+    //Glasses
+      
+    this.load.spritesheet('dudeGlasses',
+      '/assets/images/sprites/shoobyGlasses.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('bashyGlasses',
+      '/assets/images/sprites/bashyGlasses.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('booshyGlasses',
+      '/assets/images/sprites/booshyGlasses.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+    this.load.spritesheet('shabbyGlasses',
+      '/assets/images/sprites/shabbyGlasses.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+      
+      
+    //Coats
+    this.load.spritesheet('dudeCoat',
+      '/assets/images/sprites/shoobyCoat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+    this.load.spritesheet('bashyCoat',
+      '/assets/images/sprites/bashyCoat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+    this.load.spritesheet('booshyCoat',
+      '/assets/images/sprites/booshyCoat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
+      
+    this.load.spritesheet('shabbyCoat',
+      '/assets/images/sprites/shabbyCoat.png',
+      { frameWidth: 32, frameHeight: 48 }
+    );
 
 
     this.load.spritesheet('fish',
-    '/assets/images/sprites/star.png',
-    { frameWidth: 32, frameHeight: 32 }
-  );
+      '/assets/images/sprites/star.png',
+      { frameWidth: 32, frameHeight: 32 }
+    );
     this.load.on("progress", () => {
       this.add.text(20, 20, "Loading game...")
     })
 
     this.load.on("complete", () => {
+      this.game.setLevel("/assets/mapData/shoobyTileset16.json")
       this.scene.start("titleScene")
     });
   }

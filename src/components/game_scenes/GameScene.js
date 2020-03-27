@@ -36,9 +36,7 @@ this.load.image('restart', '/assets/images/buttons/difficulty_bar_medium1.png');
 
 
   create() {
-    this.socket = socketIo(
-      process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    );
+    this.socket = this.game.socket;
     const worldMap = this.add.tilemap("world");
     const tileset = worldMap.addTilesetImage("tiles");
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
