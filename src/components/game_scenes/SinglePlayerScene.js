@@ -44,7 +44,6 @@ export default class SinglePlayerScene extends Phaser.Scene {
 
     //FISH & BOMBS creation
     createFish(self, "fish", this.game.fishNum, this.ground);
-    console.log("singplayerscene", this.fish);
 
     this.physics.add.overlap(this.player, this.fish, createBomb, collectFish, this);
 
@@ -71,7 +70,8 @@ export default class SinglePlayerScene extends Phaser.Scene {
       this.player.setVelocityY(-550);
     }
     if (this.cursors.pause.isDown) {
-      this.scene.pause();
+      this.physics.pause();
+
     }
 
     //Setting highscore
@@ -103,12 +103,12 @@ export default class SinglePlayerScene extends Phaser.Scene {
         { fontSize: "32px", fill: "#fff" }
       );
 
-      const back_to_main = this.add.image(
+      const backToMain = this.add.image(
         this.game.renderer.width / 1.75,
         this.game.renderer.height * 0.65,
-        "back_to_main"
+        "backToMain"
       );
-      back_to_main.scale = 0.35;
+      backToMain.scale = 0.35;
       const restart = this.add.image(
         this.game.renderer.width / 1.55,
         this.game.renderer.height * 0.65,
@@ -116,7 +116,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
       );
       restart.scale = 0.35;
 
-      back_to_main.setInteractive();
+      backToMain.setInteractive();
       restart.setInteractive();
 
       restart.on("pointerdown", () => {
@@ -125,7 +125,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
         this.scene.restart();
       });
 
-      back_to_main.on("pointerdown", () => {
+      backToMain.on("pointerdown", () => {
         console.log("back to main");
         this.gameOver = false;
         this.scene.start("titleScene");

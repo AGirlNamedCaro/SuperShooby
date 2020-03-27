@@ -19,9 +19,6 @@ export default class settingsMenu extends Phaser.Scene {
       this.add.existing(this.menuBg);
       this.menuBg.scaleY = 0.3;
 
-       
-        
-      
         const difficulty_bar = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar");
         difficulty_bar.scale = 0.35;
         const easy = this.add.image(this.game.renderer.width/ 2.3 , this.game.renderer.height * 0.32, "difficulty_bar_easy");
@@ -34,23 +31,14 @@ export default class settingsMenu extends Phaser.Scene {
         hard.scale = 0.35;
         hard.alpha = 0.05;
         
-
-
         const back = this.add.image(this.game.renderer.width / 2.75, this.game.renderer.height * 0.63, "smallPlayButton");
         back.scale = 0.35;
-        
-        
 
-        
         easy.setInteractive();
         medium.setInteractive();
         hard.setInteractive();
         back.setInteractive();
-        
-
-     
-        
-        
+ 
       easy.on("pointerdown", () => {
       console.log("Easy");
       easy.alpha = 1;
