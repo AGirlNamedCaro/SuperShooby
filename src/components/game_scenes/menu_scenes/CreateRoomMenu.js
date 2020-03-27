@@ -8,10 +8,10 @@ export default class Customize extends Phaser.Scene {
 
     init(data) {
         
-        // this.menuBg = data.menuBg;
-        // this.menuBg.scene = this;
-        // this.menuBg.active = false;
-        // this.menuBg.visible = false;
+        this.menuBg = data.menuBg;
+        this.menuBg.scene = this;
+        this.menuBg.active = false;
+        this.menuBg.visible = false;
         this.key = data.key
     }
 
