@@ -42,6 +42,7 @@ class RoomManager {
 
     this.rooms[roomId] = {
       roomId: roomId,
+      roomMap: roomMap,
       game: game,
       players: {
         [player.playerId]: player
@@ -107,6 +108,7 @@ window.onload = () => {
       // if (roomManager[roomId]) {
       const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
       roomManager.joinRoom(roomId, player);
+      io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap)
       // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
