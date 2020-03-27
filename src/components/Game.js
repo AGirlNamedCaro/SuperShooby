@@ -15,7 +15,7 @@ import JoinRoomMenu from "./game_scenes/menu_scenes/JoinRoomMenu"
 
 
 import SinglePlayer from "./game_scenes/SinglePlayerScene";
-import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
+import MultiplayerScene from "./game_scenes/MultiplayerScene";
 import CreateMap from "./game_scenes/CreateMap";
 import SetMapMenu from "./game_scenes/menu_scenes/SetMapMenu";
 
@@ -44,7 +44,7 @@ export const config = {
     MultiplayerMenu,
     CustomizeMenu,
     CreateCharacterMenu,
-    AuthoritativeScene,
+    MultiplayerScene,
     SettingsMenu,
     CreateMap,
     SinglePlayer,
