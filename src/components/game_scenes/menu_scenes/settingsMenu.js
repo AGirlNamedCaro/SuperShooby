@@ -23,6 +23,7 @@ export default class settingsMenu extends Phaser.Scene {
         let score;
         let fishNum;
         let stepX;
+        
       
         const difficulty_bar = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.30, "difficulty_bar");
         difficulty_bar.scale = 0.35;

@@ -37,8 +37,7 @@ export default class CreateCharacter extends Phaser.Scene {
     createCharBackground.setScale(.5);
   
     
-    let shooby = this.physics.add.sprite(497, 350, 'dude')
-    shooby.visible = true;
+   
     let box = this.physics.add.staticGroup();
     box.create(500, 545, 'box').setScale(0.7).refreshBody();
 
@@ -94,6 +93,9 @@ export default class CreateCharacter extends Phaser.Scene {
     smallPlayButton.setInteractive();
 
     //Creating Sprites
+    let shooby = this.physics.add.sprite(497, 350, 'dude')
+    shooby.visible = true;
+
     let bashy = this.physics.add.sprite(500, 450, 'bashy')
     bashy.visible = false;
     
@@ -132,7 +134,6 @@ export default class CreateCharacter extends Phaser.Scene {
     bashyImage.on("pointerdown", () => {
       previous = character
       character = 'bashy'
-      console.log(character)
 
       bashy.destroy();
 
