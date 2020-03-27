@@ -58,9 +58,10 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ setGameMode }) {
+export default function Game({setGameMode}) {
   // pass the statechange method down to the game
   game.setState = setGameMode;
+ 
 
   return (
     <div id="game-container">

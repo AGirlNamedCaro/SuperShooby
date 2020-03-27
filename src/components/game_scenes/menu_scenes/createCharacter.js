@@ -77,7 +77,7 @@ export default class CreateCharacter extends Phaser.Scene {
     backButtonRope.scale = 0.45
     
     
-    
+  
     
 
     const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");

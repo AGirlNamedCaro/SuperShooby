@@ -7,11 +7,12 @@ import GameDesc from "./GameDesc"
 
 function App() {
   const [layer, setLayer] = useState({});
+  const [character, setCharacter] = useState('dude')
 
   return (
     <section id="body">
       <TopBar />
-      <Game passedLayer={layer} setLayer={setLayer} />
+      <Game passedLayer={layer} setLayer={setLayer} passedCharacter={character} setCharacter={setCharacter} />
       <GameDesc />     
     </section>
   );
