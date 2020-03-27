@@ -8,6 +8,7 @@ const {
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
 const chance = require("chance").Chance();
+const S3 = require("aws-sdk/clients/s3");
 
 // Next time trying to import a class try roomManager = roomManager.RoomManager();
 class RoomManager {
@@ -15,11 +16,14 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomId, player, maxUsers) {
+  createRoom(roomMap, roomId, player, maxUsers) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
-      "assets/images/prefabs/marioTileset.png",
-      "assets/mapData/marioTileset16.json"
+      "assets/images/prefabs/shoobyTileset.png",
+      // Optimized so that when its on the default map, it will load it from the server
+      roomMap === "/assets/mapData/shoobyTileset16.json"
+        ? roomMap.substr(1)
+        : roomMap
     );
 
     function create() {
@@ -40,6 +44,7 @@ class RoomManager {
 
     this.rooms[roomId] = {
       roomId: roomId,
+      roomMap: roomMap,
       game: game,
       players: {
         [player.playerId]: player
@@ -71,31 +76,41 @@ class RoomManager {
 window.onload = () => {
   const roomManager = new RoomManager();
   const currentPlayers = {};
+  const s3 = new S3({
+    accessKeyId: "AKIAXWMT5LDDO6DMEIOR",
+    secretAccessKey: "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"
+  });
 
   io.on("connection", socket => {
     console.log("A menu shooby has connected");
 
-    socket.on("createRoom", () => {
-      let roomId = chance.word({ syllables: 3 });
+    socket.on("setupRoomId", () => {
+      const roomId = chance.word({ syllables: 3 });
+      io.to(socket.id).emit("roomId", roomId);
+    });
 
-      while (roomManager.rooms[roomId]) {
-        console.log("test");
-        roomId = chance.word({ syllables: 3 });
-      }
+    socket.on("createRoom", roomData => {
+      // TODO change this logic, became outdated after setupRoomId was implemented
+      // Isn't a big deal after switched to the chance library
+      // while (roomManager.rooms[roomData.roomId]) {
+      //   console.log("test");
+      //   roomData.roomId = chance.word({ syllables: 3 });
+      // }
 
-      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomId, player, 2);
-      io.to(socket.id).emit("createdRoom", roomId);
-      currentPlayers[socket.id] = roomId;
+      const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
+      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2);
+      io.to(socket.id).emit("createdRoom", roomData.roomId);
+      currentPlayers[socket.id] = roomData.roomId;
     });
 
     socket.on("joinRoom", roomId => {
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
-        const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-        roomManager.joinRoom(roomId, player);
-        // TODO fix broken error handling
+      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      roomManager.joinRoom(roomId, player);
+      io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
+      // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
       // }
@@ -119,14 +134,20 @@ window.onload = () => {
           removePlayer(
             roomManager.rooms[roomId].scene,
             socket.id,
-            currentPlayers
+            currentPlayers,
+            roomManager.rooms[roomId].players
           );
           io.emit("disconnect", socket.id);
           console.log("An Authoritative Shooby has disconnected");
         }
-        delete currentPlayers[socket.id];
-        roomManager.deleteRoom(roomId);
+
+        const roomKeys = Object.keys(roomManager.rooms[roomId].players);
+        console.log("socket", socket.id);
+        if (roomKeys.length === 0) {
+          roomManager.deleteRoom(roomId);
+        }
       }
+      delete currentPlayers[socket.id];
     });
 
     socket.on("playerInput", playerState => {
@@ -138,18 +159,66 @@ window.onload = () => {
       );
     });
 
+    // This has to do with the customize creating map function
     socket.on("createMap", mapData => {
-      mapData["mapId"] = chance.word({ syllables: 3 });
+      mapData.levelData["mapId"] = chance.word({ syllables: 3 });
+      console.log("Id", mapData.levelData.mapId);
+
+      const params = {
+        Bucket: "super-shooby-assets/thumbnails",
+        Key: mapData.levelData.mapId,
+        Body: mapData.thumbnail
+      };
+
+      s3.upload(params, (err, data) => {
+        if (err) throw err;
+        console.log(`File uploaded sucess, ${data.Location}`);
+        mapData.levelData["thumbnail"] = data.Location;
+
+        const client = new MongoClient(MONGODB, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true
+        });
+
+        client.connect(err => {
+          // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
+          // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+          // TODO need to send user confirmation with the map id name
+          const collection = client.db("game_db").collection("maps");
+          collection
+            .insertOne(mapData.levelData)
+            .then(res => client.close())
+            .catch(err => console.log("err", err));
+        });
+      });
+    });
+
+    socket.on("getLevel", levelId => {
+      const mapData = {};
+      const client = new MongoClient(MONGODB, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
 
       client.connect(err => {
-        // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
-        // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
-        // TODO need to send user confirmation with the map id name
         const collection = client.db("game_db").collection("maps");
-        collection
-          .insertOne(mapData)
-          .then(res => client.close())
-          .catch(err => console.log("err", err));
+        collection.find({ mapId: levelId }).toArray((err, map) => {
+          if (err) throw err;
+          mapData["levelData"] = map;
+
+          const params = {
+            Bucket: "super-shooby-assets/thumbnails",
+            Key: levelId
+          };
+
+          s3.getObject(params, (err, data) => {
+            if (err) throw err;
+            // console.log(data.Body.toString())
+            mapData["thumbnail"] = data.Body.toString();
+            io.to(socket.id).emit("returnedMap", mapData);
+          });
+          client.close();
+        });
       });
     });
   });

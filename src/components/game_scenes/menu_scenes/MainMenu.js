@@ -10,28 +10,24 @@ export default class MainMenu extends Phaser.Scene{
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.character = data.character
-    
   }
   
   create() {
-
-    
-    
+    console.log(this.game.character)
     const menuBg = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.30, "menuBg");
     menuBg.scale = 0.3;
     const playButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.19, "playButton");
     playButton.scale = 0.3;
     const customizeButton = this.add.image(this.game.renderer.width / 1.95, this.game.renderer.height * 0.29, "customizeButton");
     customizeButton.scale = 0.27;
-    const settingsButton = this.add.image(this.game.renderer.width / 1.96, this.game.renderer.height * 0.44, "settingsButton");
-    settingsButton.scale = 0.30;
+    const settingsButton = this.add.image(this.game.renderer.width / 1.90, this.game.renderer.height * 0.42, "settingsButton");
+    settingsButton.scale = 0.35;
 
     let bombs = this.bombs;
     let score = this.score;
     let fishNum = this.fishNum;
     let stepX = this.stepX;
-    let key = this.character
+ 
     
   //Creating default settings
   
@@ -51,39 +47,25 @@ export default class MainMenu extends Phaser.Scene{
     
     
     
-    if(!key) {
-      key = 'dude'
-      
-    }
-    else {
-      
-      key = this.character
-      
-    }
    
-
-    
-    
     playButton.setInteractive();
     customizeButton.setInteractive();
     settingsButton.setInteractive();
 
 
     playButton.on("pointerdown", () => {
-      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score, fishNum: fishNum, stepX:stepX, key: key  })
+      this.scene.start("playMenu", { menuBg: menuBg,bombs:bombs, score:score, fishNum: fishNum, stepX:stepX})
     })
 
     customizeButton.on("pointerdown", () => {
-      this.scene.start("customizeMenu", { menuBg: menuBg, key: key})
+      this.scene.start("customizeMenu", { menuBg: menuBg })
     })
 
     settingsButton.on("pointerdown", () => {
       this.scene.start("settingsMenu", { menuBg: menuBg})
     })
 
-    console.log('bombs: ', bombs);
-    console.log('score: ', score);
-
+   
   }
 
   update() {

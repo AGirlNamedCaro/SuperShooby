@@ -14,7 +14,7 @@ export default class PlayMenu extends Phaser.Scene {
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.key = data.key
+    
   }
 
   preload() {
@@ -22,13 +22,17 @@ export default class PlayMenu extends Phaser.Scene {
   }
 
   create() {
+    console.log('key:',this.key)
     console.log(this.bombs);
     console.log("score:", this.score);
     const bombs = this.bombs;
     const score = this.score;
     const fishNum = this.fishNum;
     const stepX = this.stepX;
-    const key = this.key;
+    
+
+     
+    
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(
       this.game.renderer.width / 1.96,
@@ -68,13 +72,13 @@ export default class PlayMenu extends Phaser.Scene {
       titleScene.scene.transition({
         target: "singlePlayer",
         duration: 1000,
-        data: { bombs, score, fishNum, stepX, key, menuBg: this.menuBg }
+        data: { bombs, score, fishNum, stepX }
       });
     });
 
     multiplayer.on("pointerdown", () => {
       console.log("Multiplayer");
-      this.scene.start("multiplayerMenu", {
+      this.scene.start("roomSelectMenu", {
         menuBg: this.menuBg,
         smPlBtn: smallPlayButton
       });
@@ -82,18 +86,6 @@ export default class PlayMenu extends Phaser.Scene {
 
     smallPlayButton.on("pointerdown", () => {
       this.scene.start("mainMenu");
-    });
-
-    const htmlForm = this.add.dom(300, 100).createFromCache("multiplayerForm");
-
-    htmlForm.addListener("click");
-    // Have it setup so a random word gets set as server name
-    htmlForm.on("click", event => {
-      if (event.target.name === "submitBtn") {
-        const userInput = htmlForm.getChildByName("serverName");
-        const roomId = userInput.value;
-        console.log(roomId)
-      }
     });
   }
 }

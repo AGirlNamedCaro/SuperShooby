@@ -13,13 +13,13 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.socket = data.socket;
+    this.socket = this.game.socket;
     this.roomId = data.roomId;
   }
 
   preload() {
-    this.load.image("tiles", "/assets/images/prefabs/marioTileset.png");
-    this.load.tilemapTiledJSON("world", "/assets/mapData/marioTileset16.json");
+    this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
+    this.load.tilemapTiledJSON("world", this.game.level);
   }
 
   create() {
