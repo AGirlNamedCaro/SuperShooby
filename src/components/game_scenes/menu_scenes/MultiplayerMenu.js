@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import socketIo from "socket.io-client";
 
 // THIS FILE IS NOT IN USE ANYMORE REPlACED WITH ROOMSELECTMENU 
 export default class MultiplayerMenu extends Phaser.Scene {
