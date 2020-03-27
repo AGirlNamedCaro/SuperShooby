@@ -70,7 +70,6 @@ function addPlayer(self, playerInfo, collisions) {
 }
 
 function removePlayer(self, playerId, currentPlayers) {
-  console.log("self", self);
   self.players.getChildren().forEach(player => {
     if (playerId === player.playerId) {
       player.destroy();

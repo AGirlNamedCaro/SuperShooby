@@ -56,7 +56,8 @@ export default class Customize extends Phaser.Scene {
     joinCreateButton.setInteractive();
 
     joinCreateButton.on("pointerdown", () => {
-      this.game.socket.emit("createRoom", this.roomId);
+      // Is Optimized for when the default map is still a url, maybe expand on this
+      this.game.socket.emit("createRoom", { roomId: this.roomId, roomMap: this.game.level });
       this.game.socket.on("createdRoom", roomId => {
         this.game.socket.emit("joinRoom", this.roomId);
         this.scene.stop("createRoomMenu");

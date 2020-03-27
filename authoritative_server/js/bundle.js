@@ -44,11 +44,12 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomId, player, maxUsers) {
+  createRoom(roomMap, roomId, player, maxUsers) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
-      "assets/images/prefabs/marioTileset.png",
-      "assets/mapData/marioTileset16.json"
+      "assets/images/prefabs/shoobyTileset.png",
+      // Optimized so that when its on the default map, it will load it from the server
+      roomMap === "/assets/mapData/shoobyTileset16.json" ? roomMap.substr(1) : roomMap
     );
 
     function create() {
@@ -113,17 +114,19 @@ window.onload = () => {
       io.to(socket.id).emit("roomId", roomId);
     })
 
-    socket.on("createRoom", roomId => {
+    socket.on("createRoom", roomData => {
 
-      while (roomManager.rooms[roomId]) {
-        console.log("test");
-        roomId = chance.word({ syllables: 3 });
-      }
+      // TODO change this logic, became outdated after setupRoomId was implemented
+      // Isn't a big deal after switched to the chance library
+      // while (roomManager.rooms[roomData.roomId]) {
+      //   console.log("test");
+      //   roomData.roomId = chance.word({ syllables: 3 });
+      // }
 
-      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomId, player, 2);
-      io.to(socket.id).emit("createdRoom", roomId);
-      currentPlayers[socket.id] = roomId;
+      const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
+      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2);
+      io.to(socket.id).emit("createdRoom", roomData.roomId);
+      currentPlayers[socket.id] = roomData.roomId;
     });
 
     socket.on("joinRoom", roomId => {
@@ -175,6 +178,7 @@ window.onload = () => {
       );
     });
 
+    // This has to do with the customize creating map function
     socket.on("createMap", mapData => {
       mapData.levelData["mapId"] = chance.word({ syllables: 3 });
       console.log("Id", mapData.levelData.mapId);
@@ -314,7 +318,6 @@ function addPlayer(self, playerInfo, collisions) {
 }
 
 function removePlayer(self, playerId, currentPlayers) {
-  console.log("self", self);
   self.players.getChildren().forEach(player => {
     if (playerId === player.playerId) {
       player.destroy();
