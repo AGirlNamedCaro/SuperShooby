@@ -21,7 +21,9 @@ class RoomManager {
       "assets/images/sprites/dude.png",
       "assets/images/prefabs/shoobyTileset.png",
       // Optimized so that when its on the default map, it will load it from the server
-      roomMap === "/assets/mapData/shoobyTileset16.json" ? roomMap.substr(1) : roomMap
+      roomMap === "/assets/mapData/shoobyTileset16.json"
+        ? roomMap.substr(1)
+        : roomMap
     );
 
     function create() {
@@ -85,10 +87,9 @@ window.onload = () => {
     socket.on("setupRoomId", () => {
       const roomId = chance.word({ syllables: 3 });
       io.to(socket.id).emit("roomId", roomId);
-    })
+    });
 
     socket.on("createRoom", roomData => {
-
       // TODO change this logic, became outdated after setupRoomId was implemented
       // Isn't a big deal after switched to the chance library
       // while (roomManager.rooms[roomData.roomId]) {
@@ -108,7 +109,7 @@ window.onload = () => {
       // if (roomManager[roomId]) {
       const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
       roomManager.joinRoom(roomId, player);
-      io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap)
+      io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
       // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
@@ -133,14 +134,20 @@ window.onload = () => {
           removePlayer(
             roomManager.rooms[roomId].scene,
             socket.id,
-            currentPlayers
+            currentPlayers,
+            roomManager.rooms[roomId].players
           );
           io.emit("disconnect", socket.id);
           console.log("An Authoritative Shooby has disconnected");
         }
-        delete currentPlayers[socket.id];
-        roomManager.deleteRoom(roomId);
+
+        const roomKeys = Object.keys(roomManager.rooms[roomId].players);
+        console.log("socket", socket.id);
+        if (roomKeys.length === 0) {
+          roomManager.deleteRoom(roomId);
+        }
       }
+      delete currentPlayers[socket.id];
     });
 
     socket.on("playerInput", playerState => {
@@ -201,15 +208,15 @@ window.onload = () => {
 
           const params = {
             Bucket: "super-shooby-assets/thumbnails",
-            Key: levelId,
-          }
-          
+            Key: levelId
+          };
+
           s3.getObject(params, (err, data) => {
             if (err) throw err;
             // console.log(data.Body.toString())
             mapData["thumbnail"] = data.Body.toString();
             io.to(socket.id).emit("returnedMap", mapData);
-          })
+          });
           client.close();
         });
       });
