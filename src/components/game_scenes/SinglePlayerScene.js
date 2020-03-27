@@ -145,14 +145,16 @@ hitBomb(player,bomb) {
     if (this.cursors.up.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-550);
     }
-    if(this.cursors.pause.isDown) {
+
+     if(this.cursors.pause.isDown) {
+       console.log('pause')
       if(!pause) {
-        pause = true;
         this.scene.pause("singlePlayer")
+        pause = true;
       }
       else {
-        pause = false;
         this.scene.resume("singlePlayer");
+        pause = false;
       }
     }
 
