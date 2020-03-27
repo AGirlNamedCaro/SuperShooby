@@ -19,11 +19,13 @@ export default class SinglePlayerScene extends Phaser.Scene {
   }
 
   create() {
+    
     const worldMap = this.add.tilemap("world");
     const tileset = worldMap.addTilesetImage("tiles");
     const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
     const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
     const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+    
 
     ground.setCollisionByExclusion(-1, true);
 
@@ -128,6 +130,7 @@ hitBomb(player,bomb) {
 
 
   update() {
+    let pause = false;
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
       this.player.anims.play(this.game.character +"left", true);
@@ -143,7 +146,14 @@ hitBomb(player,bomb) {
       this.player.setVelocityY(-550);
     }
     if(this.cursors.pause.isDown) {
-      this.scene.pause()
+      if(!pause) {
+        pause = true;
+        this.scene.pause("singlePlayer")
+      }
+      else {
+        pause = false;
+        this.scene.resume("singlePlayer");
+      }
     }
 
 
