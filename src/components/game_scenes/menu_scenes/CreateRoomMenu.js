@@ -30,7 +30,27 @@ export default class Customize extends Phaser.Scene {
       "joinCreateButton"
     );
     joinCreateButton.scale = 0.15;
-
+    const lowJump = this.add.image(
+      this.game.renderer.width / 1.92,
+      this.game.renderer.height * 0.448,
+      "lowJump"
+    );
+    lowJump.setScale(0.12);
+    lowJump.alpha = 0.05;
+    const medJump = this.add.image(
+      this.game.renderer.width / 1.65,
+      this.game.renderer.height * 0.423,
+      "medJump"
+    );
+    medJump.setScale(0.12);
+    medJump.alpha = 1;
+    const highJump = this.add.image(
+      this.game.renderer.width / 1.455,
+      this.game.renderer.height * 0.4,
+      "highJump"
+    );
+    highJump.setScale(0.12);
+    highJump.alpha = 0.05;
     const smallPlayButton = this.add.image(
       this.game.renderer.width / 2.75,
       this.game.renderer.height * 0.63,
@@ -54,10 +74,34 @@ export default class Customize extends Phaser.Scene {
 
     smallPlayButton.setInteractive();
     joinCreateButton.setInteractive();
+    lowJump.setInteractive();
+    medJump.setInteractive();
+    highJump.setInteractive();
+
+    lowJump.on("pointerdown", () => {
+      lowJump.alpha = 1;
+      medJump.alpha = 0.05;
+      highJump.alpha = 0.05;
+    });
+
+    medJump.on("pointerdown", () => {
+      lowJump.alpha = 0.05;
+      medJump.alpha = 1;
+      highJump.alpha = 0.05;
+    });
+
+    highJump.on("pointerdown", () => {
+      lowJump.alpha = 0.05;
+      medJump.alpha = 0.05;
+      highJump.alpha = 1;
+    });
 
     joinCreateButton.on("pointerdown", () => {
       // Is Optimized for when the default map is still a url, maybe expand on this
-      this.game.socket.emit("createRoom", { roomId: this.roomId, roomMap: this.game.level });
+      this.game.socket.emit("createRoom", {
+        roomId: this.roomId,
+        roomMap: this.game.level
+      });
       this.game.socket.on("createdRoom", roomId => {
         this.game.socket.emit("joinRoom", this.roomId);
         this.scene.stop("createRoomMenu");

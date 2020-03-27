@@ -11,6 +11,7 @@ import SettingsMenu from "./game_scenes/menu_scenes/settingsMenu";
 import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
 import RoomSelectMenu from "./game_scenes/menu_scenes/RoomSelectMenu";
 import CreateRoomMenu from "./game_scenes/menu_scenes/CreateRoomMenu"
+import JoinRoomMenu from "./game_scenes/menu_scenes/JoinRoomMenu"
 
 
 import SinglePlayer from "./game_scenes/SinglePlayerScene";
@@ -49,7 +50,8 @@ export const config = {
     SinglePlayer,
     SetMapMenu,
     RoomSelectMenu, 
-    CreateRoomMenu
+    CreateRoomMenu,
+    JoinRoomMenu
   ]
 };
 

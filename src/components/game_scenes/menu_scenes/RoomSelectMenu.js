@@ -53,8 +53,9 @@ export default class Customize extends Phaser.Scene {
     });
 
     joinRoomButton.on("pointerdown", () => {
-      // this.scene.start("createCharacter", { menuBg: this.menuBg, key: this.key})
+      this.scene.start("joinRoomMenu", { menuBg: this.menuBg, key: this.key });
     });
+
     createRoomButton.on("pointerdown", () => {
       this.game.socket.emit("setupRoomId");
       this.game.socket.on("roomId", roomId => {

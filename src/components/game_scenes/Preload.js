@@ -19,6 +19,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image("joinRoomButton", "/assets/images/buttons/joinRoomButton.png");
     this.load.image('createRoomMenu', '/assets/images/backgrounds/createRoomMenu.png');
     this.load.image('joinCreateButton', '/assets/images/buttons/join_createButton.png');
+    this.load.image('joinRoomMenu', '/assets/images/backgrounds/joinRoomMenu.png');
     this.load.image("cancelButton", "/assets/images/buttons/cancelButton.png");
     this.load.image("headButton", "/assets/images/buttons/headButton.png");
     this.load.image("customizeButton", "/assets/images/buttons/customizeButton.png");
@@ -35,6 +36,10 @@ export default class Preload extends Phaser.Scene {
     this.load.image('coat', '/assets/images/buttons/coat.png');
     this.load.image('glasses', '/assets/images/buttons/glasses.png');
     this.load.image('headgear', '/assets/images/buttons/headgear.png');
+    this.load.image('lowJump', '/assets/images/buttons/lowJump.png');
+    this.load.image('medJump', '/assets/images/buttons/medJump.png');
+    this.load.image('highJump', '/assets/images/buttons/hiJump.png');
+
 
     this.load.image('bomb', '/assets/images/prefabs/bomb.png')
     this.load.image("settingsButton", "/assets/images/buttons/gameSettings.png");
