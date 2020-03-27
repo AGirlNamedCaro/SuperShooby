@@ -13,7 +13,7 @@ export default class AuthoritativeScene extends Phaser.Scene {
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.socket = data.socket;
+    this.socket = this.game.socket;
     this.roomId = data.roomId;
   }
 

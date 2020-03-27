@@ -80,8 +80,12 @@ window.onload = () => {
   io.on("connection", socket => {
     console.log("A menu shooby has connected");
 
-    socket.on("createRoom", () => {
-      let roomId = chance.word({ syllables: 3 });
+    socket.on("setupRoomId", () => {
+      const roomId = chance.word({ syllables: 3 });
+      io.to(socket.id).emit("roomId", roomId);
+    })
+
+    socket.on("createRoom", roomId => {
 
       while (roomManager.rooms[roomId]) {
         console.log("test");
