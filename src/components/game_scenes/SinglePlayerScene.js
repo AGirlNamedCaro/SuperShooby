@@ -35,17 +35,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
-    this.resume = this.add.image(this.game.renderer.width / 2.30, this.game.renderer.height * 0.35, "resume");
-    this.resume.scale = 0.20
-    this.resume.alpha = 0;
-
-    this.resume.setInteractive();
-
-    this.exit = this.add.image(this.game.renderer.width / 1.75, this.game.renderer.height * 0.51, "exit");
-    this.exit.scale = 0.20
-    this.exit.alpha = 0;
-
-    this.exit.setInteractive();
+    
 
     playerAnimations(self, this.game.character);
     createCursors(self);
@@ -59,6 +49,19 @@ export default class SinglePlayerScene extends Phaser.Scene {
       fontSize: "32px",
       fill: "#fff"
     });
+
+    //HAD TO MOVE PAUSE MENU UNDER FISH FOR DISPLAY PURPOSES
+    this.resume = this.add.image(this.game.renderer.width / 2.30, this.game.renderer.height * 0.35, "resume");
+    this.resume.scale = 0.20
+    this.resume.alpha = 0;
+
+    this.resume.setInteractive();
+
+    this.exit = this.add.image(this.game.renderer.width / 1.75, this.game.renderer.height * 0.51, "exit");
+    this.exit.scale = 0.20
+    this.exit.alpha = 0;
+
+    this.exit.setInteractive();
 
     this.resume.on("pointerdown", () => {
       this.physics.resume("singlePlayer")
@@ -75,6 +78,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
 
 
   }
+
 
   update() {
     
