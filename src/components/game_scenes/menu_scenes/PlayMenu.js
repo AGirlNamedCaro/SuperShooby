@@ -10,10 +10,6 @@ export default class PlayMenu extends Phaser.Scene {
     this.menuBg.scene = this;
     this.menuBg.active = true;
     this.menuBg.visible = true;
-    this.bombs = data.bombs;
-    this.score = data.score;
-    this.fishNum = data.fishNum;
-    this.stepX = data.stepX;
     
   }
 
@@ -22,21 +18,10 @@ export default class PlayMenu extends Phaser.Scene {
   }
 
   create() {
-    console.log('key:',this.key)
-    console.log(this.bombs);
-    console.log("score:", this.score);
-    const bombs = this.bombs;
-    const score = this.score;
-    const fishNum = this.fishNum;
-    const stepX = this.stepX;
-    
-
-     
-    
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(
       this.game.renderer.width / 1.96,
-      this.game.renderer.height * 0.185,
+      this.game.renderer.height * 0.191,
       "singlePlayer"
     );
     singlePlayer.scale = 0.3;
@@ -71,8 +56,8 @@ export default class PlayMenu extends Phaser.Scene {
       const titleScene = this.scene.get("titleScene");
       titleScene.scene.transition({
         target: "singlePlayer",
-        duration: 1000,
-        data: { bombs, score, fishNum, stepX }
+        duration: 1000
+       
       });
     });
 

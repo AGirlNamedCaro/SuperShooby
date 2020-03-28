@@ -81,7 +81,7 @@ export default class Customize extends Phaser.Scene {
           this.scene.stop("joinRoomMenu");
           const titleScene = this.scene.get("titleScene");
           titleScene.scene.transition({
-            target: "authScene",
+            target: "multiplayerScene",
             duration: 1000,
             data: { roomId: this.roomId }
           });
