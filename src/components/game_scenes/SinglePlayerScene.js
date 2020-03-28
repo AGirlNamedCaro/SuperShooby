@@ -8,6 +8,8 @@ export default class SinglePlayerScene extends Phaser.Scene {
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
     this.load.tilemapTiledJSON("world", this.game.level);
+    this.load.image("resumeButton", "/assets/images/buttons/resumeButton.png")
+    this.load.image('exitButton', '/assets/images/buttons/exitButton.png'); 
   }
 
   init(data) {
@@ -123,7 +125,9 @@ hitBomb(player,bomb) {
   this.physics.pause();
   this.player.setTint(0xff0000);
   this.player.anims.play(this.game.character +'turn')
-  this.gameOver = true;
+  this.scene.start("gameOver", {
+   
+  });
 }
 
 
@@ -144,8 +148,26 @@ hitBomb(player,bomb) {
     }
     if(this.cursors.pause.isDown) {
       this.scene.pause()
-    }
+      let resumeButton = this.add.image(350,400,'resumeButton')
+      resumeButton.setScale(.2)
+      let exitButton = this.add.image(475,500,'exitButton')
+      exitButton.setScale(.2)
 
+      resumeButton.setInteractive()
+      exitButton.setInteractive()
+
+      resumeButton.on("pointerdown", () => {
+        this.scene.start("singlePlayer")
+        
+      })
+
+      exitButton.on("pointerdown", () => {
+        this.scene.start("titleScene")
+        this.scene.start("mainMenu");
+      })
+
+    }
+    
 
         //Setting highscore
         if(this.highScore === null) {
@@ -158,36 +180,36 @@ hitBomb(player,bomb) {
       }
 
 
-      if(this.gameOver === true) {
+      // if(this.gameOver === true) {
 
-          let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, 'GAME OVER', { fontSize: '32px', fill: '#fff' });
-          let highScore = this.add.text(this.game.config.width / 4, this.game.config.height / 1.8, `High Score: ${this.highScore}` ,{ fontSize: '32px', fill: '#fff' });
-          let score = this.add.text(this.game.config.width / 1.6, this.game.config.height / 1.8, `Score: ${this.score} ` ,{ fontSize: '32px', fill: '#fff' });
+      //     let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, 'GAME OVER', { fontSize: '32px', fill: '#fff' });
+      //     let highScore = this.add.text(this.game.config.width / 4, this.game.config.height / 1.8, `High Score: ${this.highScore}` ,{ fontSize: '32px', fill: '#fff' });
+      //     let score = this.add.text(this.game.config.width / 1.6, this.game.config.height / 1.8, `Score: ${this.score} ` ,{ fontSize: '32px', fill: '#fff' });
 
-          const back_to_main = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.65, "back_to_main");
-          back_to_main.scale = 0.35;
-          const restart = this.add.image(this.game.renderer.width / 1.55, this.game.renderer.height * 0.65, "restart");
-          restart.scale = 0.35;
+      //     const back_to_main = this.add.image(this.game.renderer.width/ 1.75 , this.game.renderer.height * 0.65, "back_to_main");
+      //     back_to_main.scale = 0.35;
+      //     const restart = this.add.image(this.game.renderer.width / 1.55, this.game.renderer.height * 0.65, "restart");
+      //     restart.scale = 0.35;
          
-          back_to_main.setInteractive();
-          restart.setInteractive();
+      //     back_to_main.setInteractive();
+      //     restart.setInteractive();
 
               
-          restart.on("pointerdown", () => {
-              console.log("restart");
-              this.gameOver = false;
-              this.scene.restart();
+      //     restart.on("pointerdown", () => {
+      //         console.log("restart");
+      //         this.gameOver = false;
+      //         this.scene.restart();
              
-              });
+      //         });
 
-          back_to_main.on("pointerdown", () => {
-              console.log("back to main");
-              this.gameOver = false;
-              this.scene.start("titleScene");
-          })
+      //     back_to_main.on("pointerdown", () => {
+      //         console.log("back to main");
+      //         this.gameOver = false;
+      //         this.scene.start("titleScene");
+      //     })
 
           
 
-      }
+      // }
   }
 }
