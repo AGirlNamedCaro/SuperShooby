@@ -155,7 +155,7 @@ export default class CreateCharacter extends Phaser.Scene {
       
       this.physics.add.collider(bashy, box);
 
-      this.game.setCharacter('bashy');
+      this.game.setCharacter(character);
       
     })
 
@@ -301,7 +301,7 @@ export default class CreateCharacter extends Phaser.Scene {
     })
 
     smallPlayButton.on("pointerdown", () => {
-      
+      console.log('selectedCharacter', this.game.character)
       this.scene.start("titleScene")
       this.scene.start("mainMenu")
 

@@ -31,6 +31,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
     // ground.setCollisionByProperty({ collides: true }, true)
     // ground.setCollision([1, 265, 266, 299, 298])
     this.score = 0;
+    this.pause = false;
     this.highScore = localStorage.getItem("highScore");
 
     this.player = this.physics.add.sprite(100, 450, this.game.character);
@@ -38,6 +39,18 @@ export default class SinglePlayerScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.ground);
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
+
+    this.resume = this.add.image(this.game.renderer.width / 2.67, this.game.renderer.height * 0.35, "resume");
+    this.resume.scale = 0.15
+    this.resume.alpha = 0.02;
+
+    this.resume.setInteractive();
+
+    this.exit = this.add.image(this.game.renderer.width / 1.50, this.game.renderer.height * 0.35, "exit");
+    this.exit.scale = 0.15
+    this.exit.alpha = 0.02;
+
+    this.exit.setInteractive();
 
     playerAnimations(self, this.game.character);
     createCursors(self);
@@ -51,26 +64,43 @@ export default class SinglePlayerScene extends Phaser.Scene {
       fontSize: "32px",
       fill: "#fff"
     });
+
+    this.resume.on("pointerdown", () => {
+      this.physics.resume("singlePlayer")
+      this.exit.alpha = 0.02;
+      this.resume.alpha = 0.02
+    })
+
+    this.exit.on('pointerdown', () => {
+      console.log("in single player",this.game.character);
+      this.scene.stop("singlePlayer");
+      this.scene.start('titleScene')
+    })
+
+
   }
 
   update() {
     
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
-      this.player.anims.play("left", true);
+      this.player.anims.play(this.game.character + "left", true);
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160);
-      this.player.anims.play("right", true);
+      this.player.anims.play(this.game.character + "right", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("turn");
+      this.player.anims.play( this.game.character + "turn");
     }
 
     if (this.cursors.up.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-550);
     }
     if (this.cursors.pause.isDown) {
-      this.physics.pause();
+       this.physics.pause();
+       this.resume.alpha = 1;
+       this.exit.alpha = 1;
+       
 
     }
 
