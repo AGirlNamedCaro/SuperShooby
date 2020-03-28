@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import socketIo from "socket.io-client";
 
+// THIS FILE IS NOT IN USE ANYMORE REPlACED WITH ROOMSELECTMENU 
 export default class MultiplayerMenu extends Phaser.Scene {
   constructor() {
     super("multiplayerMenu");
@@ -59,37 +59,35 @@ export default class MultiplayerMenu extends Phaser.Scene {
       console.log(errMsg);
     });
 
-    // TODO create an overarching button to setup multiplayer, that will create the socket connection -- VERY IMPORTANT
-
     // console.log(cancelButton, "cancel");
     cancelButton.on("pointerdown", () => {
       console.log("Show Code");
 
-      this.socket.emit("createRoom");
-      this.socket.on("createdRoom", roomId => {
-        console.log("created", roomId);
+      // this.socket.emit("createRoom");
+      // this.socket.on("createdRoom", roomId => {
+      //   console.log("created", roomId);
 
-        const divCode = `
-        <div id="showCode" style="background-color: blue">
-          Your code is: ${roomId}
-          <button id="joinRoom" name="joinRoom">Join</button>
-        </div>`;
+      //   const divCode = `
+      //   <div id="showCode" style="background-color: blue">
+      //     Your code is: ${roomId}
+      //     <button id="joinRoom" name="joinRoom">Join</button>
+      //   </div>`;
 
-        const htmlCode = this.add.dom(300, 180).createFromHTML(divCode);
-        htmlCode.addListener("click");
-        htmlCode.on("click", event => {
-          if (event.target.name === "joinRoom") {
-            this.socket.emit("joinRoom", roomId);
-            this.scene.stop("multiplayerMenu");
-            const titleScene = this.scene.get("titleScene");
-            titleScene.scene.transition({
-              target: "authScene",
-              duration: 1000,
-              data: { socket: this.socket, roomId: roomId }
-            });
-          }
-        });
-      });
+      //   const htmlCode = this.add.dom(300, 180).createFromHTML(divCode);
+      //   htmlCode.addListener("click");
+      //   htmlCode.on("click", event => {
+      //     if (event.target.name === "joinRoom") {
+      //       this.socket.emit("joinRoom", roomId);
+      //       this.scene.stop("multiplayerMenu");
+      //       const titleScene = this.scene.get("titleScene");
+      //       titleScene.scene.transition({
+      //         target: "authScene",
+      //         duration: 1000,
+      //         data: { socket: this.socket, roomId: roomId }
+      //       });
+      //     }
+      //   });
+      // });
     });
 
     // headButton.on("pointerdown", () => {

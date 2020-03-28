@@ -1,19 +1,19 @@
 import Phaser from "phaser";
-import socketIo from "socket.io-client";
+import { createCursors, createWorld, playerAnimations } from "./GameHelpers";
 
-export default class AuthoritativeScene extends Phaser.Scene {
+export default class MultiplayerScene extends Phaser.Scene {
   constructor() {
-    super("authScene");
+    super("multiplayerScene");
+  }
+  
+  init(data) {
     this.playerState = this.calcPlayerState();
     this.oldPlayerState = this.playerState;
-  }
-
-  init(data) {
     this.bombs = data.bombs;
     this.score = data.score;
     this.fishNum = data.fishNum;
     this.stepX = data.stepX;
-    this.socket = data.socket;
+    this.socket = this.game.socket;
     this.roomId = data.roomId;
   }
 
@@ -27,17 +27,8 @@ export default class AuthoritativeScene extends Phaser.Scene {
     console.log("DATA: ",this.bombs,this.score,this.fishNum,this.stepX);
     const self = this;
     this.socket.emit("ready", this.roomId);
-    // this.socket = socketIo(
-    //   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
-    // );
-    const worldMap = this.add.tilemap("world");
-    const tileset = worldMap.addTilesetImage("tiles");
-    const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
-    const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
-    const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
-    // ground.setCollisionByProperty({ collides: true }, true)
-    // ground.setCollision([1, 265, 266, 299, 298])
-    ground.setCollisionByExclusion(-1, true);
+
+    createWorld(self);
 
     this.players = this.add.group();
 
@@ -51,9 +42,6 @@ export default class AuthoritativeScene extends Phaser.Scene {
       });
     });
 
-    // this.socket.on("test", () => {
-      // console.log("TEST");
-    // })
     this.socket.on("newPlayer", playerInfo => {
       console.log("newPlayer")
       this.displayPlayers(self, playerInfo, "dude");
@@ -84,33 +72,11 @@ export default class AuthoritativeScene extends Phaser.Scene {
       });
     });
 
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1
-    });
+    
+    createCursors(self);
 
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
-      frameRate: 20
-    });
-
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1
-    });
-
-    this.cursors = this.input.keyboard.addKeys({
-      up: Phaser.Input.Keyboard.KeyCodes.W,
-      left: Phaser.Input.Keyboard.KeyCodes.A,
-      down: Phaser.Input.Keyboard.KeyCodes.S,
-      right: Phaser.Input.Keyboard.KeyCodes.D
-    });
-
+    playerAnimations(self, this.game.character);
+  
 
   }
 

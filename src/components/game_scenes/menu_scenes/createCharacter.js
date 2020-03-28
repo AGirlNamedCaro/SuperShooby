@@ -10,7 +10,7 @@ export default class CreateCharacter extends Phaser.Scene {
       this.menuBg.scene = this;
       this.menuBg.active = true;
       this.menuBg.visible = true;
-      this.prevKey = data.key
+   
   }
 
   preload() {
@@ -28,9 +28,8 @@ export default class CreateCharacter extends Phaser.Scene {
 
     this.add.existing(this.menuBg);
     this.menuBg.scale = .5;
+
     
-
-
     this.cameras.main.fadeIn(2000);
     this.cameras.main.setBackgroundColor(0,0,0,0.5);
     let createCharBackground = this.add.image(400,320, 'createCharBackground')
@@ -74,7 +73,7 @@ export default class CreateCharacter extends Phaser.Scene {
     backButtonRope.scale = 0.45
     
     
-    
+  
     
 
     const smallPlayButton = this.add.image(this.game.renderer.width / 1.19, this.game.renderer.height * 0.70, "smallPlayButton");
@@ -111,7 +110,8 @@ export default class CreateCharacter extends Phaser.Scene {
     
     //Initial animation
    
-    this.createAnimationStand(this.prevKey, shooby)
+    this.createAnimationStand(this.game.character, shooby)
+
     this.physics.add.collider(shooby, box);
     shooby.setCollideWorldBounds(true);
     shooby.setScale(3);
@@ -119,7 +119,7 @@ export default class CreateCharacter extends Phaser.Scene {
     
     let character = 'dude';
     let previous = ''
-    let finalSelection = ''
+    
     
 
     //Character Accessories
@@ -154,7 +154,8 @@ export default class CreateCharacter extends Phaser.Scene {
 
       
       this.physics.add.collider(bashy, box);
-      finalSelection = character;
+
+      this.game.setCharacter(character);
       
     })
 
@@ -178,7 +179,7 @@ export default class CreateCharacter extends Phaser.Scene {
       
 
       this.physics.add.collider(booshy, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
     })
 
     shabbyImage.on("pointerdown", () => {
@@ -203,7 +204,7 @@ export default class CreateCharacter extends Phaser.Scene {
 
      
       this.physics.add.collider(shabby, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
     })
 
     shoobyImage.on("pointerdown", () => {
@@ -226,7 +227,7 @@ export default class CreateCharacter extends Phaser.Scene {
       this.createAnimationStand(character,shooby)
     
       this.physics.add.collider(shooby, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
     })
     headGear.on('pointerdown', () => {
       previous = character
@@ -247,7 +248,7 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterHat);
       this.physics.add.collider(characterHat, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
       character = previous
     })
   
@@ -271,7 +272,7 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterCoat);
       this.physics.add.collider(characterCoat, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
       character = previous
     })
 
@@ -295,14 +296,14 @@ export default class CreateCharacter extends Phaser.Scene {
 
       this.createAnimationStand(character,characterGlasses);
       this.physics.add.collider(characterGlasses, box);
-      finalSelection = character;
+      this.game.setCharacter(character);
       character = previous
     })
 
     smallPlayButton.on("pointerdown", () => {
-      
-      this.scene.start("titleScene",  {character: finalSelection})
-      this.scene.start("mainMenu",  {character: finalSelection})
+      console.log('selectedCharacter', this.game.character)
+      this.scene.start("titleScene")
+      this.scene.start("mainMenu")
 
     });
 

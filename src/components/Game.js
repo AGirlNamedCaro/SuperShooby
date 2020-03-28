@@ -12,10 +12,11 @@ import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
 import RoomSelectMenu from "./game_scenes/menu_scenes/RoomSelectMenu";
 import CreateRoomMenu from "./game_scenes/menu_scenes/CreateRoomMenu"
 import JoinRoomMenu from "./game_scenes/menu_scenes/JoinRoomMenu"
+import GameOverMenu from "./game_scenes/menu_scenes/GameOverMenu"
 
 
 import SinglePlayer from "./game_scenes/SinglePlayerScene";
-import AuthoritativeScene from "./game_scenes/AuthoritativeScene";
+import MultiplayerScene from "./game_scenes/MultiplayerScene";
 import CreateMap from "./game_scenes/CreateMap";
 import SetMapMenu from "./game_scenes/menu_scenes/SetMapMenu";
 
@@ -44,13 +45,15 @@ export const config = {
     MultiplayerMenu,
     CustomizeMenu,
     CreateCharacterMenu,
-    AuthoritativeScene,
+    MultiplayerScene,
     SettingsMenu,
     CreateMap,
     SinglePlayer,
     SetMapMenu,
     RoomSelectMenu, 
-    CreateRoomMenu
+    CreateRoomMenu,
+    JoinRoomMenu,
+    GameOverMenu
   ]
 };
 
@@ -80,10 +83,27 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ level, setLevel }) {
+export default function Game({ level, setLevel, character, setCharacter, bomb, setBomb, fishNum, setFishNum, stepX, setStepX, score, setScore, gameOver, setGameOver, gameScore, setGameScore, hiScore, setHiScore  }) {
   // pass the setLevel method down to the game
   game.level = level;
   game.setLevel = setLevel;
+  game.character = character;
+  game.setCharacter = setCharacter;
+  game.bomb = bomb;
+  game.setBomb = setBomb;
+  game.fishNum = fishNum;
+  game.setFishNum = setFishNum;
+  game.stepX = stepX;
+  game.setStepX = setStepX;
+  game.score = score;
+  game.setScore = setScore;
+  game.gameOver = gameOver;
+  game.setGameOver = setGameOver;
+  game.gameScore = gameScore;
+  game.setGameScore = setGameScore;
+  game.hiScore = hiScore;
+  game.setHiScore = setHiScore
+
 
   return (
     <div id="game-container">
