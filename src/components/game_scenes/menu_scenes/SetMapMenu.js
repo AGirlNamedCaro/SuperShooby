@@ -35,18 +35,31 @@ export default class SetMapMenu extends Phaser.Scene {
   }
 
   create() {
+    
     this.add.existing(this.menuBg);
     this.add.existing(this.setMapButton);
+    const ropeLeft = this.add.image(this.game.renderer.width / 2.30, this.game.renderer.height * 0.47, "backButtonRope");
+    ropeLeft.scale = .50;
+    const ropeRight = this.add.image(this.game.renderer.width / 1.6, this.game.renderer.height * 0.43, "backButtonRope");
+    ropeRight.scale = .50;
+    const thumbnailBg = this.add.image(this.game.renderer.width / 1.90, this.game.renderer.height * 0.58, "thumbnailBg");
+    thumbnailBg.scaleX = 0.42;
+    thumbnailBg.scaleY = 0.50;
+    
+    
+
+    
+   
+    const htmlForm = this.add.dom(this.game.renderer.width / 2.5, this.game.renderer.height * 0.18).createFromCache("multiplayerForm");
+    
+    const thumbnail = new Image(140, 115);
+    this.add.dom(337, 280, thumbnail);
+    thumbnail.src = this.cache.text.get('thumbnailB64');;
     this.add.existing(this.backButton);
     this.add.existing(this.backButtonRope);
-
     this.backButton.setInteractive();
     this.setMapButton.setInteractive();
     console.log("clicked");
-    const htmlForm = this.add.dom(this.game.renderer.width / 2.5, this.game.renderer.height * 0.18).createFromCache("multiplayerForm");
-    const thumbnail = new Image(160, 120);
-    this.add.dom(300, 180, thumbnail);
-    thumbnail.src = this.cache.text.get('thumbnailB64');;
     htmlForm.addListener("click");
 
     htmlForm.on("click", event => {
