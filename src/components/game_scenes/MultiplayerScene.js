@@ -23,7 +23,6 @@ export default class MultiplayerScene extends Phaser.Scene {
   create() {
     const self = this;
     this.socket.emit("ready", this.roomId);
-
     createWorld(self);
     createCursors(self);
 
