@@ -75,10 +75,17 @@ export default class MultiplayerScene extends Phaser.Scene {
         });
       });
 
-      Object.keys(gameObjects).forEach((fish, index) => {
+      Object.keys(gameObjects).forEach(fish => {
         self.fishes.getChildren().forEach(fishes => {
           if (fishes.fishId === fish) {
-            fishes.setPosition(gameObjects[fish].x, gameObjects[fish].y);
+            if (gameObjects[fish].active) {
+              fishes.setPosition(gameObjects[fish].x, gameObjects[fish].y);
+              fishes.setActive(true);
+              fishes.setVisible(true);
+            } else {
+              fishes.setActive(false);
+              fishes.setVisible(false);
+            }
           }
         });
       });
