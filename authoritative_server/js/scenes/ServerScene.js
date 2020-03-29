@@ -17,8 +17,11 @@ function createPreload(sprite, collectables, bombs, tileset, tilemap) {
 function createUpdate(rooms, roomId, playerSpeed, playerJump) {
   return function() {
     if (rooms[roomId]) {
-      const playerGroup = rooms[roomId].game.scene.keys.default.players;
+      const level = rooms[roomId].game.scene.keys.default;
+      const playerGroup = level.players;
       const players = rooms[roomId].players;
+      const gameObjects = {};
+
       if (Object.keys(playerGroup).length > 1) {
         playerGroup.getChildren().forEach(player => {
           const playerState = players[player.playerId].playerState;
@@ -42,7 +45,16 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
         });
 
         // this.physics.world.wrap(this.players, 5);
-        io.emit("playerUpdates", players);
+        // io.emit("playerUpdates", players);
+        // level.fish.getChildren().forEach((fish, index) => {
+        //   gameObjects[`fish${index}`] = {
+        //     x: fish.x,
+        //     y: fish.y,
+        //     active: fish.active
+        //   };
+        // });
+        // console.log("gameObjects", rooms[roomId]);
+        io.emit("gameUpdates", { players: players, gameObjects: gameObjects});
       }
     }
   };
@@ -102,7 +114,7 @@ function createFish(self, fishKey, numFish, stepX, collider) {
     setXY: { x: 12, y: 0, stepX: stepX }
   });
 
-  self.fish.children.iterate(function(child) {
+  self.fish.children.iterate(child => {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   });
 
@@ -137,15 +149,13 @@ function collectFish(player, fish) {
   if (this.fishes.countActive(true) === 0) {
     // this.level++;
     this.fishes.children.iterate(function(child) {
-      console.log("adding fish")
+      console.log("adding fish");
       child.enableBody(true, child.x, 0, true, true);
     });
     return true;
   }
   return false;
 }
-
-function getPlayerData(playerId) {}
 
 function createBomb(player) {
   // this.bombs = this.physics.add.group();

@@ -85,7 +85,8 @@ class RoomManager {
       game: game,
       players: {
         [player.playerId]: player
-      }
+      },
+      gameObjects: {},
     };
 
     console.log("players", this.rooms[roomId].players);
@@ -102,6 +103,18 @@ class RoomManager {
 
   getPlayers(roomId) {
     return this.rooms[roomId].players;
+  }
+
+  getFish(roomId) {
+    this.rooms[roomId].game.scene.keys.default.fish.getChildren().forEach((fish, index) => {
+      this.rooms[roomId].gameObjects[`fish${index}`] = {
+        x: fish.x,
+        y: fish.y,
+        active: fish.active
+      };
+    });
+
+    return this.rooms[roomId].gameObjects
   }
 
   deleteRoom(roomId) {
@@ -155,7 +168,8 @@ window.onload = () => {
 
     socket.on("ready", roomId => {
       const players = roomManager.getPlayers(roomId);
-      io.to(socket.id).emit("currentPlayers", players);
+      const gameObjects = roomManager.getFish(roomId);
+      io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 
       // TODO change this to socket groups
       for (socketId of Object.keys(players)) {
@@ -283,8 +297,11 @@ function createPreload(sprite, collectables, bombs, tileset, tilemap) {
 function createUpdate(rooms, roomId, playerSpeed, playerJump) {
   return function() {
     if (rooms[roomId]) {
-      const playerGroup = rooms[roomId].game.scene.keys.default.players;
+      const level = rooms[roomId].game.scene.keys.default;
+      const playerGroup = level.players;
       const players = rooms[roomId].players;
+      const gameObjects = {};
+
       if (Object.keys(playerGroup).length > 1) {
         playerGroup.getChildren().forEach(player => {
           const playerState = players[player.playerId].playerState;
@@ -308,7 +325,16 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
         });
 
         // this.physics.world.wrap(this.players, 5);
-        io.emit("playerUpdates", players);
+        // io.emit("playerUpdates", players);
+        // level.fish.getChildren().forEach((fish, index) => {
+        //   gameObjects[`fish${index}`] = {
+        //     x: fish.x,
+        //     y: fish.y,
+        //     active: fish.active
+        //   };
+        // });
+        // console.log("gameObjects", rooms[roomId]);
+        io.emit("gameUpdates", { players: players, gameObjects: gameObjects});
       }
     }
   };
@@ -368,7 +394,7 @@ function createFish(self, fishKey, numFish, stepX, collider) {
     setXY: { x: 12, y: 0, stepX: stepX }
   });
 
-  self.fish.children.iterate(function(child) {
+  self.fish.children.iterate(child => {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   });
 
@@ -403,15 +429,13 @@ function collectFish(player, fish) {
   if (this.fishes.countActive(true) === 0) {
     // this.level++;
     this.fishes.children.iterate(function(child) {
-      console.log("adding fish")
+      console.log("adding fish");
       child.enableBody(true, child.x, 0, true, true);
     });
     return true;
   }
   return false;
 }
-
-function getPlayerData(playerId) {}
 
 function createBomb(player) {
   // this.bombs = this.physics.add.group();

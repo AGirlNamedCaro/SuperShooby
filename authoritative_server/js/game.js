@@ -57,7 +57,8 @@ class RoomManager {
       game: game,
       players: {
         [player.playerId]: player
-      }
+      },
+      gameObjects: {},
     };
 
     console.log("players", this.rooms[roomId].players);
@@ -74,6 +75,18 @@ class RoomManager {
 
   getPlayers(roomId) {
     return this.rooms[roomId].players;
+  }
+
+  getFish(roomId) {
+    this.rooms[roomId].game.scene.keys.default.fish.getChildren().forEach((fish, index) => {
+      this.rooms[roomId].gameObjects[`fish${index}`] = {
+        x: fish.x,
+        y: fish.y,
+        active: fish.active
+      };
+    });
+
+    return this.rooms[roomId].gameObjects
   }
 
   deleteRoom(roomId) {
@@ -127,7 +140,8 @@ window.onload = () => {
 
     socket.on("ready", roomId => {
       const players = roomManager.getPlayers(roomId);
-      io.to(socket.id).emit("currentPlayers", players);
+      const gameObjects = roomManager.getFish(roomId);
+      io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 
       // TODO change this to socket groups
       for (socketId of Object.keys(players)) {

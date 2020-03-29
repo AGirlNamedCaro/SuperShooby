@@ -31,8 +31,9 @@ export default class MultiplayerScene extends Phaser.Scene {
     createWorld(self);
 
     this.players = this.add.group();
+    this.fishes = this.add.group();
 
-    this.socket.on("currentPlayers", players => {
+    this.socket.on("currentPlayers", ({players, gameObjects}) => {
       Object.keys(players).forEach(id => {
         if (players[id].playerId === self.socket.id) {
           this.player = this.displayPlayers(self, players[id], "dude");
@@ -40,6 +41,11 @@ export default class MultiplayerScene extends Phaser.Scene {
           this.displayPlayers(self, players[id], "dude");
         }
       });
+
+      console.log("gameobj", gameObjects)
+      Object.keys(gameObjects).forEach(fish => {
+        console.log("madeFish", this.displayFish(self, gameObjects[fish], fish, "fish"));
+      })
     });
 
     this.socket.on("newPlayer", playerInfo => {
@@ -55,22 +61,27 @@ export default class MultiplayerScene extends Phaser.Scene {
       });
     });
 
-    this.socket.on("playerUpdates", players => {
-      Object.keys(players).forEach(id => {
+    // TODO clean this up like the current players, deconstruct in the .on
+    this.socket.on("gameUpdates", gameUpdates => {
+      Object.keys(gameUpdates.players).forEach(id => {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {
-            if (player.x > players[id].x) {
+            if (player.x > gameUpdates.players[id].x) {
               player.anims.play("left", true);
-            } else if (player.x < players[id].x) {
+            } else if (player.x < gameUpdates.players[id].x) {
               player.anims.play("right", true);
             } else {
               player.anims.play("turn");
             }
-            player.setPosition(players[id].x, players[id].y);
+            player.setPosition(gameUpdates.players[id].x, gameUpdates.players[id].y);
           }
         });
       });
     });
+
+    // this.socket.on("objectUpdates", gameObjects => {
+    //   console.log("gameObjects", gameObjects);
+    // })
 
     
     createCursors(self);
@@ -110,11 +121,20 @@ export default class MultiplayerScene extends Phaser.Scene {
     }
   }
 
+  // TODO dry up these functions
   displayPlayers(self, playerInfo, sprite) {
+    console.log(playerInfo.x, playerInfo.y);
     const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
     player.playerId = playerInfo.playerId;
     self.players.add(player);
     return player;
+  }
+
+  displayFish(self, fish, fishId, sprite) {
+    const newFish = self.add.sprite(fish.x, fish.y, sprite);
+    newFish.fishId = fishId;
+    self.fishes.add(newFish);
+    return newFish;
   }
 
   calcPlayerState(player, playerState, isState, state) {
