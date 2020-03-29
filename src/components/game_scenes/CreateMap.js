@@ -80,6 +80,10 @@ export default class CreateMap extends Phaser.Scene {
 
     this.input.keyboard.on("keyup-" + "E", event => {
       // TODO this is where the exporting happens, should make a menu that pops up when this is pressed or something
+      
+      this.resume = this.add.image(this.game.renderer.width / 2.30, this.game.renderer.height * 0.35, "resume");
+      this.resume.scale = 0.20
+      this.resume.setInteractive();
       console.log("exporting");
       const saveThumbnail = new Promise((res, rej) => {
         this.text.setVisible(false);
@@ -107,8 +111,15 @@ export default class CreateMap extends Phaser.Scene {
           levelData: exportObj
         };
 
+       
         this.game.setLevel(exportObj);
         this.socket.emit("createMap", mapData);
+        this.resume.on("pointerdown", () => {
+          this.scene.start(exportObj, "titleScene")
+          this.scene.start( "mainMenu")
+          
+        })
+
       });
     });
 
