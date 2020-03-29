@@ -60,6 +60,10 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
           });
         }
 
+        if (level.gameOver === true) {
+          gameObjects.gameOver = true;
+        }
+
         io.to(roomId).emit("gameUpdates", { players, gameObjects });
       }
     }
@@ -175,7 +179,7 @@ function createBomb(player) {
 }
 
 function hitBomb(player) {
-  // this.physics.pause();
+  this.physics.pause();
   this.gameOver = true;
 }
 

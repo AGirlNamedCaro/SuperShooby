@@ -125,6 +125,9 @@ export default class MultiplayerScene extends Phaser.Scene {
         });
       });
 
+      if (gameObjects.gameOver === true) {
+        console.log("gameOver");
+      }
       this.scoreData(players);
       this.scoreText.text = this.score;
     });

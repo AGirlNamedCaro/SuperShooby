@@ -48,7 +48,7 @@ class RoomManager {
       this.physics.add.collider(this.bombs, this.ground);
       
       this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
-
+      this.gameOver = false;
     }
 
     const update = createUpdate(this.rooms, roomId, 160, 550);
@@ -64,6 +64,7 @@ class RoomManager {
       gameObjects: {
         fish: {},
         bombs: {},
+        gameOver: false,
       },
     };
 
