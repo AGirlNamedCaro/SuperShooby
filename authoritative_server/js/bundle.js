@@ -47,7 +47,7 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom({roomId, roomMap, difficulty}, player, maxUsers, room) {
+  createRoom({ roomId, roomMap, difficulty }, maxUsers, room) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
       "assets/images/sprites/fish.png",
@@ -70,13 +70,32 @@ class RoomManager {
       this.ground.setCollisionByExclusion(-1, true);
       this.players = this.physics.add.group();
       this.physics.add.collider(this.players, this.ground);
-      
-      createFish(this, "fish", difficulty.fishNum, difficulty.stepX, this.ground);
+
+      createFish(
+        this,
+        "fish",
+        difficulty.fishNum,
+        difficulty.stepX,
+        this.ground
+      );
       this.bombs = this.physics.add.group();
       this.physics.add.collider(this.bombs, this.ground);
-      
+
       // TODO cleanup the variables passed in here
-      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, difficulty: difficulty, collider: this.ground });
+      this.physics.add.overlap(
+        this.players,
+        this.fish,
+        createBomb,
+        collectFish,
+        {
+          this: this,
+          roomId: roomId,
+          room: room,
+          fishes: this.fish,
+          difficulty: difficulty,
+          collider: this.ground
+        }
+      );
       this.gameOver = false;
     }
 
@@ -87,14 +106,12 @@ class RoomManager {
       roomId: roomId,
       roomMap: roomMap,
       game: game,
-      players: {
-        [player.playerId]: player
-      },
+      players: {},
       gameObjects: {
         fish: {},
         bombs: {},
-        gameOver: false,
-      },
+        gameOver: false
+      }
     };
 
     console.log("players", this.rooms[roomId].players);
@@ -114,17 +131,17 @@ class RoomManager {
   }
 
   getFish(roomId) {
-    this.rooms[roomId].game.scene.keys.default.fish.getChildren().forEach((fish, index) => {
-      this.rooms[roomId].gameObjects.fish[`fish${index}`] = {
-        x: fish.x,
-        y: fish.y,
-        active: fish.active
-      };
-    });
-    
-    console.log("pls", roomId)
-    console.log("otherpls", this.rooms[roomId].gameObjects)
-    return this.rooms[roomId].gameObjects
+    this.rooms[roomId].game.scene.keys.default.fish
+      .getChildren()
+      .forEach((fish, index) => {
+        this.rooms[roomId].gameObjects.fish[`fish${index}`] = {
+          x: fish.x,
+          y: fish.y,
+          active: fish.active
+        };
+      });
+
+    return this.rooms[roomId].gameObjects;
   }
 
   deleteRoom(roomId) {
@@ -157,18 +174,23 @@ window.onload = () => {
       //   roomData.roomId = chance.word({ syllables: 3 });
       // }
 
-      const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomData, player, 2, roomManager.rooms);
+      roomManager.createRoom(roomData, 2, roomManager.rooms);
       io.to(socket.id).emit("createdRoom", roomData.roomId);
       currentPlayers[socket.id] = roomData.roomId;
     });
 
-    socket.on("joinRoom", roomId => {
+    socket.on("joinRoom", ({ roomId, character }) => {
       socket.join(roomId);
+
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
-      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      const player = initPlayer(roomId, socket.id, character, {
+        x: 200,
+        y: 450
+      });
+
+      console.log("newPlayer", player)
       roomManager.joinRoom(roomId, player);
       io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
       // TODO fix broken error handling
@@ -181,7 +203,7 @@ window.onload = () => {
       const players = roomManager.getPlayers(roomId);
       // TODO rename getFish function since its also dealing with bombs
       const gameObjects = roomManager.getFish(roomId);
-      io.to(socket.id).emit("currentPlayers", {players, gameObjects});
+      io.to(socket.id).emit("currentPlayers", { players, gameObjects });
 
       io.to(roomId).emit("newPlayer", players[socket.id]);
       currentPlayers[socket.id] = roomId;
@@ -359,10 +381,11 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
   };
 }
 
-function initPlayer(roomId, playerId, startLoc) {
+function initPlayer(roomId, playerId, character, startLoc) {
   return (player = {
     playerId: playerId,
     roomId: roomId,
+    character: character,
     points: 0,
     // have this be map set
     x: startLoc.x,

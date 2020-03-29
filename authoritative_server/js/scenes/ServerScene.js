@@ -70,10 +70,11 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
   };
 }
 
-function initPlayer(roomId, playerId, startLoc) {
+function initPlayer(roomId, playerId, character, startLoc) {
   return (player = {
     playerId: playerId,
     roomId: roomId,
+    character: character,
     points: 0,
     // have this be map set
     x: startLoc.x,

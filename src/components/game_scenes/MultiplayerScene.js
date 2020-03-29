@@ -25,7 +25,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket.emit("ready", this.roomId);
 
     createWorld(self);
-    playerAnimations(self, this.game.character);
+    // playerAnimations(self, this.game.character);
     createCursors(self);
 
     this.players = this.add.group();
@@ -34,10 +34,12 @@ export default class MultiplayerScene extends Phaser.Scene {
 
     this.socket.on("currentPlayers", ({ players, gameObjects }) => {
       Object.keys(players).forEach(id => {
+        playerAnimations(self, players[id].character);
+        console.log("playerData " + id, players[id]);
         if (players[id].playerId === self.socket.id) {
-          this.player = this.displayPlayers(self, players[id], "dude");
+          this.player = this.displayPlayers(self, players[id], players[id].character);
         } else {
-          this.displayPlayers(self, players[id], "dude");
+          this.displayPlayers(self, players[id], players[id].character);
         }
       });
 
@@ -52,7 +54,9 @@ export default class MultiplayerScene extends Phaser.Scene {
 
     this.socket.on("newPlayer", playerInfo => {
       console.log("newPlayer");
-      this.displayPlayers(self, playerInfo, "dude");
+      console.log("playerData", playerInfo);
+      playerAnimations(self, playerInfo.character);
+      this.displayPlayers(self, playerInfo, playerInfo.character);
     });
 
     this.socket.on("bombSpawn", ({ x, length}) => {
@@ -82,11 +86,11 @@ export default class MultiplayerScene extends Phaser.Scene {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {
             if (player.x > players[id].x) {
-              player.anims.play(this.game.character + "left", true);
+              player.anims.play(players[id].character + "left", true);
             } else if (player.x < players[id].x) {
-              player.anims.play(this.game.character + "right", true);
+              player.anims.play(players[id].character + "right", true);
             } else {
-              player.anims.play(this.game.character + "turn");
+              player.anims.play(players[id].character + "turn");
             }
             player.setPosition(players[id].x, players[id].y);
           }

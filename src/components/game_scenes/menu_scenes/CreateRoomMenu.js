@@ -109,7 +109,10 @@ export default class Customize extends Phaser.Scene {
         }
       });
       this.game.socket.on("createdRoom", roomId => {
-        this.game.socket.emit("joinRoom", this.roomId);
+        this.game.socket.emit("joinRoom", {
+          roomId: this.roomId,
+          character: this.game.character
+        });
         this.scene.stop("createRoomMenu");
         const titleScene = this.scene.get("titleScene");
         titleScene.scene.transition({
