@@ -50,7 +50,7 @@ export default class SetMapMenu extends Phaser.Scene {
 
     
    
-    const htmlForm = this.add.dom(this.game.renderer.width / 2.5, this.game.renderer.height * 0.18).createFromCache("multiplayerForm");
+    const htmlForm = this.add.dom(this.game.renderer.width / 2.5, this.game.renderer.height * 0.21).createFromCache("multiplayerForm");
     
     const thumbnail = new Image(140, 115);
     this.add.dom(337, 280, thumbnail);
