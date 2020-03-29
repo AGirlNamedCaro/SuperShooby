@@ -16,6 +16,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket = this.game.socket;
     this.roomId = data.roomId;
     this.score = "";
+    this.level = 0;
   }
 
   preload() {
@@ -53,11 +54,17 @@ export default class MultiplayerScene extends Phaser.Scene {
       this.displayPlayers(self, playerInfo, "dude");
     });
 
-    this.socket.on("bombSpawn", x => {
+    this.socket.on("bombSpawn", ({ x, length}) => {
+      console.log("length", length)
+      this.level++;
+      this.numOfBombs = length - 2;
+      console.log("num", this.numOfBombs);
       //TODO Get this from difficulty of the game
       console.log("spawning");
       for (let i = 0; i < 2; i++) {
-        this.displayBombs(self, x, `bomb${i}`, "bomb");
+        this.displayBombs(self, x, `bomb${this.numOfBombs}`, "bomb");
+        this.numOfBombs++;
+        console.log("aftern", this.numOfBombs)
       }
     });
 
@@ -70,7 +77,6 @@ export default class MultiplayerScene extends Phaser.Scene {
     });
 
     this.socket.on("gameUpdates", ({ players, gameObjects }) => {
-      console.log("bombs", gameObjects.bombs);
       Object.keys(players).forEach(id => {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {

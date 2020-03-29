@@ -72,8 +72,8 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
-      // this.bomb = this.physics.add.group();
-      // this.physics.add.collider(this.bombs, this.ground);
+      this.bombs = this.physics.add.group();
+      this.physics.add.collider(this.bombs, this.ground);
       
       this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
 
@@ -434,8 +434,8 @@ function collectFish(player, fish) {
 }
 
 function createBomb(player) {
-  this.this.bombs = this.this.physics.add.group();
-  this.this.physics.add.collider(this.this.bombs, this.this.ground);
+  // this.this.bombs = this.this.physics.add.group();
+  // this.this.physics.add.collider(this.this.bombs, this.this.ground);
   const x =
     player.x < 400
       ? Phaser.Math.Between(400, 800)
@@ -447,7 +447,10 @@ function createBomb(player) {
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
   }
 
-  io.to(this.roomId).emit("bombSpawn", x);
+  io.to(this.roomId).emit("bombSpawn", {
+    x,
+    length: this.this.bombs.getChildren().length
+  });
 
   this.this.physics.add.collider(
     player,
