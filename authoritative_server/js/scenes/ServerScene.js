@@ -1,9 +1,14 @@
-function createPreload(sprite, tileset, tilemap) {
+function createPreload(sprite, collectables, bombs, tileset, tilemap) {
   return function() {
     this.load.spritesheet("dude", sprite, {
       frameWidth: 32,
       frameHeight: 48
     });
+    this.load.spritesheet("fish", collectables, {
+      frameWidth: 32,
+      frameHeight: 32
+    });
+    this.load.image("bomb", bombs);
     this.load.image("tiles", tileset);
     this.load.tilemapTiledJSON("world", tilemap);
   };
@@ -29,6 +34,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
 
           if (playerState.up && player.body.blocked.down) {
             player.setVelocityY(playerJump * -1);
+            console.log(players[player.playerId])
           }
 
           players[player.playerId].x = player.x;
@@ -46,6 +52,7 @@ function initPlayer(roomId, playerId, startLoc) {
   return (player = {
     playerId: playerId,
     roomId: roomId,
+    points: 0,
     // have this be map set
     x: startLoc.x,
     y: startLoc.y,
@@ -87,11 +94,89 @@ function handlePlayerInput(self, players, playerId, playerState) {
   });
 }
 
+function createFish(self, fishKey, numFish, stepX, collider) {
+  self.fish = self.physics.add.group({
+    // TODO add these in from the client
+    key: fishKey,
+    repeat: numFish,
+    setXY: { x: 12, y: 0, stepX: stepX }
+  });
+
+  self.fish.children.iterate(function(child) {
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+  });
+
+  self.physics.add.collider(self.fish, collider);
+  console.log("fish", self.fish.countActive(true));
+}
+
+// TODO need to re-write function
+function collectFish(player, fish) {
+  // console.log("hit fish", fish);
+
+  // console.log(this.room[this.roomId].players)
+  if (this.room.hasOwnProperty(this.roomId)) {
+    console.log("has key")
+    if (this.room[this.roomId].players[player.playerId]) {
+      this.room[this.roomId].players[player.playerId].points += 10;
+      console.log("players", player.playerId);
+      console.log("room", this.room[this.roomId].players[player.playerId]);
+      fish.disableBody(true, true);
+    }
+  }
+
+  // console.log("this", this)
+  return function() {
+    // console.log("rooms", rooms)
+    // this.score += this.scoreNum;
+    // this.scoreText.setText("score: " + this.score);
+
+    // if (this.score > this.highScore) {
+    // this.scoreText.setText("NEW score: " + this.score);
+    // }
+
+    if (this.fish.countActive(true) === 0) {
+      // this.level++;
+      // this.fish.children.iterate(function(child) {
+      //   child.enableBody(true, child.x, 0, true, true);
+      // });
+      return true;
+    }
+    return false;
+  };
+}
+
+function getPlayerData(playerId) {}
+
+function createBomb(player) {
+  // this.bombs = this.physics.add.group();
+  // this.physics.add.collider(this.bombs, this.ground);
+  // const x =
+  //   player.x < 400
+  //     ? Phaser.Math.Between(400, 800)
+  //     : Phaser.Math.Between(0, 400);
+  // for (let i = 0; i < this.bombsNum; i++) {
+  //   const bomb = this.bombs.create(x, 16, "bomb");
+  //   bomb.setBounce(1);
+  //   bomb.setCollideWorldBounds(true);
+  //   bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  // }
+  // this.physics.add.collider(player, this.bombs, hitBomb, null, this);
+}
+
+function hitBomb(player) {
+  this.physics.pause();
+  this.gameOver = true;
+}
+
 module.exports = {
   createPreload,
   createUpdate,
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 };

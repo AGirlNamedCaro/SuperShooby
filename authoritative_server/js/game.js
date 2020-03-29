@@ -4,7 +4,10 @@ const {
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
 const chance = require("chance").Chance();
@@ -16,9 +19,11 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomMap, roomId, player, maxUsers) {
+  createRoom(roomMap, roomId, player, maxUsers, room) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
+      "assets/images/sprites/fish.png",
+      "assets/images/prefabs/bomb.png",
       "assets/images/prefabs/shoobyTileset.png",
       // Optimized so that when its on the default map, it will load it from the server
       roomMap === "/assets/mapData/shoobyTileset16.json"
@@ -29,14 +34,18 @@ class RoomManager {
     function create() {
       const worldMap = this.add.tilemap("world");
       const tileset = worldMap.addTilesetImage("tiles");
-      const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
-      const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
-      const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+      worldMap.createStaticLayer("sky", [tileset], 0, 0);
+      worldMap.createStaticLayer("clouds", [tileset], 0, 0);
+      this.ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
       // ground.setCollisionByProperty({ collides: true }, true)
       // ground.setCollision([1, 265, 266, 299, 298])
-      ground.setCollisionByExclusion(-1, true);
+      this.ground.setCollisionByExclusion(-1, true);
       this.players = this.physics.add.group();
-      this.physics.add.collider(this.players, ground);
+      this.physics.add.collider(this.players, this.ground);
+      
+      createFish(this, "fish", 11, 70, this.ground);
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room });
+
     }
 
     const update = createUpdate(this.rooms, roomId, 160, 150);
@@ -77,8 +86,8 @@ window.onload = () => {
   const roomManager = new RoomManager();
   const currentPlayers = {};
   const s3 = new S3({
-    accessKeyId: "AKIAXWMT5LDDO6DMEIOR",
-    secretAccessKey: "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"
+    accessKeyId: AWSKEY,
+    secretAccessKey: AWSSECRETKEY
   });
 
   io.on("connection", socket => {
@@ -98,7 +107,7 @@ window.onload = () => {
       // }
 
       const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2);
+      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2, roomManager.rooms);
       io.to(socket.id).emit("createdRoom", roomData.roomId);
       currentPlayers[socket.id] = roomData.roomId;
     });

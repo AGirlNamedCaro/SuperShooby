@@ -32,7 +32,10 @@ const {
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
 const chance = require("chance").Chance();
@@ -44,9 +47,11 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomMap, roomId, player, maxUsers) {
+  createRoom(roomMap, roomId, player, maxUsers, room) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
+      "assets/images/sprites/fish.png",
+      "assets/images/prefabs/bomb.png",
       "assets/images/prefabs/shoobyTileset.png",
       // Optimized so that when its on the default map, it will load it from the server
       roomMap === "/assets/mapData/shoobyTileset16.json"
@@ -57,14 +62,18 @@ class RoomManager {
     function create() {
       const worldMap = this.add.tilemap("world");
       const tileset = worldMap.addTilesetImage("tiles");
-      const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
-      const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
-      const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+      worldMap.createStaticLayer("sky", [tileset], 0, 0);
+      worldMap.createStaticLayer("clouds", [tileset], 0, 0);
+      this.ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
       // ground.setCollisionByProperty({ collides: true }, true)
       // ground.setCollision([1, 265, 266, 299, 298])
-      ground.setCollisionByExclusion(-1, true);
+      this.ground.setCollisionByExclusion(-1, true);
       this.players = this.physics.add.group();
-      this.physics.add.collider(this.players, ground);
+      this.physics.add.collider(this.players, this.ground);
+      
+      createFish(this, "fish", 11, 70, this.ground);
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room });
+
     }
 
     const update = createUpdate(this.rooms, roomId, 160, 150);
@@ -105,8 +114,8 @@ window.onload = () => {
   const roomManager = new RoomManager();
   const currentPlayers = {};
   const s3 = new S3({
-    accessKeyId: "AKIAXWMT5LDDO6DMEIOR",
-    secretAccessKey: "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"
+    accessKeyId: AWSKEY,
+    secretAccessKey: AWSSECRETKEY
   });
 
   io.on("connection", socket => {
@@ -126,7 +135,7 @@ window.onload = () => {
       // }
 
       const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2);
+      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2, roomManager.rooms);
       io.to(socket.id).emit("createdRoom", roomData.roomId);
       currentPlayers[socket.id] = roomData.roomId;
     });
@@ -255,12 +264,17 @@ window.onload = () => {
 window.gameLoaded();
 
 },{"./config":1,"./scenes/ServerScene":3,"aws-sdk/clients/s3":13,"chance":102}],3:[function(require,module,exports){
-function createPreload(sprite, tileset, tilemap) {
+function createPreload(sprite, collectables, bombs, tileset, tilemap) {
   return function() {
     this.load.spritesheet("dude", sprite, {
       frameWidth: 32,
       frameHeight: 48
     });
+    this.load.spritesheet("fish", collectables, {
+      frameWidth: 32,
+      frameHeight: 32
+    });
+    this.load.image("bomb", bombs);
     this.load.image("tiles", tileset);
     this.load.tilemapTiledJSON("world", tilemap);
   };
@@ -286,6 +300,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
 
           if (playerState.up && player.body.blocked.down) {
             player.setVelocityY(playerJump * -1);
+            console.log(players[player.playerId])
           }
 
           players[player.playerId].x = player.x;
@@ -303,6 +318,7 @@ function initPlayer(roomId, playerId, startLoc) {
   return (player = {
     playerId: playerId,
     roomId: roomId,
+    points: 0,
     // have this be map set
     x: startLoc.x,
     y: startLoc.y,
@@ -344,13 +360,91 @@ function handlePlayerInput(self, players, playerId, playerState) {
   });
 }
 
+function createFish(self, fishKey, numFish, stepX, collider) {
+  self.fish = self.physics.add.group({
+    // TODO add these in from the client
+    key: fishKey,
+    repeat: numFish,
+    setXY: { x: 12, y: 0, stepX: stepX }
+  });
+
+  self.fish.children.iterate(function(child) {
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+  });
+
+  self.physics.add.collider(self.fish, collider);
+  console.log("fish", self.fish.countActive(true));
+}
+
+// TODO need to re-write function
+function collectFish(player, fish) {
+  // console.log("hit fish", fish);
+
+  // console.log(this.room[this.roomId].players)
+  if (this.room.hasOwnProperty(this.roomId)) {
+    console.log("has key")
+    if (this.room[this.roomId].players[player.playerId]) {
+      this.room[this.roomId].players[player.playerId].points += 10;
+      console.log("players", player.playerId);
+      console.log("room", this.room[this.roomId].players[player.playerId]);
+      fish.disableBody(true, true);
+    }
+  }
+
+  // console.log("this", this)
+  return function() {
+    // console.log("rooms", rooms)
+    // this.score += this.scoreNum;
+    // this.scoreText.setText("score: " + this.score);
+
+    // if (this.score > this.highScore) {
+    // this.scoreText.setText("NEW score: " + this.score);
+    // }
+
+    if (this.fish.countActive(true) === 0) {
+      // this.level++;
+      // this.fish.children.iterate(function(child) {
+      //   child.enableBody(true, child.x, 0, true, true);
+      // });
+      return true;
+    }
+    return false;
+  };
+}
+
+function getPlayerData(playerId) {}
+
+function createBomb(player) {
+  // this.bombs = this.physics.add.group();
+  // this.physics.add.collider(this.bombs, this.ground);
+  // const x =
+  //   player.x < 400
+  //     ? Phaser.Math.Between(400, 800)
+  //     : Phaser.Math.Between(0, 400);
+  // for (let i = 0; i < this.bombsNum; i++) {
+  //   const bomb = this.bombs.create(x, 16, "bomb");
+  //   bomb.setBounce(1);
+  //   bomb.setCollideWorldBounds(true);
+  //   bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  // }
+  // this.physics.add.collider(player, this.bombs, hitBomb, null, this);
+}
+
+function hitBomb(player) {
+  this.physics.pause();
+  this.gameOver = true;
+}
+
 module.exports = {
   createPreload,
   createUpdate,
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 };
 
 },{}],4:[function(require,module,exports){
