@@ -30,6 +30,8 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket.emit("ready", this.roomId);
 
     createWorld(self);
+    playerAnimations(self, this.game.character);
+    createCursors(self);
 
     this.players = this.add.group();
     this.fishes = this.add.group();
@@ -85,11 +87,11 @@ export default class MultiplayerScene extends Phaser.Scene {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {
             if (player.x > players[id].x) {
-              player.anims.play("left", true);
+              player.anims.play(this.game.character + "left", true);
             } else if (player.x < players[id].x) {
-              player.anims.play("right", true);
+              player.anims.play(this.game.character + "right", true);
             } else {
-              player.anims.play("turn");
+              player.anims.play(this.game.character + "turn");
             }
             player.setPosition(players[id].x, players[id].y);
           }
@@ -131,10 +133,6 @@ export default class MultiplayerScene extends Phaser.Scene {
       this.scoreData(players);
       this.scoreText.text = this.score;
     });
-
-    createCursors(self);
-
-    playerAnimations(self, this.game.character);
 
     this.scoreText = this.add.text(16, 16, this.score, {
       fontSize: "32px",
