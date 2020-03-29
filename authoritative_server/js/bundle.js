@@ -72,7 +72,7 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
-      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish });
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
 
     }
 
@@ -397,11 +397,8 @@ function createFish(self, fishKey, numFish, stepX, collider) {
   self.physics.add.collider(self.fish, collider);
 }
 
-// TODO need to re-write function
+// Clean up function with this.this
 function collectFish(player, fish) {
-  // console.log("hit fish", fish);
-
-  // console.log(this.room[this.roomId].players)
   if (this.room.hasOwnProperty(this.roomId)) {
     if (this.room[this.roomId].players[player.playerId]) {
       // TODO need to have score per fish brought in from client
@@ -411,7 +408,6 @@ function collectFish(player, fish) {
   }
 
   if (this.fishes.countActive(true) === 0) {
-    // this.level++;
     this.fishes.children.iterate(function(child) {
       child.enableBody(true, child.x, 0, true, true);
     });
@@ -421,19 +417,19 @@ function collectFish(player, fish) {
 }
 
 function createBomb(player) {
-  // this.bombs = this.physics.add.group();
-  // this.physics.add.collider(this.bombs, this.ground);
-  // const x =
-  //   player.x < 400
-  //     ? Phaser.Math.Between(400, 800)
-  //     : Phaser.Math.Between(0, 400);
-  // for (let i = 0; i < this.bombsNum; i++) {
-  //   const bomb = this.bombs.create(x, 16, "bomb");
-  //   bomb.setBounce(1);
-  //   bomb.setCollideWorldBounds(true);
-  //   bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-  // }
-  // this.physics.add.collider(player, this.bombs, hitBomb, null, this);
+  this.this.bombs = this.this.physics.add.group();
+  this.this.physics.add.collider(this.this.bombs, this.this.ground);
+  const x =
+    player.x < 400
+      ? Phaser.Math.Between(400, 800)
+      : Phaser.Math.Between(0, 400);
+  for (let i = 0; i < 2; i++) {
+    const bomb = this.this.bombs.create(x, 16, "bomb");
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  }
+  this.this.physics.add.collider(player, this.this.bombs, hitBomb, null, this.this);
 }
 
 function hitBomb(player) {

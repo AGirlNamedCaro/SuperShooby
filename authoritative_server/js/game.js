@@ -44,7 +44,7 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
-      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish });
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
 
     }
 
