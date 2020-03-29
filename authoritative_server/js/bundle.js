@@ -113,7 +113,9 @@ class RoomManager {
         active: fish.active
       };
     });
-
+    
+    console.log("pls", roomId)
+    console.log("otherpls", this.rooms[roomId].gameObjects)
     return this.rooms[roomId].gameObjects
   }
 
@@ -154,6 +156,7 @@ window.onload = () => {
     });
 
     socket.on("joinRoom", roomId => {
+      socket.join(roomId);
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
@@ -171,10 +174,7 @@ window.onload = () => {
       const gameObjects = roomManager.getFish(roomId);
       io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 
-      // TODO change this to socket groups
-      for (socketId of Object.keys(players)) {
-        io.to(socketId).emit("newPlayer", players[socket.id]);
-      }
+      io.to(roomId).emit("newPlayer", players[socket.id]);
       currentPlayers[socket.id] = roomId;
     });
 
@@ -317,15 +317,12 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
 
           if (playerState.up && player.body.blocked.down) {
             player.setVelocityY(playerJump * -1);
-            console.log(players[player.playerId]);
           }
 
           players[player.playerId].x = player.x;
           players[player.playerId].y = player.y;
         });
 
-        // this.physics.world.wrap(this.players, 5);
-        // io.emit("playerUpdates", players);
         level.fish.getChildren().forEach((fish, index) => {
           gameObjects[`fish${index}`] = {
             x: fish.x,
@@ -333,8 +330,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
             active: fish.active
           };
         });
-        console.log("gameObjects", rooms[roomId]);
-        io.emit("gameUpdates", { players, gameObjects});
+        io.to(roomId).emit("gameUpdates", { players, gameObjects });
       }
     }
   };
@@ -399,7 +395,6 @@ function createFish(self, fishKey, numFish, stepX, collider) {
   });
 
   self.physics.add.collider(self.fish, collider);
-  console.log("fish", self.fish.countActive(true));
 }
 
 // TODO need to re-write function
@@ -408,28 +403,16 @@ function collectFish(player, fish) {
 
   // console.log(this.room[this.roomId].players)
   if (this.room.hasOwnProperty(this.roomId)) {
-    console.log("has key");
     if (this.room[this.roomId].players[player.playerId]) {
       // TODO need to have score per fish brought in from client
       this.room[this.roomId].players[player.playerId].points += 10;
-      console.log("players", player.playerId);
-      console.log("room", this.room[this.roomId].players[player.playerId]);
       fish.disableBody(true, true);
     }
   }
 
-  // console.log("this", this)
-  // console.log("rooms", rooms)
-  // this.score += this.scoreNum;
-  // this.scoreText.setText("score: " + this.score);
-
-  // if (this.score > this.highScore) {
-  // this.scoreText.setText("NEW score: " + this.score);
-  // }
   if (this.fishes.countActive(true) === 0) {
     // this.level++;
     this.fishes.children.iterate(function(child) {
-      console.log("adding fish");
       child.enableBody(true, child.x, 0, true, true);
     });
     return true;

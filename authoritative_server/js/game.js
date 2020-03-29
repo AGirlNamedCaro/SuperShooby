@@ -85,7 +85,9 @@ class RoomManager {
         active: fish.active
       };
     });
-
+    
+    console.log("pls", roomId)
+    console.log("otherpls", this.rooms[roomId].gameObjects)
     return this.rooms[roomId].gameObjects
   }
 
@@ -126,6 +128,7 @@ window.onload = () => {
     });
 
     socket.on("joinRoom", roomId => {
+      socket.join(roomId);
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
@@ -143,10 +146,7 @@ window.onload = () => {
       const gameObjects = roomManager.getFish(roomId);
       io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 
-      // TODO change this to socket groups
-      for (socketId of Object.keys(players)) {
-        io.to(socketId).emit("newPlayer", players[socket.id]);
-      }
+      io.to(roomId).emit("newPlayer", players[socket.id]);
       currentPlayers[socket.id] = roomId;
     });
 
