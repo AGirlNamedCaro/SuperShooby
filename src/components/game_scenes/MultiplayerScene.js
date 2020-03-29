@@ -25,7 +25,6 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket.emit("ready", this.roomId);
 
     createWorld(self);
-    // playerAnimations(self, this.game.character);
     createCursors(self);
 
     this.players = this.add.group();
@@ -180,6 +179,7 @@ export default class MultiplayerScene extends Phaser.Scene {
   displayFish(self, fish, fishId, sprite) {
     const newFish = self.add.sprite(fish.x, fish.y, sprite);
     newFish.fishId = fishId;
+    newFish.anims.play("flop", true);
     self.fishes.add(newFish);
     return newFish;
   }
