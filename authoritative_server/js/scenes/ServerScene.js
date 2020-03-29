@@ -34,7 +34,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
 
           if (playerState.up && player.body.blocked.down) {
             player.setVelocityY(playerJump * -1);
-            console.log(players[player.playerId])
+            console.log(players[player.playerId]);
           }
 
           players[player.playerId].x = player.x;
@@ -116,8 +116,9 @@ function collectFish(player, fish) {
 
   // console.log(this.room[this.roomId].players)
   if (this.room.hasOwnProperty(this.roomId)) {
-    console.log("has key")
+    console.log("has key");
     if (this.room[this.roomId].players[player.playerId]) {
+      // TODO need to have score per fish brought in from client
       this.room[this.roomId].players[player.playerId].points += 10;
       console.log("players", player.playerId);
       console.log("room", this.room[this.roomId].players[player.playerId]);
@@ -126,24 +127,22 @@ function collectFish(player, fish) {
   }
 
   // console.log("this", this)
-  return function() {
-    // console.log("rooms", rooms)
-    // this.score += this.scoreNum;
-    // this.scoreText.setText("score: " + this.score);
+  // console.log("rooms", rooms)
+  // this.score += this.scoreNum;
+  // this.scoreText.setText("score: " + this.score);
 
-    // if (this.score > this.highScore) {
-    // this.scoreText.setText("NEW score: " + this.score);
-    // }
-
-    if (this.fish.countActive(true) === 0) {
-      // this.level++;
-      // this.fish.children.iterate(function(child) {
-      //   child.enableBody(true, child.x, 0, true, true);
-      // });
-      return true;
-    }
-    return false;
-  };
+  // if (this.score > this.highScore) {
+  // this.scoreText.setText("NEW score: " + this.score);
+  // }
+  if (this.fishes.countActive(true) === 0) {
+    // this.level++;
+    this.fishes.children.iterate(function(child) {
+      console.log("adding fish")
+      child.enableBody(true, child.x, 0, true, true);
+    });
+    return true;
+  }
+  return false;
 }
 
 function getPlayerData(playerId) {}

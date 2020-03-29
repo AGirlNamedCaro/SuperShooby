@@ -44,11 +44,11 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
-      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room });
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish });
 
     }
 
-    const update = createUpdate(this.rooms, roomId, 160, 150);
+    const update = createUpdate(this.rooms, roomId, 160, 550);
     const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
