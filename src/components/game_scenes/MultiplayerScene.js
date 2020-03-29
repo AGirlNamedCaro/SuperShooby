@@ -5,7 +5,7 @@ export default class MultiplayerScene extends Phaser.Scene {
   constructor() {
     super("multiplayerScene");
   }
-  
+
   init(data) {
     this.playerState = this.calcPlayerState();
     this.oldPlayerState = this.playerState;
@@ -23,8 +23,7 @@ export default class MultiplayerScene extends Phaser.Scene {
   }
 
   create() {
-
-    console.log("DATA: ",this.bombs,this.score,this.fishNum,this.stepX);
+    console.log("DATA: ", this.bombs, this.score, this.fishNum, this.stepX);
     const self = this;
     this.socket.emit("ready", this.roomId);
 
@@ -33,7 +32,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.players = this.add.group();
     this.fishes = this.add.group();
 
-    this.socket.on("currentPlayers", ({players, gameObjects}) => {
+    this.socket.on("currentPlayers", ({ players, gameObjects }) => {
       Object.keys(players).forEach(id => {
         if (players[id].playerId === self.socket.id) {
           this.player = this.displayPlayers(self, players[id], "dude");
@@ -42,14 +41,13 @@ export default class MultiplayerScene extends Phaser.Scene {
         }
       });
 
-      console.log("gameobj", gameObjects)
       Object.keys(gameObjects).forEach(fish => {
-        console.log("madeFish", this.displayFish(self, gameObjects[fish], fish, "fish"));
-      })
+        this.displayFish(self, gameObjects[fish], fish, "fish");
+      });
     });
 
     this.socket.on("newPlayer", playerInfo => {
-      console.log("newPlayer")
+      console.log("newPlayer");
       this.displayPlayers(self, playerInfo, "dude");
     });
 
@@ -61,34 +59,34 @@ export default class MultiplayerScene extends Phaser.Scene {
       });
     });
 
-    // TODO clean this up like the current players, deconstruct in the .on
-    this.socket.on("gameUpdates", gameUpdates => {
-      Object.keys(gameUpdates.players).forEach(id => {
+    this.socket.on("gameUpdates", ({ players, gameObjects }) => {
+      Object.keys(players).forEach(id => {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {
-            if (player.x > gameUpdates.players[id].x) {
+            if (player.x > players[id].x) {
               player.anims.play("left", true);
-            } else if (player.x < gameUpdates.players[id].x) {
+            } else if (player.x < players[id].x) {
               player.anims.play("right", true);
             } else {
               player.anims.play("turn");
             }
-            player.setPosition(gameUpdates.players[id].x, gameUpdates.players[id].y);
+            player.setPosition(players[id].x, players[id].y);
+          }
+        });
+      });
+
+      Object.keys(gameObjects).forEach((fish, index) => {
+        self.fishes.getChildren().forEach(fishes => {
+          if (fishes.fishId === fish) {
+            fishes.setPosition(gameObjects[fish].x, gameObjects[fish].y);
           }
         });
       });
     });
 
-    // this.socket.on("objectUpdates", gameObjects => {
-    //   console.log("gameObjects", gameObjects);
-    // })
-
-    
     createCursors(self);
 
     playerAnimations(self, this.game.character);
-  
-
   }
 
   update() {
@@ -113,7 +111,6 @@ export default class MultiplayerScene extends Phaser.Scene {
         this.playerState.right !== this.oldPlayerState.right ||
         this.playerState.up !== this.oldPlayerState.up
       ) {
-
         this.playerState.roomId = this.roomId;
         this.socket.emit("playerInput", this.playerState);
       }

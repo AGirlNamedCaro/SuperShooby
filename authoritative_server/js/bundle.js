@@ -300,7 +300,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
       const level = rooms[roomId].game.scene.keys.default;
       const playerGroup = level.players;
       const players = rooms[roomId].players;
-      const gameObjects = {};
+      const gameObjects = rooms[roomId].gameObjects;
 
       if (Object.keys(playerGroup).length > 1) {
         playerGroup.getChildren().forEach(player => {
@@ -326,15 +326,15 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
 
         // this.physics.world.wrap(this.players, 5);
         // io.emit("playerUpdates", players);
-        // level.fish.getChildren().forEach((fish, index) => {
-        //   gameObjects[`fish${index}`] = {
-        //     x: fish.x,
-        //     y: fish.y,
-        //     active: fish.active
-        //   };
-        // });
-        // console.log("gameObjects", rooms[roomId]);
-        io.emit("gameUpdates", { players: players, gameObjects: gameObjects});
+        level.fish.getChildren().forEach((fish, index) => {
+          gameObjects[`fish${index}`] = {
+            x: fish.x,
+            y: fish.y,
+            active: fish.active
+          };
+        });
+        console.log("gameObjects", rooms[roomId]);
+        io.emit("gameUpdates", { players, gameObjects});
       }
     }
   };
@@ -362,7 +362,7 @@ function addPlayer(self, playerInfo, collisions) {
   player.body.setGravityY(300);
 
   player.setBounce(0.2);
-  // This isnt working, probably because the game screens are different sizes right now.
+  // TODO This isnt working, probably because the game screens are different sizes right now.
   player.setCollideWorldBounds(true);
   player.playerId = playerInfo.playerId;
   self.players.add(player);
