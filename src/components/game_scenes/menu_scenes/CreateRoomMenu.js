@@ -100,7 +100,13 @@ export default class Customize extends Phaser.Scene {
       // Is Optimized for when the default map is still a url, maybe expand on this
       this.game.socket.emit("createRoom", {
         roomId: this.roomId,
-        roomMap: this.game.level
+        roomMap: this.game.level,
+        difficulty: {
+          bombNum: this.game.bomb,
+          fishNum: this.game.fishNum,
+          score: this.game.score,
+          stepX: this.game.stepX
+        }
       });
       this.game.socket.on("createdRoom", roomId => {
         this.game.socket.emit("joinRoom", this.roomId);

@@ -19,7 +19,7 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomMap, roomId, player, maxUsers, room) {
+  createRoom({roomId, roomMap, difficulty}, player, maxUsers, room) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
       "assets/images/sprites/fish.png",
@@ -43,11 +43,12 @@ class RoomManager {
       this.players = this.physics.add.group();
       this.physics.add.collider(this.players, this.ground);
       
-      createFish(this, "fish", 11, 70, this.ground);
+      createFish(this, "fish", difficulty.fishNum, difficulty.stepX, this.ground);
       this.bombs = this.physics.add.group();
       this.physics.add.collider(this.bombs, this.ground);
       
-      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
+      // TODO cleanup the variables passed in here
+      this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, difficulty: difficulty, collider: this.ground });
       this.gameOver = false;
     }
 
@@ -129,7 +130,7 @@ window.onload = () => {
       // }
 
       const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2, roomManager.rooms);
+      roomManager.createRoom(roomData, player, 2, roomManager.rooms);
       io.to(socket.id).emit("createdRoom", roomData.roomId);
       currentPlayers[socket.id] = roomData.roomId;
     });

@@ -136,7 +136,7 @@ function collectFish(player, fish) {
   if (this.room.hasOwnProperty(this.roomId)) {
     if (this.room[this.roomId].players[player.playerId]) {
       // TODO need to have score per fish brought in from client
-      this.room[this.roomId].players[player.playerId].points += 10;
+      this.room[this.roomId].players[player.playerId].points += this.difficulty.score;
       fish.disableBody(true, true);
     }
   }
@@ -157,7 +157,7 @@ function createBomb(player) {
     player.x < 400
       ? Phaser.Math.Between(400, 800)
       : Phaser.Math.Between(0, 400);
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < this.difficulty.bombNum; i++) {
     const bomb = this.this.bombs.create(x, 16, "bomb");
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);

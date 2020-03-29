@@ -9,10 +9,6 @@ export default class MultiplayerScene extends Phaser.Scene {
   init(data) {
     this.playerState = this.calcPlayerState();
     this.oldPlayerState = this.playerState;
-    this.bombs = data.bombs;
-    this.score = data.score;
-    this.fishNum = data.fishNum;
-    this.stepX = data.stepX;
     this.socket = this.game.socket;
     this.roomId = data.roomId;
     this.score = "";
@@ -25,7 +21,6 @@ export default class MultiplayerScene extends Phaser.Scene {
   }
 
   create() {
-    console.log("DATA: ", this.bombs, this.score, this.fishNum, this.stepX);
     const self = this;
     this.socket.emit("ready", this.roomId);
 
@@ -63,11 +58,11 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket.on("bombSpawn", ({ x, length}) => {
       console.log("length", length)
       this.level++;
-      this.numOfBombs = length - 2;
+      this.numOfBombs = length - this.game.bomb;
       console.log("num", this.numOfBombs);
       //TODO Get this from difficulty of the game
       console.log("spawning");
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < this.game.bomb; i++) {
         this.displayBombs(self, x, `bomb${this.numOfBombs}`, "bomb");
         this.numOfBombs++;
         console.log("aftern", this.numOfBombs)
