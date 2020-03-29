@@ -23,20 +23,20 @@ export function createWorld(self) {
 
 export function playerAnimations(self, character) {
   self.anims.create({
-    key: "left",
+    key: character + "left",
     frames: self.anims.generateFrameNumbers(character, { start: 0, end: 3 }),
     frameRate: 10,
     repeat: -1
   });
 
   self.anims.create({
-    key: "turn",
+    key: character + "turn",
     frames: [{ key: character, frame: 4 }],
     frameRate: 20
   });
 
   self.anims.create({
-    key: "right",
+    key: character + "right",
     frames: self.anims.generateFrameNumbers(character, { start: 5, end: 8 }),
     frameRate: 10,
     repeat: -1
@@ -47,7 +47,7 @@ export function createFish(self, fishKey, numFish, collider) {
   self.fish = self.physics.add.group({
     key: fishKey,
     repeat: numFish,
-    setXY: { x: 12, y: 0, stepX: self.stepX }
+    setXY: { x: 12, y: 0, stepX: self.game.stepX }
   });
 
   self.fish.children.iterate(function(child) {
@@ -60,7 +60,7 @@ export function createFish(self, fishKey, numFish, collider) {
 
 export function collectFish(player, fish) {
   fish.disableBody(true, true);
-  this.score += this.scoreNum;
+  this.score += this.game.score;
   this.scoreText.setText("score: " + this.score);
 
   if (this.score > this.highScore) {
@@ -86,7 +86,7 @@ export function createBomb(player) {
       ? Phaser.Math.Between(400, 800)
       : Phaser.Math.Between(0, 400);
 
-  for (let i = 0; i < this.bombsNum; i++) {
+  for (let i = 0; i < this.game.bomb; i++) {
     const bomb = this.bombs.create(x, 16, "bomb");
     bomb.setBounce(1);
     bomb.setCollideWorldBounds(true);
@@ -99,6 +99,6 @@ export function createBomb(player) {
 export function hitBomb(player) {
   this.physics.pause();
   player.setTint(0xff0000);
-  player.anims.play("turn");
+  player.anims.play(this.game.character + "turn");
   this.gameOver = true;
 }

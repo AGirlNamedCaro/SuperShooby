@@ -20,10 +20,6 @@ export default class SinglePlayerScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.bombs = data.bombs;
-    this.scoreNum = data.score;
-    this.fishNum = data.fishNum;
-    this.stepX = data.stepX;
     this.level = 1;
   }
 
@@ -32,10 +28,10 @@ export default class SinglePlayerScene extends Phaser.Scene {
 
     createWorld(self);
 
-    this.bombsNum = this.bombs;
     // ground.setCollisionByProperty({ collides: true }, true)
     // ground.setCollision([1, 265, 266, 299, 298])
     this.score = 0;
+    this.pause = false;
     this.highScore = localStorage.getItem("highScore");
 
     this.player = this.physics.add.sprite(100, 450, this.game.character);
@@ -44,12 +40,23 @@ export default class SinglePlayerScene extends Phaser.Scene {
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
 
+    this.resume = this.add.image(this.game.renderer.width / 2.67, this.game.renderer.height * 0.35, "resume");
+    this.resume.scale = 0.15
+    this.resume.alpha = 0.02;
+
+    this.resume.setInteractive();
+
+    this.exit = this.add.image(this.game.renderer.width / 1.50, this.game.renderer.height * 0.35, "exit");
+    this.exit.scale = 0.15
+    this.exit.alpha = 0.02;
+
+    this.exit.setInteractive();
+
     playerAnimations(self, this.game.character);
     createCursors(self);
 
     //FISH & BOMBS creation
-    createFish(self, "fish", this.fishNum, this.ground);
-    console.log("singplayerscene", this.fish);
+    createFish(self, "fish", this.game.fishNum, this.ground);
 
     this.physics.add.overlap(this.player, this.fish, createBomb, collectFish, this);
 
@@ -57,25 +64,44 @@ export default class SinglePlayerScene extends Phaser.Scene {
       fontSize: "32px",
       fill: "#fff"
     });
+
+    this.resume.on("pointerdown", () => {
+      this.physics.resume("singlePlayer")
+      this.exit.alpha = 0.02;
+      this.resume.alpha = 0.02
+    })
+
+    this.exit.on('pointerdown', () => {
+      console.log("in single player",this.game.character);
+      this.scene.stop("singlePlayer");
+      this.scene.start('titleScene')
+    })
+
+
   }
 
   update() {
+    
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-160);
-      this.player.anims.play("left", true);
+      this.player.anims.play(this.game.character + "left", true);
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(160);
-      this.player.anims.play("right", true);
+      this.player.anims.play(this.game.character + "right", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("turn");
+      this.player.anims.play( this.game.character + "turn");
     }
 
     if (this.cursors.up.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-550);
     }
     if (this.cursors.pause.isDown) {
-      this.scene.pause();
+       this.physics.pause();
+       this.resume.alpha = 1;
+       this.exit.alpha = 1;
+       
+
     }
 
     //Setting highscore
@@ -103,16 +129,16 @@ export default class SinglePlayerScene extends Phaser.Scene {
       let score = this.add.text(
         this.game.config.width / 1.6,
         this.game.config.height / 1.8,
-        `Score: ${this.score} `,
+        `Score: ${this.score}  `,
         { fontSize: "32px", fill: "#fff" }
       );
 
-      const back_to_main = this.add.image(
+      const backToMain = this.add.image(
         this.game.renderer.width / 1.75,
         this.game.renderer.height * 0.65,
-        "back_to_main"
+        "backToMain"
       );
-      back_to_main.scale = 0.35;
+      backToMain.scale = 0.35;
       const restart = this.add.image(
         this.game.renderer.width / 1.55,
         this.game.renderer.height * 0.65,
@@ -120,7 +146,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
       );
       restart.scale = 0.35;
 
-      back_to_main.setInteractive();
+      backToMain.setInteractive();
       restart.setInteractive();
 
       restart.on("pointerdown", () => {
@@ -129,7 +155,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
         this.scene.restart();
       });
 
-      back_to_main.on("pointerdown", () => {
+      backToMain.on("pointerdown", () => {
         console.log("back to main");
         this.gameOver = false;
         this.scene.start("titleScene");
