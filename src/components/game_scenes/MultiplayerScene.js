@@ -126,7 +126,7 @@ export default class MultiplayerScene extends Phaser.Scene {
         down: false,
         right: false,
         x: 100,
-        y: 450
+        y: this.game.jump
       };
       return resultsObj;
     }

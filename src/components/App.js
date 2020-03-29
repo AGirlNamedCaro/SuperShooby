@@ -12,6 +12,7 @@ function App() {
   const [fishNum, setFishNum] = useState(7)
   const [stepX, setStepX] = useState(100)
   const [score, setScore] = useState(15)
+  const [jump, setJump] = useState(-550)
   
 
 
@@ -25,6 +26,7 @@ function App() {
       fishNum={fishNum} setFishNum={setFishNum}
       stepX={stepX} setStepX={setStepX}
       score={score} setScore={setScore}
+      jump={jump} setJump={setJump}
       />
       <GameDesc />     
     </section>

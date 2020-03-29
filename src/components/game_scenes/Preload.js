@@ -41,6 +41,11 @@ export default class Preload extends Phaser.Scene {
     this.load.image('highJump', '/assets/images/buttons/hiJump.png');
     this.load.image('resume', '/assets/images/buttons/resumeButton.png');
     this.load.image('exit', '/assets/images/buttons/exitButton.png');
+    this.load.image('gravityOne', '/assets/images/buttons/gravityOne.png');
+    this.load.image('gravityTwo', '/assets/images/buttons/gravityTwo.png');
+    this.load.image('gravityThree', '/assets/images/buttons/gravityThree.png');
+
+
 
 
 
