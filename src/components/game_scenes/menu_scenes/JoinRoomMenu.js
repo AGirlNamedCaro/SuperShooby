@@ -60,7 +60,10 @@ export default class Customize extends Phaser.Scene {
       this.roomId = userInput.value;
       console.log(this.roomId);
 
-      this.game.socket.emit("joinRoom", this.roomId);
+      this.game.socket.emit("joinRoom", {
+        roomId: this.roomId,
+        character: this.game.character
+      });
       this.game.socket.on("roomMap", roomMap => {
         const changeLevel = new Promise((res, rej) => {
           const roomData =

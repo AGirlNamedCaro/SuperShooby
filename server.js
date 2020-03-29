@@ -46,6 +46,8 @@ function setupAuthoritativePhaser() {
         dom.window.io = io;
         dom.window.MongoClient = MongoClient;
         dom.window.MONGODB = process.env.MONGODB;
+        dom.window.AWSKEY = process.env.AWSKEY;
+        dom.window.AWSSECRETKEY = process.env.AWSSECRETKEY;
       };
     })
     .catch(err => console.log(err.message));
