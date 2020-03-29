@@ -14,11 +14,11 @@ const io = require("socket.io").listen(server);
 
 const players = {};
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/build"));
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/index.html");
+// });
 
 function setupAuthoritativePhaser() {
   JSDOM.fromFile(path.join(__dirname, "authoritative_server/index.html"), {
@@ -40,7 +40,7 @@ function setupAuthoritativePhaser() {
       };
       dom.window.URL.revokeObjectURL = objectURL => {};
       dom.window.gameLoaded = () => {
-        server.listen(8080, "0.0.0.0", () => {
+        server.listen(process.env.PORT, () => {
           console.log(`Listening on ${server.address().port}`);
         });
         dom.window.io = io;

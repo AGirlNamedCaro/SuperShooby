@@ -25,12 +25,13 @@
   "scripts": {
     "start": "react-scripts start",
     "server": "npx nodemon server.js",
+    "server:prod": "node ./server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "bundle": "browserify authoritative_server/js/game.js -o authoritative_server/js/bundle.js",
     "watch": "watchify authoritative_server/js/game.js -o authoritative_server/js/bundle.js",
-    "heroku-postbuild": "react-scripts build && npx nodemon server.js"
+    "heroku-postbuild": "react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
