@@ -1,9 +1,14 @@
-function createPreload(sprite, tileset, tilemap) {
+function createPreload(sprite, collectables, bombs, tileset, tilemap) {
   return function() {
     this.load.spritesheet("dude", sprite, {
       frameWidth: 32,
       frameHeight: 48
     });
+    this.load.spritesheet("fish", collectables, {
+      frameWidth: 32,
+      frameHeight: 32
+    });
+    this.load.image("bomb", bombs);
     this.load.image("tiles", tileset);
     this.load.tilemapTiledJSON("world", tilemap);
   };
@@ -12,8 +17,11 @@ function createPreload(sprite, tileset, tilemap) {
 function createUpdate(rooms, roomId, playerSpeed, playerJump) {
   return function() {
     if (rooms[roomId]) {
-      const playerGroup = rooms[roomId].game.scene.keys.default.players;
+      const level = rooms[roomId].game.scene.keys.default;
+      const playerGroup = level.players;
       const players = rooms[roomId].players;
+      const gameObjects = rooms[roomId].gameObjects;
+
       if (Object.keys(playerGroup).length > 1) {
         playerGroup.getChildren().forEach(player => {
           const playerState = players[player.playerId].playerState;
@@ -35,17 +43,39 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
           players[player.playerId].y = player.y;
         });
 
-        // this.physics.world.wrap(this.players, 5);
-        io.emit("playerUpdates", players);
+        level.fish.getChildren().forEach((fish, index) => {
+          gameObjects.fish[`fish${index}`] = {
+            x: fish.x,
+            y: fish.y,
+            active: fish.active
+          };
+        });
+
+        if (level.hasOwnProperty("bombs")) {
+          level.bombs.getChildren().forEach((bomb, index) => {
+            gameObjects.bombs[`bomb${index}`] = {
+              x: bomb.x,
+              y: bomb.y
+            };
+          });
+        }
+
+        if (level.gameOver === true) {
+          gameObjects.gameOver = true;
+        }
+
+        io.to(roomId).emit("gameUpdates", { players, gameObjects });
       }
     }
   };
 }
 
-function initPlayer(roomId, playerId, startLoc) {
+function initPlayer(roomId, playerId, character, startLoc) {
   return (player = {
     playerId: playerId,
     roomId: roomId,
+    character: character,
+    points: 0,
     // have this be map set
     x: startLoc.x,
     y: startLoc.y,
@@ -63,7 +93,7 @@ function addPlayer(self, playerInfo, collisions) {
   player.body.setGravityY(300);
 
   player.setBounce(0.2);
-  // This isnt working, probably because the game screens are different sizes right now.
+  // TODO This isnt working, probably because the game screens are different sizes right now.
   player.setCollideWorldBounds(true);
   player.playerId = playerInfo.playerId;
   self.players.add(player);
@@ -87,11 +117,81 @@ function handlePlayerInput(self, players, playerId, playerState) {
   });
 }
 
+function createFish(self, fishKey, numFish, stepX, collider) {
+  self.fish = self.physics.add.group({
+    // TODO add these in from the client
+    key: fishKey,
+    repeat: numFish,
+    setXY: { x: 12, y: 0, stepX: stepX }
+  });
+
+  self.fish.children.iterate(child => {
+    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+  });
+
+  self.physics.add.collider(self.fish, collider);
+}
+
+// TODO Clean up function with this.this
+function collectFish(player, fish) {
+  if (this.room.hasOwnProperty(this.roomId)) {
+    if (this.room[this.roomId].players[player.playerId]) {
+      // TODO need to have score per fish brought in from client
+      this.room[this.roomId].players[player.playerId].points += this.difficulty.score;
+      fish.disableBody(true, true);
+    }
+  }
+
+  if (this.fishes.countActive(true) === 0) {
+    this.fishes.children.iterate(child => {
+      child.enableBody(true, child.x, 0, true, true);
+    });
+    return true;
+  }
+  return false;
+}
+
+function createBomb(player) {
+  // this.this.bombs = this.this.physics.add.group();
+  // this.this.physics.add.collider(this.this.bombs, this.this.ground);
+  const x =
+    player.x < 400
+      ? Phaser.Math.Between(400, 800)
+      : Phaser.Math.Between(0, 400);
+  for (let i = 0; i < this.difficulty.bombNum; i++) {
+    const bomb = this.this.bombs.create(x, 16, "bomb");
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  }
+
+  io.to(this.roomId).emit("bombSpawn", {
+    x,
+    length: this.this.bombs.getChildren().length
+  });
+
+  this.this.physics.add.collider(
+    this.this.players,
+    this.this.bombs,
+    hitBomb,
+    null,
+    this.this
+  );
+}
+
+function hitBomb(player) {
+  this.physics.pause();
+  this.gameOver = true;
+}
+
 module.exports = {
   createPreload,
   createUpdate,
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 };

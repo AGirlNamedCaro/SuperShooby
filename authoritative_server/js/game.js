@@ -4,7 +4,10 @@ const {
   initPlayer,
   addPlayer,
   removePlayer,
-  handlePlayerInput
+  handlePlayerInput,
+  createFish,
+  collectFish,
+  createBomb
 } = require("./scenes/ServerScene");
 const { config } = require("./config");
 const chance = require("chance").Chance();
@@ -16,9 +19,11 @@ class RoomManager {
     this.rooms = {};
   }
 
-  createRoom(roomMap, roomId, player, maxUsers) {
+  createRoom({ roomId, roomMap, difficulty }, maxUsers, room) {
     const preload = createPreload(
       "assets/images/sprites/dude.png",
+      "assets/images/sprites/fish.png",
+      "assets/images/prefabs/bomb.png",
       "assets/images/prefabs/shoobyTileset.png",
       // Optimized so that when its on the default map, it will load it from the server
       roomMap === "/assets/mapData/shoobyTileset16.json"
@@ -29,25 +34,55 @@ class RoomManager {
     function create() {
       const worldMap = this.add.tilemap("world");
       const tileset = worldMap.addTilesetImage("tiles");
-      const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
-      const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
-      const ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
+      worldMap.createStaticLayer("sky", [tileset], 0, 0);
+      worldMap.createStaticLayer("clouds", [tileset], 0, 0);
+      this.ground = worldMap.createStaticLayer("ground", [tileset], 0, 0);
       // ground.setCollisionByProperty({ collides: true }, true)
       // ground.setCollision([1, 265, 266, 299, 298])
-      ground.setCollisionByExclusion(-1, true);
+      this.ground.setCollisionByExclusion(-1, true);
       this.players = this.physics.add.group();
-      this.physics.add.collider(this.players, ground);
+      this.physics.add.collider(this.players, this.ground);
+
+      createFish(
+        this,
+        "fish",
+        difficulty.fishNum,
+        difficulty.stepX,
+        this.ground
+      );
+      this.bombs = this.physics.add.group();
+      this.physics.add.collider(this.bombs, this.ground);
+
+      // TODO cleanup the variables passed in here
+      this.physics.add.overlap(
+        this.players,
+        this.fish,
+        createBomb,
+        collectFish,
+        {
+          this: this,
+          roomId: roomId,
+          room: room,
+          fishes: this.fish,
+          difficulty: difficulty,
+          collider: this.ground
+        }
+      );
+      this.gameOver = false;
     }
 
-    const update = createUpdate(this.rooms, roomId, 160, 150);
+    const update = createUpdate(this.rooms, roomId, 160, 550);
     const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
       roomId: roomId,
       roomMap: roomMap,
       game: game,
-      players: {
-        [player.playerId]: player
+      players: {},
+      gameObjects: {
+        fish: {},
+        bombs: {},
+        gameOver: false
       }
     };
 
@@ -67,6 +102,20 @@ class RoomManager {
     return this.rooms[roomId].players;
   }
 
+  getFish(roomId) {
+    this.rooms[roomId].game.scene.keys.default.fish
+      .getChildren()
+      .forEach((fish, index) => {
+        this.rooms[roomId].gameObjects.fish[`fish${index}`] = {
+          x: fish.x,
+          y: fish.y,
+          active: fish.active
+        };
+      });
+
+    return this.rooms[roomId].gameObjects;
+  }
+
   deleteRoom(roomId) {
     this.rooms[roomId].game.destroy(true);
     delete this.rooms[roomId];
@@ -77,8 +126,8 @@ window.onload = () => {
   const roomManager = new RoomManager();
   const currentPlayers = {};
   const s3 = new S3({
-    accessKeyId: "AKIAXWMT5LDDO6DMEIOR",
-    secretAccessKey: "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"
+    accessKeyId: AWSKEY,
+    secretAccessKey: AWSSECRETKEY
   });
 
   io.on("connection", socket => {
@@ -97,17 +146,23 @@ window.onload = () => {
       //   roomData.roomId = chance.word({ syllables: 3 });
       // }
 
-      const player = initPlayer(roomData.roomId, socket.id, { x: 200, y: 450 });
-      roomManager.createRoom(roomData.roomMap, roomData.roomId, player, 2);
+      roomManager.createRoom(roomData, 2, roomManager.rooms);
       io.to(socket.id).emit("createdRoom", roomData.roomId);
       currentPlayers[socket.id] = roomData.roomId;
     });
 
-    socket.on("joinRoom", roomId => {
+    socket.on("joinRoom", ({ roomId, character }) => {
+      socket.join(roomId);
+
       console.log("An Authoritative Shooby has connected");
 
       // if (roomManager[roomId]) {
-      const player = initPlayer(roomId, socket.id, { x: 200, y: 450 });
+      const player = initPlayer(roomId, socket.id, character, {
+        x: 200,
+        y: 450
+      });
+
+      console.log("newPlayer", player)
       roomManager.joinRoom(roomId, player);
       io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
       // TODO fix broken error handling
@@ -118,12 +173,11 @@ window.onload = () => {
 
     socket.on("ready", roomId => {
       const players = roomManager.getPlayers(roomId);
-      io.to(socket.id).emit("currentPlayers", players);
+      // TODO rename getFish function since its also dealing with bombs
+      const gameObjects = roomManager.getFish(roomId);
+      io.to(socket.id).emit("currentPlayers", { players, gameObjects });
 
-      // TODO change this to socket groups
-      for (socketId of Object.keys(players)) {
-        io.to(socketId).emit("newPlayer", players[socket.id]);
-      }
+      io.to(roomId).emit("newPlayer", players[socket.id]);
       currentPlayers[socket.id] = roomId;
     });
 

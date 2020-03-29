@@ -79,7 +79,7 @@ export function collectFish(player, fish) {
   return false;
 }
 
-export function createBomb(player, fish) {
+export function createBomb(player) {
   this.bombs = this.physics.add.group();
   this.physics.add.collider(this.bombs, this.ground);
 
