@@ -453,7 +453,7 @@ function createBomb(player) {
   });
 
   this.this.physics.add.collider(
-    player,
+    this.this.players,
     this.this.bombs,
     hitBomb,
     null,

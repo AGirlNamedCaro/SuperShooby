@@ -47,6 +47,10 @@ export default class MultiplayerScene extends Phaser.Scene {
       Object.keys(gameObjects.fish).forEach(fish => {
         this.displayFish(self, gameObjects.fish[fish], fish, "fish");
       });
+
+      Object.keys(gameObjects.bombs).forEach(bomb => {
+        this.displayBombs(self, gameObjects.bombs[bomb], bomb, "bomb");
+      });
     });
 
     this.socket.on("newPlayer", playerInfo => {
