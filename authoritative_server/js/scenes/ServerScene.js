@@ -44,12 +44,22 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
         });
 
         level.fish.getChildren().forEach((fish, index) => {
-          gameObjects[`fish${index}`] = {
+          gameObjects.fish[`fish${index}`] = {
             x: fish.x,
             y: fish.y,
             active: fish.active
           };
         });
+
+        if (level.hasOwnProperty("bombs")) {
+          level.bombs.getChildren().forEach((bomb, index) => {
+            gameObjects.bombs[`bomb${index}`] = {
+              x: bomb.x,
+              y: bomb.y
+            };
+          });
+        }
+
         io.to(roomId).emit("gameUpdates", { players, gameObjects });
       }
     }
@@ -117,7 +127,7 @@ function createFish(self, fishKey, numFish, stepX, collider) {
   self.physics.add.collider(self.fish, collider);
 }
 
-// Clean up function with this.this
+// TODO Clean up function with this.this
 function collectFish(player, fish) {
   if (this.room.hasOwnProperty(this.roomId)) {
     if (this.room[this.roomId].players[player.playerId]) {
@@ -128,7 +138,7 @@ function collectFish(player, fish) {
   }
 
   if (this.fishes.countActive(true) === 0) {
-    this.fishes.children.iterate(function(child) {
+    this.fishes.children.iterate(child => {
       child.enableBody(true, child.x, 0, true, true);
     });
     return true;
@@ -149,11 +159,20 @@ function createBomb(player) {
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
   }
-  this.this.physics.add.collider(player, this.this.bombs, hitBomb, null, this.this);
+
+  io.to(this.roomId).emit("bombSpawn", x);
+
+  this.this.physics.add.collider(
+    player,
+    this.this.bombs,
+    hitBomb,
+    null,
+    this.this
+  );
 }
 
 function hitBomb(player) {
-  this.physics.pause();
+  // this.physics.pause();
   this.gameOver = true;
 }
 

@@ -32,6 +32,7 @@ export default class MultiplayerScene extends Phaser.Scene {
 
     this.players = this.add.group();
     this.fishes = this.add.group();
+    this.bombs = this.add.group();
 
     this.socket.on("currentPlayers", ({ players, gameObjects }) => {
       Object.keys(players).forEach(id => {
@@ -42,14 +43,22 @@ export default class MultiplayerScene extends Phaser.Scene {
         }
       });
 
-      Object.keys(gameObjects).forEach(fish => {
-        this.displayFish(self, gameObjects[fish], fish, "fish");
+      Object.keys(gameObjects.fish).forEach(fish => {
+        this.displayFish(self, gameObjects.fish[fish], fish, "fish");
       });
     });
 
     this.socket.on("newPlayer", playerInfo => {
       console.log("newPlayer");
       this.displayPlayers(self, playerInfo, "dude");
+    });
+
+    this.socket.on("bombSpawn", x => {
+      //TODO Get this from difficulty of the game
+      console.log("spawning");
+      for (let i = 0; i < 2; i++) {
+        this.displayBombs(self, x, `bomb${i}`, "bomb");
+      }
     });
 
     this.socket.on("disconnect", playerId => {
@@ -61,6 +70,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     });
 
     this.socket.on("gameUpdates", ({ players, gameObjects }) => {
+      console.log("bombs", gameObjects.bombs);
       Object.keys(players).forEach(id => {
         self.players.getChildren().forEach(player => {
           if (id === player.playerId) {
@@ -76,17 +86,31 @@ export default class MultiplayerScene extends Phaser.Scene {
         });
       });
 
-      Object.keys(gameObjects).forEach(fish => {
+      Object.keys(gameObjects.fish).forEach(fish => {
         self.fishes.getChildren().forEach(fishes => {
           if (fishes.fishId === fish) {
-            if (gameObjects[fish].active) {
-              fishes.setPosition(gameObjects[fish].x, gameObjects[fish].y);
+            if (gameObjects.fish[fish].active) {
+              fishes.setPosition(
+                gameObjects.fish[fish].x,
+                gameObjects.fish[fish].y
+              );
               fishes.setActive(true);
               fishes.setVisible(true);
             } else {
               fishes.setActive(false);
               fishes.setVisible(false);
             }
+          }
+        });
+      });
+
+      Object.keys(gameObjects.bombs).forEach(bomb => {
+        self.bombs.getChildren().forEach(bombs => {
+          if (bombs.bombId === bomb) {
+            bombs.setPosition(
+              gameObjects.bombs[bomb].x,
+              gameObjects.bombs[bomb].y
+            );
           }
         });
       });
@@ -148,6 +172,13 @@ export default class MultiplayerScene extends Phaser.Scene {
     newFish.fishId = fishId;
     self.fishes.add(newFish);
     return newFish;
+  }
+
+  displayBombs(self, bomb, bombId, sprite) {
+    const newBomb = self.add.image(bomb.x, bomb.y, sprite);
+    newBomb.bombId = bombId;
+    self.bombs.add(newBomb);
+    return newBomb;
   }
 
   calcPlayerState(player, playerState, isState, state) {

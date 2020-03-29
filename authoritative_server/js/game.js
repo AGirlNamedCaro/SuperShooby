@@ -44,6 +44,9 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
+      // this.bomb = this.physics.add.group();
+      // this.physics.add.collider(this.bombs, this.ground);
+      
       this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
 
     }
@@ -58,7 +61,10 @@ class RoomManager {
       players: {
         [player.playerId]: player
       },
-      gameObjects: {},
+      gameObjects: {
+        fish: {},
+        bombs: {},
+      },
     };
 
     console.log("players", this.rooms[roomId].players);
@@ -79,7 +85,7 @@ class RoomManager {
 
   getFish(roomId) {
     this.rooms[roomId].game.scene.keys.default.fish.getChildren().forEach((fish, index) => {
-      this.rooms[roomId].gameObjects[`fish${index}`] = {
+      this.rooms[roomId].gameObjects.fish[`fish${index}`] = {
         x: fish.x,
         y: fish.y,
         active: fish.active
@@ -143,6 +149,7 @@ window.onload = () => {
 
     socket.on("ready", roomId => {
       const players = roomManager.getPlayers(roomId);
+      // TODO rename getFish function since its also dealing with bombs
       const gameObjects = roomManager.getFish(roomId);
       io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 

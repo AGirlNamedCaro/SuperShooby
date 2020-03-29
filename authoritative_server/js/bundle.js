@@ -72,6 +72,9 @@ class RoomManager {
       this.physics.add.collider(this.players, this.ground);
       
       createFish(this, "fish", 11, 70, this.ground);
+      // this.bomb = this.physics.add.group();
+      // this.physics.add.collider(this.bombs, this.ground);
+      
       this.physics.add.overlap(this.players, this.fish, createBomb, collectFish, { this: this, roomId: roomId, room: room, fishes: this.fish, collider: this.ground });
 
     }
@@ -86,7 +89,10 @@ class RoomManager {
       players: {
         [player.playerId]: player
       },
-      gameObjects: {},
+      gameObjects: {
+        fish: {},
+        bombs: {},
+      },
     };
 
     console.log("players", this.rooms[roomId].players);
@@ -107,7 +113,7 @@ class RoomManager {
 
   getFish(roomId) {
     this.rooms[roomId].game.scene.keys.default.fish.getChildren().forEach((fish, index) => {
-      this.rooms[roomId].gameObjects[`fish${index}`] = {
+      this.rooms[roomId].gameObjects.fish[`fish${index}`] = {
         x: fish.x,
         y: fish.y,
         active: fish.active
@@ -171,6 +177,7 @@ window.onload = () => {
 
     socket.on("ready", roomId => {
       const players = roomManager.getPlayers(roomId);
+      // TODO rename getFish function since its also dealing with bombs
       const gameObjects = roomManager.getFish(roomId);
       io.to(socket.id).emit("currentPlayers", {players, gameObjects});
 
@@ -324,12 +331,22 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
         });
 
         level.fish.getChildren().forEach((fish, index) => {
-          gameObjects[`fish${index}`] = {
+          gameObjects.fish[`fish${index}`] = {
             x: fish.x,
             y: fish.y,
             active: fish.active
           };
         });
+
+        if (level.hasOwnProperty("bombs")) {
+          level.bombs.getChildren().forEach((bomb, index) => {
+            gameObjects.bombs[`bomb${index}`] = {
+              x: bomb.x,
+              y: bomb.y
+            };
+          });
+        }
+
         io.to(roomId).emit("gameUpdates", { players, gameObjects });
       }
     }
@@ -397,7 +414,7 @@ function createFish(self, fishKey, numFish, stepX, collider) {
   self.physics.add.collider(self.fish, collider);
 }
 
-// Clean up function with this.this
+// TODO Clean up function with this.this
 function collectFish(player, fish) {
   if (this.room.hasOwnProperty(this.roomId)) {
     if (this.room[this.roomId].players[player.playerId]) {
@@ -408,7 +425,7 @@ function collectFish(player, fish) {
   }
 
   if (this.fishes.countActive(true) === 0) {
-    this.fishes.children.iterate(function(child) {
+    this.fishes.children.iterate(child => {
       child.enableBody(true, child.x, 0, true, true);
     });
     return true;
@@ -429,11 +446,20 @@ function createBomb(player) {
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
   }
-  this.this.physics.add.collider(player, this.this.bombs, hitBomb, null, this.this);
+
+  io.to(this.roomId).emit("bombSpawn", x);
+
+  this.this.physics.add.collider(
+    player,
+    this.this.bombs,
+    hitBomb,
+    null,
+    this.this
+  );
 }
 
 function hitBomb(player) {
-  this.physics.pause();
+  // this.physics.pause();
   this.gameOver = true;
 }
 
