@@ -15,6 +15,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.stepX = data.stepX;
     this.socket = this.game.socket;
     this.roomId = data.roomId;
+    this.score = "";
   }
 
   preload() {
@@ -89,11 +90,19 @@ export default class MultiplayerScene extends Phaser.Scene {
           }
         });
       });
+
+      this.scoreData(players);
+      this.scoreText.text = this.score;
     });
 
     createCursors(self);
 
     playerAnimations(self, this.game.character);
+
+    this.scoreText = this.add.text(16, 16, this.score, {
+      fontSize: "32px",
+      fill: "#fff"
+    });
   }
 
   update() {
@@ -165,5 +174,16 @@ export default class MultiplayerScene extends Phaser.Scene {
     resultsObj.x = player.x;
     resultsObj.y = player.y;
     return resultsObj;
+  }
+
+  scoreData(players) {
+    const firstShoob = Object.keys(players)[0];
+    this.score = `Shooby 1: ${players[firstShoob].points}`;
+
+    for (let i = 1; i < Object.keys(players).length; i++) {
+      this.score = this.score.concat(
+        `\nShooby ${i + 1}: ${players[Object.keys(players)[i]].points}`
+      );
+    }
   }
 }
