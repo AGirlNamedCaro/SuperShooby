@@ -5,7 +5,7 @@ module.exports = {
       type: Phaser.HEADLESS,
       parent: "phaser-example",
       width: 800,
-      height: 600,
+      height: 640,
       autoFocus: false,
       physics: {
         default: "arcade",

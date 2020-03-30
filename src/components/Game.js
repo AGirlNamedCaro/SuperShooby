@@ -30,9 +30,6 @@ export const config = {
       gravity: { y: 200 }
     }
   },
-  scale: {
-    mode: Phaser.Scale.FIT
-  },
   dom: {
     createContainer: true
   },
@@ -55,33 +52,13 @@ export const config = {
   ]
 };
 
-function resize() {
-  let canvas = document.querySelector("canvas");
-  let windowWidth = window.innerWidth;
-  let windowHeight = window.innerHeight;
-  let windowRatio = windowWidth / windowHeight;
-  let gameRatio = game.config.width / game.config.height;
-
-  if (windowRatio < gameRatio) {
-    canvas.style.width = windowWidth + "px";
-    canvas.style.height = windowWidth / gameRatio + "px";
-  } else {
-    canvas.style.width = windowHeight * gameRatio + "px";
-    canvas.style.height = windowHeight + "px";
-  }
-}
 
 const game = new Phaser.Game(config);
 game.socket = socketIo(
   process.env.REACT_APP_HOST + ":" + process.env.REACT_APP_PORT
 );
 
-window.onload = function() {
-  resize();
-  window.addEventListener("resize", resize, false);
-};
-
-export default function Game({ level, setLevel, character, setCharacter, bomb, setBomb, fishNum, setFishNum, stepX, setStepX, score, setScore }) {
+export default function Game({ level, setLevel, character, setCharacter, bomb, setBomb, fishNum, setFishNum, stepX, setStepX, score, setScore, jump, setJump }) {
   // pass the setLevel method down to the game
   game.level = level;
   game.setLevel = setLevel;
@@ -95,6 +72,8 @@ export default function Game({ level, setLevel, character, setCharacter, bomb, s
   game.setStepX = setStepX;
   game.score = score;
   game.setScore = setScore;
+  game.jump = jump;
+  game.setJump = setJump;
 
   return (
     <div id="game-container">
