@@ -13,10 +13,14 @@ function App() {
   const [fishNum, setFishNum] = useState(7)
   const [stepX, setStepX] = useState(100)
   const [score, setScore] = useState(15)
+<<<<<<< HEAD
   const [gameOver, setGameOver] = useState(false);
   const [gameScore, setGameScore] = useState(0);
   const [hiScore, setHiScore] = useState(0);
   const [gameInfo, setGameInfo] = useState('controls')
+=======
+  const [jump, setJump] = useState(-550)
+>>>>>>> 61fdf81772a22388b96765fbfe9ef9602e0f7e7a
   
 
 
@@ -30,10 +34,14 @@ function App() {
       fishNum={fishNum} setFishNum={setFishNum}
       stepX={stepX} setStepX={setStepX}
       score={score} setScore={setScore}
+<<<<<<< HEAD
       gameOver={gameOver} setGameOver={setGameOver}
       gameScore={gameScore} hiScore={hiScore}
       setGameScore={setGameScore} setHiScore={setHiScore}
       gameInfo={gameInfo} setGameInfo={setGameInfo}
+=======
+      jump={jump} setJump={setJump}
+>>>>>>> 61fdf81772a22388b96765fbfe9ef9602e0f7e7a
       />
       {gameInfo === "createMapControls" ?   <EditMapDesc 
       gameInfo={gameInfo} setGameInfo={setGameInfo}

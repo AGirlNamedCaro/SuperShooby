@@ -83,7 +83,8 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ level, setLevel, gameInfo, setGameInfo, character, setCharacter, bomb, setBomb, fishNum, setFishNum, stepX, setStepX, score, setScore, gameOver, setGameOver, gameScore, setGameScore, hiScore, setHiScore  }) {
+export default function Game({ level, setLevel, gameInfo, setGameInfo, character, setCharacter, bomb, setBomb,
+   fishNum, setFishNum, jump, setJump, stepX, setStepX, score, setScore, gameOver, setGameOver, gameScore, setGameScore, hiScore, setHiScore  }) {
   // pass the setLevel method down to the game
   game.level = level;
   game.setLevel = setLevel;
@@ -107,6 +108,8 @@ export default function Game({ level, setLevel, gameInfo, setGameInfo, character
   game.setGameInfo = setGameInfo
 
 
+  game.jump = jump;
+  game.setJump = setJump;
 
   return (
     <div id="game-container">
