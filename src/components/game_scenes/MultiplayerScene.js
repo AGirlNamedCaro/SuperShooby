@@ -12,6 +12,7 @@ export default class MultiplayerScene extends Phaser.Scene {
     this.socket = this.game.socket;
     this.roomId = data.roomId;
     this.score = "";
+    this.gameOverScore = "";
     this.level = 0;
   }
 
@@ -23,7 +24,6 @@ export default class MultiplayerScene extends Phaser.Scene {
   create() {
     const self = this;
     this.socket.emit("ready", this.roomId);
-
     createWorld(self);
     createCursors(self);
 
@@ -36,7 +36,11 @@ export default class MultiplayerScene extends Phaser.Scene {
         playerAnimations(self, players[id].character);
         console.log("playerData " + id, players[id]);
         if (players[id].playerId === self.socket.id) {
-          this.player = this.displayPlayers(self, players[id], players[id].character);
+          this.player = this.displayPlayers(
+            self,
+            players[id],
+            players[id].character
+          );
         } else {
           this.displayPlayers(self, players[id], players[id].character);
         }
@@ -58,8 +62,8 @@ export default class MultiplayerScene extends Phaser.Scene {
       this.displayPlayers(self, playerInfo, playerInfo.character);
     });
 
-    this.socket.on("bombSpawn", ({ x, length}) => {
-      console.log("length", length)
+    this.socket.on("bombSpawn", ({ x, length }) => {
+      console.log("length", length);
       this.level++;
       this.numOfBombs = length - this.game.bomb;
       console.log("num", this.numOfBombs);
@@ -68,7 +72,7 @@ export default class MultiplayerScene extends Phaser.Scene {
       for (let i = 0; i < this.game.bomb; i++) {
         this.displayBombs(self, x, `bomb${this.numOfBombs}`, "bomb");
         this.numOfBombs++;
-        console.log("aftern", this.numOfBombs)
+        console.log("aftern", this.numOfBombs);
       }
     });
 
@@ -126,10 +130,17 @@ export default class MultiplayerScene extends Phaser.Scene {
       });
 
       if (gameObjects.gameOver === true) {
-        console.log("gameOver");
+        this.displayGameOver(players);
+        this.gameOverText.text = this.gameOverScore;
       }
+
       this.scoreData(players);
       this.scoreText.text = this.score;
+    });
+
+    this.gameOverText = this.add.text(100, 100, this.gameOverScore, {
+      fontSize: "32px",
+      fill: "#fff"
     });
 
     this.scoreText = this.add.text(16, 16, this.score, {
@@ -172,6 +183,10 @@ export default class MultiplayerScene extends Phaser.Scene {
     console.log(playerInfo.x, playerInfo.y);
     const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
     player.playerId = playerInfo.playerId;
+
+    // TODO need the player to be a physics object to collide with world bounds, but causes glitches
+    // Server might also think its passing the world bounds and giving back an incorrect position
+    // player.setCollideWorldBounds(true);
     self.players.add(player);
     return player;
   }
@@ -200,7 +215,7 @@ export default class MultiplayerScene extends Phaser.Scene {
         down: false,
         right: false,
         x: 100,
-        y: 450
+        y: this.game.jump
       };
       return resultsObj;
     }
@@ -218,13 +233,44 @@ export default class MultiplayerScene extends Phaser.Scene {
   }
 
   scoreData(players) {
+    // TODO set the player number to the playerId
     const firstShoob = Object.keys(players)[0];
     this.score = `Shooby 1: ${players[firstShoob].points}`;
+    if (this.socket.id === firstShoob) {
+      this.score = this.score.concat(" *");
+    }
 
     for (let i = 1; i < Object.keys(players).length; i++) {
       this.score = this.score.concat(
         `\nShooby ${i + 1}: ${players[Object.keys(players)[i]].points}`
       );
+
+      if (Object.keys(players)[i] === this.socket.id) {
+        this.score = this.score.concat(" *");
+      }
     }
+  }
+
+  displayGameOver(players) {
+    // TODO rewrite this so that highscores can be used in scoreData also
+    const highScores = {};
+
+    for (let i = 0; i < Object.keys(players).length; i++) {
+      if (Object.keys(players)[i] === this.socket.id) {
+        highScores[`Shooby ${i + 1}`] = players[Object.keys(players)[i]].points + " *";
+      } else {
+        highScores[`Shooby ${i + 1}`] = players[Object.keys(players)[i]].points;
+      }
+    }
+
+    const sortedScore = Object.entries(highScores).sort((a, b) => b[1] - a[1]);
+
+    this.gameOverScore = "GAME OVER \nHIGH SCORES";
+
+    sortedScore.forEach((score, index) => {
+      this.gameOverScore = this.gameOverScore.concat(
+        `\n\n${index + 1}. ${score[0]} : ${score[1]}`
+      );
+    });
   }
 }

@@ -59,12 +59,14 @@ export function createFish(self, fishKey, numFish, collider) {
 }
 
 export function collectFish(player, fish) {
+ 
   fish.disableBody(true, true);
-  this.score += this.game.score;
-  this.scoreText.setText("score: " + this.score);
+    
+  this.game.setGameScore(this.game.gameScore + this.game.score); 
+  this.scoreText.setText("score: " + this.game.gameScore);
 
-  if (this.score > this.highScore) {
-    this.scoreText.setText("NEW score: " + this.score);
+  if (this.game.gameScore > this.game.hiScore) {
+    this.scoreText.setText("NEW score: " + this.game.gameScore);
   }
 
   if (this.fish.countActive(true) === 0) {
@@ -100,5 +102,5 @@ export function hitBomb(player) {
   this.physics.pause();
   player.setTint(0xff0000);
   player.anims.play(this.game.character + "turn");
-  this.gameOver = true;
+  this.game.setGameOver(true);
 }

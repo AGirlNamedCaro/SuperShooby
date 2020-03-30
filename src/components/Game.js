@@ -1,6 +1,6 @@
 import React from "react";
 import Phaser from "phaser";
-import socketIo from "socket.io-client"
+import socketIo from "socket.io-client";
 import Preload from "./game_scenes/Preload";
 import TitleScene from "./game_scenes/TitleScene";
 import MainMenu from "./game_scenes/menu_scenes/MainMenu";
@@ -12,7 +12,7 @@ import CreateCharacterMenu from "./game_scenes/menu_scenes/createCharacter";
 import RoomSelectMenu from "./game_scenes/menu_scenes/RoomSelectMenu";
 import CreateRoomMenu from "./game_scenes/menu_scenes/CreateRoomMenu"
 import JoinRoomMenu from "./game_scenes/menu_scenes/JoinRoomMenu"
-
+import GameOverMenu from "./game_scenes/menu_scenes/GameOverMenu"
 
 import SinglePlayer from "./game_scenes/SinglePlayerScene";
 import MultiplayerScene from "./game_scenes/MultiplayerScene";
@@ -49,9 +49,10 @@ export const config = {
     CreateMap,
     SinglePlayer,
     SetMapMenu,
-    RoomSelectMenu, 
+    RoomSelectMenu,
     CreateRoomMenu,
-    JoinRoomMenu
+    JoinRoomMenu,
+    GameOverMenu
   ]
 };
 
@@ -79,7 +80,8 @@ window.onload = function() {
   window.addEventListener("resize", resize, false);
 };
 
-export default function Game({ level, setLevel, character, setCharacter, bomb, setBomb, fishNum, setFishNum, stepX, setStepX, score, setScore }) {
+export default function Game({ level, setLevel, gameInfo, setGameInfo, character, setCharacter, bomb, setBomb,
+   fishNum, setFishNum, jump, setJump, stepX, setStepX, score, setScore, gameOver, setGameOver, gameScore, setGameScore, hiScore, setHiScore, gravity, setGravity }) {
   // pass the setLevel method down to the game
   game.level = level;
   game.setLevel = setLevel;
@@ -93,6 +95,18 @@ export default function Game({ level, setLevel, character, setCharacter, bomb, s
   game.setStepX = setStepX;
   game.score = score;
   game.setScore = setScore;
+  game.gameOver = gameOver;
+  game.setGameOver = setGameOver;
+  game.gameScore = gameScore;
+  game.setGameScore = setGameScore;
+  game.hiScore = hiScore;
+  game.setHiScore = setHiScore;
+  game.gameInfo = gameInfo;
+  game.setGameInfo = setGameInfo
+  game.jump = jump;
+  game.setJump = setJump;
+  game.gravity = gravity;
+  game.setGravity = setGravity;
 
   return (
     <div id="game-container">

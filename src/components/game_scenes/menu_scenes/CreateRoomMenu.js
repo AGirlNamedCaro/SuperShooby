@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-const axios = require("axios");
 
 export default class Customize extends Phaser.Scene {
   constructor() {
@@ -51,6 +50,31 @@ export default class Customize extends Phaser.Scene {
     );
     highJump.setScale(0.12);
     highJump.alpha = 0.05;
+
+    const gravityOne = this.add.image(
+      this.game.renderer.width / 1.72,
+      this.game.renderer.height * 0.29,
+      "gravityOne"
+    );
+    gravityOne.setScale(0.12);
+    gravityOne.alpha = 0.05;
+
+    const gravityTwo = this.add.image(
+      this.game.renderer.width / 1.60,
+      this.game.renderer.height * 0.29,
+      "gravityTwo"
+    );
+    gravityTwo.setScale(0.12);
+    gravityTwo.alpha = 1;
+
+    const gravityThree = this.add.image(
+      this.game.renderer.width / 1.45,
+      this.game.renderer.height * 0.28,
+      "gravityThree"
+    );
+    gravityThree.setScale(0.12);
+    gravityThree.alpha = 0.05;
+
     const smallPlayButton = this.add.image(
       this.game.renderer.width / 2.75,
       this.game.renderer.height * 0.63,
@@ -77,23 +101,54 @@ export default class Customize extends Phaser.Scene {
     lowJump.setInteractive();
     medJump.setInteractive();
     highJump.setInteractive();
+    gravityOne.setInteractive();
+    gravityTwo.setInteractive();
+    gravityThree.setInteractive();
+
+
 
     lowJump.on("pointerdown", () => {
       lowJump.alpha = 1;
       medJump.alpha = 0.05;
       highJump.alpha = 0.05;
+      this.game.setJump(-435);
     });
 
     medJump.on("pointerdown", () => {
       lowJump.alpha = 0.05;
       medJump.alpha = 1;
       highJump.alpha = 0.05;
+      this.game.setJump(-470);
+
     });
 
     highJump.on("pointerdown", () => {
       lowJump.alpha = 0.05;
       medJump.alpha = 0.05;
       highJump.alpha = 1;
+      this.game.setJump(-550);
+      
+    });
+
+    gravityOne.on("pointerdown", () => {
+      gravityOne.alpha = 1;
+      gravityTwo.alpha = 0.05;
+      gravityThree.alpha = 0.05;
+      this.game.setGravity(100);
+    });
+
+    gravityTwo.on("pointerdown", () => {
+      gravityOne.alpha = 0.05;
+      gravityTwo.alpha = 1;
+      gravityThree.alpha = 0.05;
+      this.game.setGravity(300);
+    });
+
+    gravityThree.on("pointerdown", () => {
+      gravityOne.alpha = 0.05;
+      gravityTwo.alpha = 0.05;
+      gravityThree.alpha = 1;
+      this.game.setGravity(500);
     });
 
     joinCreateButton.on("pointerdown", () => {
@@ -105,7 +160,9 @@ export default class Customize extends Phaser.Scene {
           bombNum: this.game.bomb,
           fishNum: this.game.fishNum,
           score: this.game.score,
-          stepX: this.game.stepX
+          stepX: this.game.stepX,
+          jump: this.game.jump,
+          gravity: this.game.gravity
         }
       });
       this.game.socket.on("createdRoom", roomId => {

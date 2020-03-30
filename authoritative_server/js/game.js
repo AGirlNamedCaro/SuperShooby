@@ -71,13 +71,15 @@ class RoomManager {
       this.gameOver = false;
     }
 
-    const update = createUpdate(this.rooms, roomId, 160, 550);
+    const update = createUpdate(this.rooms, roomId, 160, difficulty.jump);
     const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
       roomId: roomId,
       roomMap: roomMap,
       game: game,
+      gravity: difficulty.gravity,
+      jump: difficulty.jump,
       players: {},
       gameObjects: {
         fish: {},
@@ -90,12 +92,16 @@ class RoomManager {
   }
 
   joinRoom(roomId, player) {
-    const room = this.rooms[roomId];
-    room.scene = room.game.scene.keys.default;
+    if (this.rooms[roomId]) {
+      const room = this.rooms[roomId];
+      room.scene = room.game.scene.keys.default;
 
-    addPlayer(room.scene, player);
+      addPlayer(room, player);
 
-    room.players[player.playerId] = player;
+      room.players[player.playerId] = player;
+      return true;
+    }
+    return false;
   }
 
   getPlayers(roomId) {
@@ -162,9 +168,12 @@ window.onload = () => {
         y: 450
       });
 
-      console.log("newPlayer", player)
-      roomManager.joinRoom(roomId, player);
-      io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
+      console.log("newPlayer", player);
+      const working = roomManager.joinRoom(roomId, player);
+      // TODO quick hack to stop server from crashing, implement better error handling
+      if (working) {
+        io.to(socket.id).emit("roomMap", roomManager.rooms[roomId].roomMap);
+      }
       // TODO fix broken error handling
       // } else {
       //   io.to(socket.id).emit("errJoinRoom", "Room does not exist");
@@ -255,6 +264,7 @@ window.onload = () => {
       });
 
       client.connect(err => {
+        if (err) throw err;
         const collection = client.db("game_db").collection("maps");
         collection.find({ mapId: levelId }).toArray((err, map) => {
           if (err) throw err;
