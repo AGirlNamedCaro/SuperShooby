@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-const axios = require("axios");
 
 export default class Customize extends Phaser.Scene {
   constructor() {
@@ -135,18 +134,21 @@ export default class Customize extends Phaser.Scene {
       gravityOne.alpha = 1;
       gravityTwo.alpha = 0.05;
       gravityThree.alpha = 0.05;
+      this.game.setGravity(100);
     });
 
     gravityTwo.on("pointerdown", () => {
       gravityOne.alpha = 0.05;
       gravityTwo.alpha = 1;
       gravityThree.alpha = 0.05;
+      this.game.setGravity(300);
     });
 
     gravityThree.on("pointerdown", () => {
       gravityOne.alpha = 0.05;
       gravityTwo.alpha = 0.05;
       gravityThree.alpha = 1;
+      this.game.setGravity(500);
     });
 
     joinCreateButton.on("pointerdown", () => {
@@ -158,7 +160,9 @@ export default class Customize extends Phaser.Scene {
           bombNum: this.game.bomb,
           fishNum: this.game.fishNum,
           score: this.game.score,
-          stepX: this.game.stepX
+          stepX: this.game.stepX,
+          jump: this.game.jump,
+          gravity: this.game.gravity
         }
       });
       this.game.socket.on("createdRoom", roomId => {

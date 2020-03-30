@@ -71,13 +71,15 @@ class RoomManager {
       this.gameOver = false;
     }
 
-    const update = createUpdate(this.rooms, roomId, 160, 550);
+    const update = createUpdate(this.rooms, roomId, 160, difficulty.jump);
     const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
       roomId: roomId,
       roomMap: roomMap,
       game: game,
+      gravity: difficulty.gravity,
+      jump: difficulty.jump,
       players: {},
       gameObjects: {
         fish: {},
@@ -93,7 +95,7 @@ class RoomManager {
     const room = this.rooms[roomId];
     room.scene = room.game.scene.keys.default;
 
-    addPlayer(room.scene, player);
+    addPlayer(room, player);
 
     room.players[player.playerId] = player;
   }

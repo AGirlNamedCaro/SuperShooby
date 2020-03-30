@@ -36,7 +36,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
           }
 
           if (playerState.up && player.body.blocked.down) {
-            player.setVelocityY(playerJump * -1);
+            player.setVelocityY(playerJump);
           }
 
           players[player.playerId].x = player.x;
@@ -88,9 +88,10 @@ function initPlayer(roomId, playerId, character, startLoc) {
   });
 }
 
-function addPlayer(self, playerInfo, collisions) {
+function addPlayer(room, playerInfo) {
+  const self = room.game.scene.keys.default;
   const player = self.physics.add.sprite(100, 450, "dude");
-  player.body.setGravityY(300);
+  player.body.setGravityY(room.jump);
 
   player.setBounce(0.2);
   // TODO This isnt working, probably because the game screens are different sizes right now.

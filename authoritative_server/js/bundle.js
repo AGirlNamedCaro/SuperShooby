@@ -99,13 +99,15 @@ class RoomManager {
       this.gameOver = false;
     }
 
-    const update = createUpdate(this.rooms, roomId, 160, 550);
+    const update = createUpdate(this.rooms, roomId, 160, difficulty.jump);
     const game = new Phaser.Game(config(preload, create, update, { y: 300 }));
 
     this.rooms[roomId] = {
       roomId: roomId,
       roomMap: roomMap,
       game: game,
+      gravity: difficulty.gravity,
+      jump: difficulty.jump,
       players: {},
       gameObjects: {
         fish: {},
@@ -121,7 +123,7 @@ class RoomManager {
     const room = this.rooms[roomId];
     room.scene = room.game.scene.keys.default;
 
-    addPlayer(room.scene, player);
+    addPlayer(room, player);
 
     room.players[player.playerId] = player;
   }
@@ -347,7 +349,7 @@ function createUpdate(rooms, roomId, playerSpeed, playerJump) {
           }
 
           if (playerState.up && player.body.blocked.down) {
-            player.setVelocityY(playerJump * -1);
+            player.setVelocityY(playerJump);
           }
 
           players[player.playerId].x = player.x;
@@ -399,9 +401,10 @@ function initPlayer(roomId, playerId, character, startLoc) {
   });
 }
 
-function addPlayer(self, playerInfo, collisions) {
+function addPlayer(room, playerInfo) {
+  const self = room.game.scene.keys.default;
   const player = self.physics.add.sprite(100, 450, "dude");
-  player.body.setGravityY(300);
+  player.body.setGravityY(room.jump);
 
   player.setBounce(0.2);
   // TODO This isnt working, probably because the game screens are different sizes right now.
