@@ -72,9 +72,7 @@ function resize() {
 }
 
 const game = new Phaser.Game(config);
-game.socket = socketIo(
-  window.origin + ":" + process.env.PORT
-);
+game.socket = socketIo('/');
 
 window.onload = function() {
   resize();
