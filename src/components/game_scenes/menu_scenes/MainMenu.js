@@ -10,6 +10,7 @@ export default class MainMenu extends Phaser.Scene{
   }
   
   create() {
+    this.game.setGameInfo("controls");
     console.log('mainMenu',this.game.character)
     const menuBg = this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.30, "menuBg");
     menuBg.scale = 0.3;

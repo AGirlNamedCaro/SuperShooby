@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import "./App.css";
 import Game from "./Game";
 import TopBar from "./TopBar";
-import GameDesc from "./GameDesc"
+import GameDesc from "./GameDesc";
+import EditMapDesc from "./EditMapDesc"
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
   const [score, setScore] = useState(15)
   const [gameOver, setGameOver] = useState(false);
   const [gameScore, setGameScore] = useState(0);
-  const [hiScore, setHiScore] = useState(0)
+  const [hiScore, setHiScore] = useState(0);
+  const [gameInfo, setGameInfo] = useState('controls')
   
 
 
@@ -31,9 +33,17 @@ function App() {
       gameOver={gameOver} setGameOver={setGameOver}
       gameScore={gameScore} hiScore={hiScore}
       setGameScore={setGameScore} setHiScore={setHiScore}
+      gameInfo={gameInfo} setGameInfo={setGameInfo}
       />
-      <GameDesc />     
-    </section>
+      {gameInfo === "createMapControls" ?   <EditMapDesc 
+      gameInfo={gameInfo} setGameInfo={setGameInfo}
+      /> : <GameDesc 
+      gameInfo={gameInfo} setGameInfo={setGameInfo}
+      />}  
+      
+     
+  </section>
+
   );
 }
 
