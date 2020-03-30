@@ -183,6 +183,10 @@ export default class MultiplayerScene extends Phaser.Scene {
     console.log(playerInfo.x, playerInfo.y);
     const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
     player.playerId = playerInfo.playerId;
+
+    // TODO need the player to be a physics object to collide with world bounds, but causes glitches
+    // Server might also think its passing the world bounds and giving back an incorrect position
+    // player.setCollideWorldBounds(true);
     self.players.add(player);
     return player;
   }
