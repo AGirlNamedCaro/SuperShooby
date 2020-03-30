@@ -17,6 +17,7 @@ function App() {
   const [gameScore, setGameScore] = useState(0);
   const [hiScore, setHiScore] = useState(0);
   const [gameInfo, setGameInfo] = useState('controls')
+  const [jump, setJump] = useState(-550)
   
 
 
@@ -34,6 +35,7 @@ function App() {
       gameScore={gameScore} hiScore={hiScore}
       setGameScore={setGameScore} setHiScore={setHiScore}
       gameInfo={gameInfo} setGameInfo={setGameInfo}
+      jump={jump} setJump={setJump}
       />
       {gameInfo === "createMapControls" ?   <EditMapDesc 
       gameInfo={gameInfo} setGameInfo={setGameInfo}
