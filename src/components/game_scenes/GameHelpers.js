@@ -102,3 +102,65 @@ export function hitBomb(player) {
   player.anims.play(this.game.character + "turn");
   this.gameOver = true;
 }
+
+//multiplayer functions 
+
+export function  displayPlayers(self, playerInfo, sprite) {
+  console.log(playerInfo.x, playerInfo.y);
+  const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
+  player.playerId = playerInfo.playerId;
+  self.players.add(player);
+  return player;
+}
+
+export function displayFish(self, fish, fishId, sprite) {
+  const newFish = self.add.sprite(fish.x, fish.y, sprite);
+  newFish.fishId = fishId;
+  newFish.anims.play("flop", true);
+  self.fishes.add(newFish);
+  return newFish;
+}
+
+export function displayBombs(self, bomb, bombId, sprite) {
+  const newBomb = self.add.image(bomb.x, bomb.y, sprite);
+  newBomb.bombId = bombId;
+  self.bombs.add(newBomb);
+  return newBomb;
+}
+
+export function calcPlayerState(player, playerState, isState, state) {
+  let resultsObj = {};
+  if (!playerState) {
+    resultsObj = {
+      up: false,
+      left: false,
+      down: false,
+      right: false,
+      x: 100,
+      y: 450
+    };
+    return resultsObj;
+  }
+
+  resultsObj = playerState;
+
+  if (isState) {
+    resultsObj[state] = true;
+  } else {
+    resultsObj[state] = false;
+  }
+  resultsObj.x = player.x;
+  resultsObj.y = player.y;
+  return resultsObj;
+}
+
+export function scoreData(self,players) {
+  const firstShoob = Object.keys(players)[0];
+  self.score = `Shooby 1: ${players[firstShoob].points}`;
+
+  for (let i = 1; i < Object.keys(players).length; i++) {
+    self.score = self.score.concat(
+      `\nShooby ${i + 1}: ${players[Object.keys(players)[i]].points}`
+    );
+  }
+}

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { createCursors, createWorld, playerAnimations } from "./GameHelpers";
+import { createCursors, createWorld, playerAnimations, displayPlayers, displayFish, displayBombs, calcPlayerState, scoreData } from "./GameHelpers";
 
 export default class MultiplayerScene extends Phaser.Scene {
   constructor() {
@@ -7,7 +7,7 @@ export default class MultiplayerScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.playerState = this.calcPlayerState();
+    this.playerState = calcPlayerState();
     this.oldPlayerState = this.playerState;
     this.socket = this.game.socket;
     this.roomId = data.roomId;
@@ -36,18 +36,18 @@ export default class MultiplayerScene extends Phaser.Scene {
         playerAnimations(self, players[id].character);
         console.log("playerData " + id, players[id]);
         if (players[id].playerId === self.socket.id) {
-          this.player = this.displayPlayers(self, players[id], players[id].character);
+          this.player = displayPlayers(self, players[id], players[id].character);
         } else {
-          this.displayPlayers(self, players[id], players[id].character);
+          displayPlayers(self, players[id], players[id].character);
         }
       });
 
       Object.keys(gameObjects.fish).forEach(fish => {
-        this.displayFish(self, gameObjects.fish[fish], fish, "fish");
+        displayFish(self, gameObjects.fish[fish], fish, "fish");
       });
 
       Object.keys(gameObjects.bombs).forEach(bomb => {
-        this.displayBombs(self, gameObjects.bombs[bomb], bomb, "bomb");
+        displayBombs(self, gameObjects.bombs[bomb], bomb, "bomb");
       });
     });
 
@@ -55,7 +55,7 @@ export default class MultiplayerScene extends Phaser.Scene {
       console.log("newPlayer");
       console.log("playerData", playerInfo);
       playerAnimations(self, playerInfo.character);
-      this.displayPlayers(self, playerInfo, playerInfo.character);
+      displayPlayers(self, playerInfo, playerInfo.character);
     });
 
     this.socket.on("bombSpawn", ({ x, length}) => {
@@ -66,7 +66,7 @@ export default class MultiplayerScene extends Phaser.Scene {
       //TODO Get this from difficulty of the game
       console.log("spawning");
       for (let i = 0; i < this.game.bomb; i++) {
-        this.displayBombs(self, x, `bomb${this.numOfBombs}`, "bomb");
+        displayBombs(self, x, `bomb${this.numOfBombs}`, "bomb");
         this.numOfBombs++;
         console.log("aftern", this.numOfBombs)
       }
@@ -128,7 +128,7 @@ export default class MultiplayerScene extends Phaser.Scene {
       if (gameObjects.gameOver === true) {
         console.log("gameOver");
       }
-      this.scoreData(players);
+      scoreData(self,players);
       this.scoreText.text = this.score;
     });
 
@@ -167,64 +167,4 @@ export default class MultiplayerScene extends Phaser.Scene {
     }
   }
 
-  // TODO dry up these functions
-  displayPlayers(self, playerInfo, sprite) {
-    console.log(playerInfo.x, playerInfo.y);
-    const player = self.add.sprite(playerInfo.x, playerInfo.y, sprite);
-    player.playerId = playerInfo.playerId;
-    self.players.add(player);
-    return player;
-  }
-
-  displayFish(self, fish, fishId, sprite) {
-    const newFish = self.add.sprite(fish.x, fish.y, sprite);
-    newFish.fishId = fishId;
-    newFish.anims.play("flop", true);
-    self.fishes.add(newFish);
-    return newFish;
-  }
-
-  displayBombs(self, bomb, bombId, sprite) {
-    const newBomb = self.add.image(bomb.x, bomb.y, sprite);
-    newBomb.bombId = bombId;
-    self.bombs.add(newBomb);
-    return newBomb;
-  }
-
-  calcPlayerState(player, playerState, isState, state) {
-    let resultsObj = {};
-    if (!playerState) {
-      resultsObj = {
-        up: false,
-        left: false,
-        down: false,
-        right: false,
-        x: 100,
-        y: 450
-      };
-      return resultsObj;
-    }
-
-    resultsObj = playerState;
-
-    if (isState) {
-      resultsObj[state] = true;
-    } else {
-      resultsObj[state] = false;
-    }
-    resultsObj.x = player.x;
-    resultsObj.y = player.y;
-    return resultsObj;
-  }
-
-  scoreData(players) {
-    const firstShoob = Object.keys(players)[0];
-    this.score = `Shooby 1: ${players[firstShoob].points}`;
-
-    for (let i = 1; i < Object.keys(players).length; i++) {
-      this.score = this.score.concat(
-        `\nShooby ${i + 1}: ${players[Object.keys(players)[i]].points}`
-      );
-    }
-  }
 }
