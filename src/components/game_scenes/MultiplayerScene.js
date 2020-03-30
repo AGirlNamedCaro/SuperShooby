@@ -232,11 +232,18 @@ export default class MultiplayerScene extends Phaser.Scene {
     // TODO set the player number to the playerId
     const firstShoob = Object.keys(players)[0];
     this.score = `Shooby 1: ${players[firstShoob].points}`;
+    if (this.socket.id === firstShoob) {
+      this.score = this.score.concat(" *");
+    }
 
     for (let i = 1; i < Object.keys(players).length; i++) {
       this.score = this.score.concat(
         `\nShooby ${i + 1}: ${players[Object.keys(players)[i]].points}`
       );
+
+      if (Object.keys(players)[i] === this.socket.id) {
+        this.score = this.score.concat(" *");
+      }
     }
   }
 
@@ -245,16 +252,21 @@ export default class MultiplayerScene extends Phaser.Scene {
     const highScores = {};
 
     for (let i = 0; i < Object.keys(players).length; i++) {
-      highScores[`Shooby ${i + 1}`] = players[Object.keys(players)[i]].points;
+      if (Object.keys(players)[i] === this.socket.id) {
+        highScores[`Shooby ${i + 1}`] = players[Object.keys(players)[i]].points + " *";
+      } else {
+        highScores[`Shooby ${i + 1}`] = players[Object.keys(players)[i]].points;
+      }
     }
 
     const sortedScore = Object.entries(highScores).sort((a, b) => b[1] - a[1]);
 
     this.gameOverScore = "GAME OVER \nHIGH SCORES";
 
-    for (let score of sortedScore) {
-      this.gameOverScore.concat(`\n ${score[0]} : ${score[1]}`)
-    };
-    
+    sortedScore.forEach((score, index) => {
+      this.gameOverScore = this.gameOverScore.concat(
+        `\n\n${index + 1}. ${score[0]} : ${score[1]}`
+      );
+    });
   }
 }
