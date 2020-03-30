@@ -13,9 +13,12 @@ export default class CreateMap extends Phaser.Scene {
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
     this.load.tilemapTiledJSON("world", this.game.level);
+    this.load.image("exportMenu", "/assets/images/backgrounds/exportMenu.png");
+
   }
 
   create() {
+    this.game.setGameInfo('createMapControls') 
     const map = this.make.tilemap({ key: "world" });
     const tiles = map.addTilesetImage("tiles");
 
@@ -80,6 +83,11 @@ export default class CreateMap extends Phaser.Scene {
 
     this.input.keyboard.on("keyup-" + "E", event => {
       // TODO this is where the exporting happens, should make a menu that pops up when this is pressed or something
+      this.exportMenu = this.add.image(this.game.renderer.width / 3.2, this.game.renderer.height * 0.40, "exportMenu");
+      this.exportMenu.scale = 0.35
+      this.exit = this.add.image(this.game.renderer.width / 1.5, this.game.renderer.height * 0.62, "exit");
+      this.exit.scale = 0.20
+      this.exit.setInteractive();
       console.log("exporting");
       const saveThumbnail = new Promise((res, rej) => {
         this.text.setVisible(false);
@@ -107,8 +115,15 @@ export default class CreateMap extends Phaser.Scene {
           levelData: exportObj
         };
 
+       
         this.game.setLevel(exportObj);
         this.socket.emit("createMap", mapData);
+        this.exit.on("pointerdown", () => {
+          this.scene.start( "titleScene")
+          this.scene.start( "mainMenu")
+          
+        })
+
       });
     });
 

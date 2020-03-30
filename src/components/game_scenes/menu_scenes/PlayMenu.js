@@ -21,7 +21,7 @@ export default class PlayMenu extends Phaser.Scene {
     this.add.existing(this.menuBg);
     const singlePlayer = this.add.image(
       this.game.renderer.width / 1.96,
-      this.game.renderer.height * 0.185,
+      this.game.renderer.height * 0.191,
       "singlePlayer"
     );
     singlePlayer.scale = 0.3;

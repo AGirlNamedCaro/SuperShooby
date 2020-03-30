@@ -57,6 +57,7 @@ export default class Customize extends Phaser.Scene {
     });
 
     createRoomButton.on("pointerdown", () => {
+      
       this.game.socket.emit("setupRoomId");
       this.game.socket.on("roomId", roomId => {
         console.log("created", roomId);

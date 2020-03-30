@@ -24,6 +24,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image("headButton", "/assets/images/buttons/headButton.png");
     this.load.image("customizeButton", "/assets/images/buttons/customizeButton.png");
     this.load.image("setMapButton", "/assets/images/buttons/setMapButton.png");
+    this.load.image('thumbnailBg', '/assets/images/backgrounds/thumbnailBg.png');
     this.load.image("createMapButton", "/assets/images/buttons/createMapButton.png");
     this.load.image("createCharButton", "/assets/images/buttons/createCharButton.png");
     this.load.image('ground', '/assets/images/prefabs/platform.png');
@@ -44,6 +45,7 @@ export default class Preload extends Phaser.Scene {
     this.load.image('gravityOne', '/assets/images/buttons/gravityOne.png');
     this.load.image('gravityTwo', '/assets/images/buttons/gravityTwo.png');
     this.load.image('gravityThree', '/assets/images/buttons/gravityThree.png');
+
 
 
 
