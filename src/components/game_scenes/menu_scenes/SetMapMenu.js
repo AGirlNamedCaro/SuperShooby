@@ -35,7 +35,8 @@ export default class SetMapMenu extends Phaser.Scene {
   }
 
   create() {
-    
+    // TODO should fix keys being captured and not entering into text field
+    this.input.keyboard.disableGlobalCapture();
     this.add.existing(this.menuBg);
     this.add.existing(this.setMapButton);
     const ropeLeft = this.add.image(this.game.renderer.width / 2.30, this.game.renderer.height * 0.47, "backButtonRope");
