@@ -12,13 +12,14 @@ export default class CreateMap extends Phaser.Scene {
 
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
-    this.load.tilemapTiledJSON("world", this.game.level);
+    this.load.tilemapTiledJSON("createWorld", this.game.level);
     this.load.image("exportMenu", "/assets/images/backgrounds/exportmenu.png");
   }
 
   create() {
     this.game.setGameInfo("createMapControls");
-    const map = this.make.tilemap({ key: "world" });
+    // TODO need to figure out why this scene isnt loading up the set scene
+    const map = this.make.tilemap({ key: "createWorld" });
     const tiles = map.addTilesetImage("tiles");
 
     this.skyLayer = map.createDynamicLayer("sky", [tiles], 0, 0);
@@ -155,6 +156,7 @@ export default class CreateMap extends Phaser.Scene {
         this.exit.on("pointerdown", () => {
           this.scene.start("titleScene");
           this.scene.start("mainMenu");
+          this.scene.stop("createMap");
         });
       });
     });
