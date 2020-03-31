@@ -34,6 +34,9 @@
     "watch": "watchify authoritative_server/js/game.js -o authoritative_server/js/bundle.js",
     "heroku-postbuild": "react-scripts build"
   },
+  "engines": {
+    "node": "v10.16.x"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
