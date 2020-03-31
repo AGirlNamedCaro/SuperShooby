@@ -15,7 +15,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
 
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
-    this.load.tilemapTiledJSON("world", this.game.level);
+    this.load.tilemapTiledJSON("singleWorld", this.game.level);
     this.load.image("resumeButton", "/assets/images/buttons/resumeButton.png")
     this.load.image('exitButton', '/assets/images/buttons/exitButton.png'); 
   }

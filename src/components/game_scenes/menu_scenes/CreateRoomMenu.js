@@ -52,8 +52,8 @@ export default class Customize extends Phaser.Scene {
     highJump.alpha = 0.05;
 
     const gravityOne = this.add.image(
-      this.game.renderer.width / 1.72,
-      this.game.renderer.height * 0.29,
+      this.game.renderer.width / 1.75,
+      this.game.renderer.height * 0.30,
       "gravityOne"
     );
     gravityOne.setScale(0.12);
@@ -68,7 +68,7 @@ export default class Customize extends Phaser.Scene {
     gravityTwo.alpha = 1;
 
     const gravityThree = this.add.image(
-      this.game.renderer.width / 1.45,
+      this.game.renderer.width / 1.46,
       this.game.renderer.height * 0.28,
       "gravityThree"
     );

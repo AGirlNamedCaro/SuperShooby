@@ -52,15 +52,15 @@
        "tileheight":16,
        "tilesets":[
               {
-               "columns":33,
+               "columns":5,
                "firstgid":1,
-               "image":"..\/..\/Pictures\/marioTileset2.png",
-               "imageheight":448,
-               "imagewidth":528,
+               "image":"..\/..\/Pictures\/shoobyTileSet.png",
+               "imageheight":80,
+               "imagewidth":80,
                "margin":0,
                "name":"tiles",
                "spacing":0,
-               "tilecount":924,
+               "tilecount":25,
                "tileheight":16,
                "tilewidth":16
               }],

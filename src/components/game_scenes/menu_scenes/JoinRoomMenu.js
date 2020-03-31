@@ -11,6 +11,8 @@ export default class Customize extends Phaser.Scene {
   }
 
   create() {
+    this.input.keyboard.disableGlobalCapture();
+
     const backButtonRope = this.add.image(
       this.game.renderer.width / 2.8,
       this.game.renderer.height * 0.47,
@@ -52,8 +54,9 @@ export default class Customize extends Phaser.Scene {
         </div>`;
     //
     const htmlForm = this.add
-      .dom(this.game.renderer.width / 2.1, this.game.renderer.height * 0.3)
+      .dom(this.game.renderer.width / 1.7, this.game.renderer.height * 0.38)
       .createFromHTML(inputField);
+    htmlForm.scale = 1.3;
 
     joinCreateButton.on("pointerdown", () => {
       const userInput = htmlForm.getChildByName("roomName");

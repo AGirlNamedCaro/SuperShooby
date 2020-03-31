@@ -12,14 +12,14 @@ export default class CreateMap extends Phaser.Scene {
 
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
-    this.load.tilemapTiledJSON("world", this.game.level);
-    this.load.image("exportMenu", "/assets/images/backgrounds/exportMenu.png");
-
+    this.load.tilemapTiledJSON("createWorld", this.game.level);
+    this.load.image("exportMenu", "/assets/images/backgrounds/exportmenu.png");
   }
 
   create() {
-    this.game.setGameInfo('createMapControls') 
-    const map = this.make.tilemap({ key: "world" });
+    this.game.setGameInfo("createMapControls");
+    // TODO need to figure out why this scene isnt loading up the set scene
+    const map = this.make.tilemap({ key: "createWorld" });
     const tiles = map.addTilesetImage("tiles");
 
     this.skyLayer = map.createDynamicLayer("sky", [tiles], 0, 0);
@@ -83,12 +83,14 @@ export default class CreateMap extends Phaser.Scene {
 
     this.input.keyboard.on("keyup-" + "E", event => {
       // TODO this is where the exporting happens, should make a menu that pops up when this is pressed or something
-      this.exportMenu = this.add.image(this.game.renderer.width / 3.2, this.game.renderer.height * 0.40, "exportMenu");
-      this.exportMenu.scale = 0.35
-      this.exit = this.add.image(this.game.renderer.width / 1.5, this.game.renderer.height * 0.62, "exit");
-      this.exit.scale = 0.20
-      this.exit.setInteractive();
+
       console.log("exporting");
+      this.exportingText = this.add.text(
+        this.game.renderer.width / 3.2,
+        this.game.renderer.height * 0.4,
+        "Exporting... Please Wait"
+      );
+
       const saveThumbnail = new Promise((res, rej) => {
         this.text.setVisible(false);
         this.marker.setVisible(false);
@@ -96,6 +98,20 @@ export default class CreateMap extends Phaser.Scene {
           this.marker.setVisible(true);
           this.text.setVisible(true);
           if (image) {
+            this.exportMenu = this.add.image(
+              this.game.renderer.width / 3.2,
+              this.game.renderer.height * 0.4,
+              "exportMenu"
+            );
+            this.exportMenu.scale = 0.35;
+            this.exit = this.add.image(
+              this.game.renderer.width / 1.5,
+              this.game.renderer.height * 0.62,
+              "exit"
+            );
+            this.exit.scale = 0.2;
+            this.exit.setVisible(false);
+            this.exportMenu.setVisible(false);
             res(image);
           } else {
             rej(Error("couldnt save image"));
@@ -115,18 +131,35 @@ export default class CreateMap extends Phaser.Scene {
           levelData: exportObj
         };
 
-       
         this.game.setLevel(exportObj);
         this.socket.emit("createMap", mapData);
-        this.exit.on("pointerdown", () => {
-          this.scene.start( "titleScene")
-          this.scene.start( "mainMenu")
-          
-        })
+        this.socket.on("returnedMapId", mapId => {
+          this.exportingText.setVisible(false);
+          this.exit.setVisible(true);
+          this.exportMenu.setVisible(true);
+          this.exit.setInteractive();
 
+          const textStyle = {
+            // Many different keys to alter the text
+            // fontFamily:
+            fontSize: "50px",
+            color: "#000000"
+          };
+
+          this.add.text(
+            this.game.renderer.width / 3.7,
+            this.game.renderer.height * 0.43,
+            mapId,
+            textStyle
+          ).scale = 0.7;
+        });
+        this.exit.on("pointerdown", () => {
+          this.scene.start("titleScene");
+          this.scene.start("mainMenu");
+          this.scene.stop("createMap");
+        });
       });
     });
-
 
     this.mapTilesToLayer(
       this.create2DArray(tiles.columns, tiles.rows),
@@ -249,7 +282,7 @@ export default class CreateMap extends Phaser.Scene {
           columns: tileSet.columns,
           firstgid: tileSet.firstgid,
           // not sure how to set this up
-          image: "../../Pictures/marioTileset2.png",
+          image: "../../Pictures/shoobyTileSet.png",
           imageheight: tileSet.image.source[0].height,
           imagewidth: tileSet.image.source[0].width,
           margin: tileSet.tileMargin,

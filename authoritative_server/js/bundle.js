@@ -5,7 +5,7 @@ module.exports = {
       type: Phaser.HEADLESS,
       parent: "phaser-example",
       width: 800,
-      height: 600,
+      height: 640,
       autoFocus: false,
       physics: {
         default: "arcade",
@@ -272,13 +272,17 @@ window.onload = () => {
         });
 
         client.connect(err => {
+          if (err) throw err;
           // Can only use this client connection once after closed, Pulling new MongoClient line from server.js into here should change that
           // const client = new MongoClient(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
           // TODO need to send user confirmation with the map id name
           const collection = client.db("game_db").collection("maps");
           collection
             .insertOne(mapData.levelData)
-            .then(res => client.close())
+            .then(res => {
+              io.to(socket.id).emit("returnedMapId", mapData.levelData.mapId);
+              client.close();
+            })
             .catch(err => console.log("err", err));
         });
       });

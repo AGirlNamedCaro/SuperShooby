@@ -11,7 +11,7 @@ export function createCursors(self) {
 }
 
 export function createWorld(self) {
-  const worldMap = self.add.tilemap("world");
+  const worldMap = self.add.tilemap("singleWorld");
   const tileset = worldMap.addTilesetImage("tiles");
   const sky = worldMap.createStaticLayer("sky", [tileset], 0, 0);
   const clouds = worldMap.createStaticLayer("clouds", [tileset], 0, 0);
