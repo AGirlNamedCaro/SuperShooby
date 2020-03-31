@@ -13,7 +13,7 @@ export default class CreateMap extends Phaser.Scene {
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
     this.load.tilemapTiledJSON("world", this.game.level);
-    this.load.image("exportMenu", "/assets/images/backgrounds/exportMenu.png");
+    this.load.image("exportMenu", "/assets/images/backgrounds/exportmenu.png");
   }
 
   create() {
@@ -84,6 +84,12 @@ export default class CreateMap extends Phaser.Scene {
       // TODO this is where the exporting happens, should make a menu that pops up when this is pressed or something
 
       console.log("exporting");
+      this.exportingText = this.add.text(
+        this.game.renderer.width / 3.2,
+        this.game.renderer.height * 0.4,
+        "Exporting... Please Wait"
+      );
+
       const saveThumbnail = new Promise((res, rej) => {
         this.text.setVisible(false);
         this.marker.setVisible(false);
@@ -103,7 +109,8 @@ export default class CreateMap extends Phaser.Scene {
               "exit"
             );
             this.exit.scale = 0.2;
-            this.exit.setInteractive();
+            this.exit.setVisible(false);
+            this.exportMenu.setVisible(false);
             res(image);
           } else {
             rej(Error("couldnt save image"));
@@ -125,6 +132,26 @@ export default class CreateMap extends Phaser.Scene {
 
         this.game.setLevel(exportObj);
         this.socket.emit("createMap", mapData);
+        this.socket.on("returnedMapId", mapId => {
+          this.exportingText.setVisible(false);
+          this.exit.setVisible(true);
+          this.exportMenu.setVisible(true);
+          this.exit.setInteractive();
+
+          const textStyle = {
+            // Many different keys to alter the text
+            // fontFamily:
+            fontSize: "50px",
+            color: "#000000"
+          };
+
+          this.add.text(
+            this.game.renderer.width / 3.7,
+            this.game.renderer.height * 0.43,
+            mapId,
+            textStyle
+          ).scale = 0.7;
+        });
         this.exit.on("pointerdown", () => {
           this.scene.start("titleScene");
           this.scene.start("mainMenu");
