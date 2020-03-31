@@ -13,10 +13,18 @@
   border-radius: 10px;
   box-shadow: 2px 2px 15px #5f5f5f65;
   color: rgba(255, 255, 255, 0.658);
+  text-align: center;
+  padding: 0.8rem;
 }
 
 .controls {
 padding: 25px;
   width: 75%;
 
+}
+
+.controlsCreate {
+  padding: 25px;
+  width: 100%;
+  margin-top: -8rem;
 }
