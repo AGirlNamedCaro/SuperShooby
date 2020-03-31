@@ -240,7 +240,7 @@ window.onload = () => {
 
         const client = new MongoClient(MONGODB, {
           useNewUrlParser: true,
-          // useUnifiedTopology: true
+          useUnifiedTopology: true
         });
 
         client.connect(err => {
@@ -260,7 +260,7 @@ window.onload = () => {
       const mapData = {};
       const client = new MongoClient(MONGODB, {
         useNewUrlParser: true,
-        // useUnifiedTopology: true
+        useUnifiedTopology: true
       });
 
       client.connect(err => {
