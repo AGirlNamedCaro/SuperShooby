@@ -27,7 +27,7 @@ export default class SinglePlayerScene extends Phaser.Scene {
   create() {
     const self = this;
     
-    createWorld(self);
+    createWorld(self, "singleWorld");
     
     this.player = this.physics.add.sprite(100, 450, this.game.character);
     this.player.body.setGravityY(300);

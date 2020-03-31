@@ -18,13 +18,13 @@ export default class MultiplayerScene extends Phaser.Scene {
 
   preload() {
     this.load.image("tiles", "/assets/images/prefabs/shoobyTileSet.png");
-    this.load.tilemapTiledJSON("world", this.game.level);
+    this.load.tilemapTiledJSON("multiWorld", this.game.level);
   }
 
   create() {
     const self = this;
     this.socket.emit("ready", this.roomId);
-    createWorld(self);
+    createWorld(self, "multiWorld");
     createCursors(self);
 
     this.players = this.add.group();
